@@ -9,7 +9,6 @@ import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ma5951.utils.MAShuffleboard;
 import com.ma5951.utils.RobotConstants;
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
@@ -27,6 +26,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.PortMap;
 
@@ -216,7 +216,7 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
   public double getFusedHeading() {
     StatusSignal<Double> yaw = gyro.getYaw();
     yaw.refresh();
-    return yaw.getValue();
+    return -yaw.getValue();
   }
 
   public double getRoll() {
@@ -289,9 +289,8 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
       speeds.omegaRadiansPerSecond, false);
   }
 
-  public Command getAutonomousPathCommand(String pathName) {
-        PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
-        return AutoBuilder.followPathWithEvents(path);
+  public Command getAutonomousPathCommand(String autoName) {
+        return AutoBuilder.buildAuto(autoName);
   }
 
   public void setAccelerationLimit(double limit) {
@@ -334,5 +333,10 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
     board.addNum("fr angle", frontRightModule.getTurningPosition());
     board.addNum("rl angle", rearLeftModule.getTurningPosition());
     board.addNum("rr angle", rearRightModule.getTurningPosition());
+
+    board.addNum("vfl angle", frontLeftModule.getDriveVelocity());
+    board.addNum("vfr angle", frontRightModule.getDriveVelocity());
+    board.addNum("vrl angle", rearLeftModule.getDriveVelocity());
+    board.addNum("vrr angle", rearRightModule.getDriveVelocity());
   }
 }

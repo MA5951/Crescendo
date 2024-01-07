@@ -42,6 +42,6 @@ public class RobotContainer {
   }
   public Command getAutonomousCommand() {
     return SwerveDrivetrainSubsystem.getInstance()
-    .getAutonomousPathCommand("Example Path");
+    .getAutonomousPathCommand("New Auto");
   }
 }

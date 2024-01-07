@@ -76,7 +76,7 @@ public class SwerveModuleTalonFX extends SwerveModule {
             isTurningMotorReversed ? InvertedValue.Clockwise_Positive : 
             InvertedValue.CounterClockwise_Positive;
 
-        turningConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        turningConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Coast;
 
         turningConfiguration.Slot0.kP = SwerveConstants.turningPIDKP;
         turningConfiguration.Slot0.kI = SwerveConstants.turningPIDKI;
@@ -124,8 +124,9 @@ public class SwerveModuleTalonFX extends SwerveModule {
     public double getAbsoluteEncoderPosition() {
         StatusSignal<Double> pose = absoluteEcoder.getAbsolutePosition();
         pose.refresh();
-        return isAbsoluteEncoderReversed ? 360 - pose.getValue() * 360
-                : pose.getValue() * 360;
+        // return pose.getValue();
+        return isAbsoluteEncoderReversed ? 360 - ((pose.getValue() + 0.5)) * 360
+                : ((pose.getValue() + 0.5)) * 360;
     }
 
     public double getDrivePosition() {
