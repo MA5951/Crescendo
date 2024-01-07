@@ -18,13 +18,28 @@ public class RobotContainer {
   public static final CommandPS5Controller
     operatorController = new CommandPS5Controller(PortMap.Controllers.operatorID);
 
-  public RobotContainer() {
+  private void registerCommands() {
     NamedCommands.registerCommand("wait", new WaitCommand(3));
+  }
+
+  public RobotContainer() {
+    registerCommands();
+
     configureBindings();
   }
 
-  private void configureBindings() {}
+  private void configureBindings() {
+    driverController.R2().whileTrue(new InstantCommand(
+      () -> SwerveDrivetrainSubsystem.getInstance().FactorVelocityTo(0.4)
+    )).whileFalse(
+      new InstantCommand(
+      () -> SwerveDrivetrainSubsystem.getInstance().FactorVelocityTo(1)
+    ));
 
+    driverController.triangle().whileTrue(
+      new InstantCommand(SwerveDrivetrainSubsystem.getInstance()::updateOffset)
+    );
+  }
   public Command getAutonomousCommand() {
     return SwerveDrivetrainSubsystem.getInstance()
     .getAutonomousPathCommand("Example Path");
