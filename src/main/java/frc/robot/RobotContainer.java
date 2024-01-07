@@ -7,6 +7,7 @@ package frc.robot;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
@@ -24,7 +25,6 @@ public class RobotContainer {
 
   public RobotContainer() {
     registerCommands();
-
     configureBindings();
   }
 
