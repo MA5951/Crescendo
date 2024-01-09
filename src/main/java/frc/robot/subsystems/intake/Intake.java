@@ -23,7 +23,7 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
 
   private boolean piceInIntake = false;
 
-  public Intake() {
+  private Intake() {
     master = new CANSparkMax(PortMap.Intake.masterID, MotorType.kBrushless);
     slave = new CANSparkMax(PortMap.Intake.slvaeID, MotorType.kBrushless);
 
