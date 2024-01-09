@@ -50,7 +50,9 @@ public class RobotContainer {
 
     driverController.circle().whileTrue(
       new MotorCommand(Intake.getInstance() , IntakeConstants.ejectPower, 0)
-    );
+    ).whileFalse(new InstantCommand(
+      () -> Intake.getInstance().setPiceIn(false)
+    ));
   }
   public Command getAutonomousCommand() {
     return SwerveDrivetrainSubsystem.getInstance()

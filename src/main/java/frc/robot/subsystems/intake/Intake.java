@@ -73,10 +73,6 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
   public void periodic() {
     board.addBoolean("isPiceIn", piceInIntake);
     board.addNum("Avrage current", getIntakeCurrent());
-    
-    if (getSensor()) {
-      setPiceIn(true);
-    }
   }
 
 }
