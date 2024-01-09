@@ -29,6 +29,11 @@ public class PortMap {
     public static final int rightBackDriveID = 2;
     public static final int rightBackTurningID = 3;
 
-    public static final int Pigeon2ID = 12; // TODO
+    public static final int Pigeon2ID = 12;
+  }
+
+  public static class Shooter {
+    public static final int masterID = 0; //TODO
+    public static final int slaveID = 0; //TODO
   }
 }
