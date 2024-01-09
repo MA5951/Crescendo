@@ -17,7 +17,6 @@ public class IntakeCommand extends Command {
   public IntakeCommand() {
     intake = Intake.getInstance();
     motorCommand = new MotorCommand(intake, IntakeConstants.intakePower, 0);
-    addRequirements(intake);
   }
 
   // Called when the command is initially scheduled.
