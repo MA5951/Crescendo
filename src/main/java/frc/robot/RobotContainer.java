@@ -4,16 +4,12 @@
 
 package frc.robot;
 
-import com.ma5951.utils.commands.MotorCommand;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
-import frc.robot.commands.Intake.IntakeCommand;
-import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.intake.IntakeConstants;
 import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
 
 public class RobotContainer {
@@ -44,15 +40,6 @@ public class RobotContainer {
       new InstantCommand(SwerveDrivetrainSubsystem.getInstance()::updateOffset)
     );
 
-    driverController.cross().whileTrue(
-      new IntakeCommand()
-    );
-
-    driverController.circle().whileTrue(
-      new MotorCommand(Intake.getInstance() , IntakeConstants.ejectPower, 0)
-    ).whileFalse(new InstantCommand(
-      () -> Intake.getInstance().setPiceIn(false)
-    ));
   }
   public Command getAutonomousCommand() {
     return SwerveDrivetrainSubsystem.getInstance()
