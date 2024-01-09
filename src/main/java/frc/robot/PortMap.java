@@ -31,4 +31,11 @@ public class PortMap {
 
     public static final int Pigeon2ID = 12; // TODO
   }
+
+  public static class Intake {
+    public static final int masterID = 0; //TODO
+    public static final int slvaeID = 0; //TODO
+
+    public static final int sensorID = 0; //TODO
+  }
 }
