@@ -4,7 +4,6 @@ package frc.robot.subsystems.intake;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.revrobotics.Rev2mDistanceSensor;
 import com.revrobotics.jni.VL53L0XJNI;
 
 import edu.wpi.first.wpilibj.Timer;
