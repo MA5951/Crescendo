@@ -44,6 +44,6 @@ public class IntakeCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return intake.getSensor() || intake.isPiceIn();
+    return false;//intake.getSensor() || intake.isPiceIn();
   }
 }

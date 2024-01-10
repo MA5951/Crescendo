@@ -8,10 +8,10 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ma5951.utils.MAShuffleboard;
 import com.ma5951.utils.RobotConstants;
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.ReplanningConfig;
+// import com.pathplanner.lib.auto.AutoBuilder;
+// import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+// import com.pathplanner.lib.util.PIDConstants;
+// import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -169,21 +169,21 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
 
     SmartDashboard.putData("Field", field);
 
-    AutoBuilder.configureHolonomic(
-          this::getPose,
-          this::resetOdometry,
-          this::getRobotRelativeSpeeds,
-          this::driveAuto,
-          new HolonomicPathFollowerConfig(
-            new PIDConstants(SwerveConstants.KP_TRANSLATION),
-            new PIDConstants(SwerveConstants.THATA_KP,
-              SwerveConstants.THATA_KI, SwerveConstants.THATA_KD),
-            SwerveConstants.MAX_VELOCITY,
-            SwerveConstants.RADIUS,
-            new ReplanningConfig()
-          ),
-          this
-        );
+    // AutoBuilder.configureHolonomic(
+    //       this::getPose,
+    //       this::resetOdometry,
+    //       this::getRobotRelativeSpeeds,
+    //       this::driveAuto,
+    //       new HolonomicPathFollowerConfig(
+    //         new PIDConstants(SwerveConstants.KP_TRANSLATION),
+    //         new PIDConstants(SwerveConstants.THATA_KP,
+    //           SwerveConstants.THATA_KI, SwerveConstants.THATA_KD),
+    //         SwerveConstants.MAX_VELOCITY,
+    //         SwerveConstants.RADIUS,
+    //         new ReplanningConfig()
+    //       ),
+    //       this
+    //     );
   }
 
   public void resetEncoders() {
@@ -289,9 +289,9 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
       speeds.omegaRadiansPerSecond, false);
   }
 
-  public Command getAutonomousPathCommand(String autoName) {
-        return AutoBuilder.buildAuto(autoName);
-  }
+//   public Command getAutonomousPathCommand(String autoName) {
+//         return AutoBuilder.buildAuto(autoName);
+//   }
 
   public void setAccelerationLimit(double limit) {
     frontLeftModule.setAccelerationLimit(limit);

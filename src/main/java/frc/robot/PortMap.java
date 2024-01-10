@@ -33,8 +33,8 @@ public class PortMap {
   }
 
   public static class Intake {
-    public static final int masterID = 0; //TODO
-    public static final int slvaeID = 0; //TODO
+    public static final int masterID = 13; //TODO
+    public static final int slvaeID = 14; //TODO
 
     public static final int sensorID = 0; //TODO
   }
