@@ -34,7 +34,7 @@ public class Shooter extends SubsystemBase implements InternallyControlledSubsys
   private MAShuffleboard board;
   private pidControllerGainSupplier pidGainSupplier;
 
-  public Shooter() {
+  private Shooter() {
     master = new CANSparkMax(PortMap.Shooter.masterID, MotorType.kBrushless);
     slave = new CANSparkMax(PortMap.Shooter.slaveID, MotorType.kBrushless);
 
