@@ -6,6 +6,8 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import com.ma5951.utils.MAShuffleboard;
 import com.ma5951.utils.subsystem.MotorSubsystem;
+
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.PortMap;
 import com.revrobotics.CANSparkMax;
@@ -16,7 +18,7 @@ import com.revrobotics.CANSparkMax;
 public class Intake extends SubsystemBase implements MotorSubsystem{
   private static Intake intake;
   
-  private Rev2MeterSensore sensor;
+  private DigitalInput sensor;
   private CANSparkMax master;
   private CANSparkMax slave;
 
@@ -29,8 +31,7 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
     master = new CANSparkMax(PortMap.Intake.masterID, MotorType.kBrushless);
     slave = new CANSparkMax(PortMap.Intake.slvaeID, MotorType.kBrushless);
 
-    //sensor = new Rev2mdistanceSensor();
-    sensor = new Rev2MeterSensore();
+    sensor = new DigitalInput(PortMap.Intake.sensorID);
     board = new MAShuffleboard("Intake");
 
     master.setIdleMode(IdleMode.kBrake);
@@ -42,7 +43,7 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
   }
 
   public double getSensor() {
-    return sensor.getRange();
+    return sensor.get() ? 1 : 0;
   }
 
   public double getIntakeCurrent() {
@@ -79,7 +80,6 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
     board.addBoolean("isPiceIn", piceInIntake);
     board.addNum("Avrage current", getIntakeCurrent());
     board.addNum("Sensor", getSensor());
-    getSensor();
   }
 
 
