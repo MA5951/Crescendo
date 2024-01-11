@@ -1,6 +1,5 @@
 package frc.robot.subsystems.conveyor;
 
-import com.ma5951.utils.MAShuffleboard;
 import com.ma5951.utils.subsystem.MotorSubsystem;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
@@ -14,12 +13,8 @@ public class Conveyor extends SubsystemBase implements MotorSubsystem {
 
     private CANSparkMax motor;
 
-    private MAShuffleboard board;
-
     private Conveyor() {
         motor = new CANSparkMax(PortMap.Conveyor.motorID, MotorType.kBrushless);
-
-        board = new MAShuffleboard("Conveyor");
     }
 
     @Override
@@ -41,6 +36,5 @@ public class Conveyor extends SubsystemBase implements MotorSubsystem {
 
     @Override
     public void periodic() {
-        board.addNum("Current", motor.getOutputCurrent());
     }
 }
