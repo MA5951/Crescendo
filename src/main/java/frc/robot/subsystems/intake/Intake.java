@@ -25,8 +25,6 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
 
   private MAShuffleboard board;
 
-  private boolean piceInIntake = false;
-
   private Intake() {
     master = new CANSparkMax(PortMap.Intake.masterID, MotorType.kBrushless);
     slave = new CANSparkMax(PortMap.Intake.slvaeID, MotorType.kBrushless);
@@ -42,20 +40,12 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
   
   }
 
-  public double getSensor() {
-    return sensor.get() ? 1 : 0;
+  public boolean getSensor() {
+    return sensor.get();
   }
 
   public double getIntakeCurrent() {
     return (master.getOutputCurrent() + slave.getOutputCurrent()) / 2;
-  }
-
-  public boolean isPiceIn() {
-    return piceInIntake;
-  }
-
-  public void setPiceIn(boolean state) {
-    piceInIntake = state;
   }
 
   @Override
@@ -77,9 +67,8 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
 
   @Override
   public void periodic() {
-    board.addBoolean("isPiceIn", piceInIntake);
     board.addNum("Avrage current", getIntakeCurrent());
-    board.addNum("Sensor", getSensor());
+    board.addBoolean("Sensor", getSensor());
   }
 
 
