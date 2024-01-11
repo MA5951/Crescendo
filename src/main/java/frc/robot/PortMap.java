@@ -38,4 +38,8 @@ public class PortMap {
 
     public static final int sensorID = 0; //TODO
   }
+
+  public static class Conveyor {
+    public static final int motorID = 0; //TODO
+  }
 }
