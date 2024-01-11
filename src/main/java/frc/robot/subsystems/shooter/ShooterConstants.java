@@ -1,4 +1,4 @@
-package frc.robot.subsystems.shotter;
+package frc.robot.subsystems.shooter;
 
 public class ShooterConstants {
 
@@ -10,4 +10,8 @@ public class ShooterConstants {
     public static final double kd = 0; // TODO
     
     public static final double kv = 0; // TODO
+
+    public static final double pos1 = 0; // TODO
+    public static final double pos2 = 0; // TODO
+    public static final double pos3 = 0; // TODO
 }
