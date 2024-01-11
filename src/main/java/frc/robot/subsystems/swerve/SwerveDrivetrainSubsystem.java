@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems.swerve;
 
+import java.util.function.BooleanSupplier;
+
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ma5951.utils.MAShuffleboard;
@@ -23,6 +25,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -37,6 +41,8 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
   public boolean isXReversed = true;
   public boolean isYReversed = false;
   public boolean isXYReversed = true;
+
+  public BooleanSupplier flipPath = () -> false;
 
   private double offsetAngle = 0;
 
@@ -169,6 +175,10 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
 
     SmartDashboard.putData("Field", field);
 
+    if (DriverStation.getAlliance().get() ==  Alliance.Red) {
+      flipPath = () -> true;
+    } 
+
     AutoBuilder.configureHolonomic(
           this::getPose,
           this::resetOdometry,
@@ -182,6 +192,7 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
             SwerveConstants.RADIUS,
             new ReplanningConfig()
           ),
+          flipPath, 
           this
         );
   }
