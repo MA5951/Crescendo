@@ -39,14 +39,10 @@ public class IntakeCommand extends Command {
   public void end(boolean interrupted) {
     intakeMotorCommand.end(interrupted);
     conveyorMotorCommand.end(interrupted);
-
-    if (!interrupted) {
-      intake.setPiceIn(true);
-    }
   }
 
   @Override
   public boolean isFinished() {
-    return false;//intake.getSensor() || intake.isPiceIn();
+    return intake.getSensor();
   }
 }
