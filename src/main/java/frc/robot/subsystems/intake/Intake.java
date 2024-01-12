@@ -20,25 +20,20 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
   
   private DigitalInput sensor1;
   private DigitalInput sensor2; 
-  private CANSparkMax master;
-  private CANSparkMax slave;
+  private CANSparkMax motor;
 
 
   private MAShuffleboard board;
 
   private Intake() {
-    master = new CANSparkMax(PortMap.Intake.masterID, MotorType.kBrushless);
-    slave = new CANSparkMax(PortMap.Intake.slvaeID, MotorType.kBrushless);
+    motor = new CANSparkMax(PortMap.Intake.motorID, MotorType.kBrushless);
 
     sensor1 = new DigitalInput(PortMap.Intake.sensor1ID);
     sensor2 = new DigitalInput(PortMap.Intake.sensor2ID);
     board = new MAShuffleboard("Intake");
 
-    master.setIdleMode(IdleMode.kBrake);
-    slave.setIdleMode(IdleMode.kBrake);
-    master.setInverted(false);
-    slave.follow(master, true);
-
+    motor.setIdleMode(IdleMode.kBrake);
+    motor.setInverted(false);
   
   }
 
@@ -54,10 +49,6 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
     return getSensor1() || getSensor2();
   }
 
-  public double getIntakeCurrent() {
-    return (master.getOutputCurrent() + slave.getOutputCurrent()) / 2;
-  }
-
   @Override
   public boolean canMove() {
       return true;
@@ -65,7 +56,7 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
 
   @Override
   public void setVoltage(double voltage) {
-      master.set(voltage / 12);
+      motor.set(voltage / 12);
   }
 
   public static Intake getInstance() {
@@ -77,7 +68,6 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
 
   @Override
   public void periodic() {
-    board.addNum("Avrage current", getIntakeCurrent());
     board.addBoolean("Sensor 1", getSensor1());
     board.addBoolean("Sensor 2", getSensor2());
   }
