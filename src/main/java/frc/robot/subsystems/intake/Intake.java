@@ -43,14 +43,14 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
   }
 
   public boolean getSensor1() {
-    return sensor1.get();
+    return !sensor1.get();
   }
 
   public boolean getSensor2() {
-    return sensor2.get();
+    return !sensor2.get();
   }
 
-  public boolean isGamePiece(){
+  public boolean isGamePieceInIntake(){
     return getSensor1() || getSensor2();
   }
 
@@ -78,9 +78,8 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
   @Override
   public void periodic() {
     board.addNum("Avrage current", getIntakeCurrent());
-    board.addBoolean("High Sensor", getSensor1());
-    board.addBoolean("Low Sensor", getSensor2());
-    board.addBoolean("Is Game Piece", isGamePiece());
+    board.addBoolean("Sensor 1", getSensor1());
+    board.addBoolean("Sensor 2", getSensor2());
   }
 
 

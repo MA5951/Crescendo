@@ -24,7 +24,6 @@ public class RobotContainer {
     operatorController = new CommandPS5Controller(PortMap.Controllers.operatorID);
 
   private void registerCommands() {
-    //NamedCommands.registerCommand("wait", new WaitCommand(3));
   }
 
   public RobotContainer() {
@@ -53,8 +52,6 @@ public class RobotContainer {
     );
   }
   public Command getAutonomousCommand() {
-  //   return SwerveDrivetrainSubsystem.getInstance()
-  //   .getAutonomousPathCommand("New Auto");
     return null;
   }
 }
