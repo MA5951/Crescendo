@@ -32,6 +32,7 @@ public class IntakeCommand extends Command {
 
   @Override
   public boolean isFinished() {
-    return intake.getHighSensor();
+    return (intake.getSensor1() && !intake.getSensor2()) 
+    || (intake.getSensor2() && !intake.getSensor1());
   }
 }
