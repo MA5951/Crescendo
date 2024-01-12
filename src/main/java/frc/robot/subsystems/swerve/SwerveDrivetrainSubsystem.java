@@ -15,7 +15,6 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -24,13 +23,11 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.PortMap;
 
@@ -42,8 +39,6 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
   public boolean isYReversed = false;
   public boolean isXYReversed = true;
 
-  public BooleanSupplier flipPath = () -> false;
-
   private double offsetAngle = 0;
 
   private double acc = 0;
@@ -51,12 +46,6 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
 
   public double maxVelocity = SwerveConstants.MAX_VELOCITY;
   public double maxAngularVelocity = SwerveConstants.MAX_ANGULAR_VELOCITY;
-
-  private ProfiledPIDController thetaProfiledPID;
-
-  private static final String theta_KP = "theta_KP";
-  private static final String theta_KI = "theta_KI";
-  private static final String theta_KD = "theta_KD";
 
   private static final String profiled_theta_KP = "Profiled_theta_KP";
   private static final String profiled_theta_KI = "Profiled_theta_KI";
@@ -157,27 +146,15 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
 
     this.board = new MAShuffleboard("swerve");
 
-    board.addNum(theta_KP, SwerveConstants.THATA_KP);
-    board.addNum(theta_KI, SwerveConstants.THATA_KI);
-    board.addNum(theta_KD, SwerveConstants.THATA_KD);
-
     board.addNum(profiled_theta_KP, SwerveConstants.PROFILED_THATA_KP);
     board.addNum(profiled_theta_KI, SwerveConstants.PROFILED_THATA_KI);
     board.addNum(profiled_theta_KD, SwerveConstants.PROFILED_THATA_KD);
 
-    thetaProfiledPID = new ProfiledPIDController(
-        board.getNum(profiled_theta_KP), board.getNum(profiled_theta_KI),
-        board.getNum(profiled_theta_KD),
-        new TrapezoidProfile.Constraints(SwerveConstants.MAX_ANGULAR_VELOCITY,
-            SwerveConstants.MAX_ANGULAR_ACCELERATION));
-
-    thetaProfiledPID.enableContinuousInput(0, 2 * Math.PI);
-
     SmartDashboard.putData("Field", field);
 
-    if (DriverStation.getAlliance().get() ==  Alliance.Red) {
-      flipPath = () -> true;
-    } 
+    BooleanSupplier flipPath = () -> {
+      return DriverStation.getAlliance().get() == Alliance.Red;
+    };
 
     AutoBuilder.configureHolonomic(
           this::getPose,
@@ -192,7 +169,7 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
             SwerveConstants.RADIUS,
             new ReplanningConfig()
           ),
-          flipPath, 
+          flipPath,
           this
         );
   }
