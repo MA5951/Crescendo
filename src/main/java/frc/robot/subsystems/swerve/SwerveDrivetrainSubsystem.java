@@ -4,10 +4,16 @@
 
 package frc.robot.subsystems.swerve;
 
+import java.util.function.BooleanSupplier;
+
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ma5951.utils.MAShuffleboard;
 import com.ma5951.utils.RobotConstants;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -19,9 +25,11 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.PortMap;
 
@@ -164,21 +172,26 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
 
     SmartDashboard.putData("Field", field);
 
-    // AutoBuilder.configureHolonomic(
-    //       this::getPose,
-    //       this::resetOdometry,
-    //       this::getRobotRelativeSpeeds,
-    //       this::driveAuto,
-    //       new HolonomicPathFollowerConfig(
-    //         new PIDConstants(SwerveConstants.KP_TRANSLATION),
-    //         new PIDConstants(SwerveConstants.THATA_KP,
-    //           SwerveConstants.THATA_KI, SwerveConstants.THATA_KD),
-    //         SwerveConstants.MAX_VELOCITY,
-    //         SwerveConstants.RADIUS,
-    //         new ReplanningConfig()
-    //       ),
-    //       this
-    //     );
+    BooleanSupplier flipPath = () -> {
+      return DriverStation.getAlliance().get() == Alliance.Red;
+    };
+
+    AutoBuilder.configureHolonomic(
+          this::getPose,
+          this::resetOdometry,
+          this::getRobotRelativeSpeeds,
+          this::driveAuto,
+          new HolonomicPathFollowerConfig(
+            new PIDConstants(SwerveConstants.KP_TRANSLATION),
+            new PIDConstants(SwerveConstants.THATA_KP,
+              SwerveConstants.THATA_KI, SwerveConstants.THATA_KD),
+            SwerveConstants.MAX_VELOCITY,
+            SwerveConstants.RADIUS,
+            new ReplanningConfig()
+          ),
+          flipPath,
+          this
+        );
   }
 
   public void resetEncoders() {
@@ -284,9 +297,9 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
       speeds.omegaRadiansPerSecond, false);
   }
 
-//   public Command getAutonomousPathCommand(String autoName) {
-//         return AutoBuilder.buildAuto(autoName);
-//   }
+  public Command getAutonomousPathCommand(String autoName) {
+        return AutoBuilder.buildAuto(autoName);
+  }
 
   public void setAccelerationLimit(double limit) {
     frontLeftModule.setAccelerationLimit(limit);
