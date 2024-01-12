@@ -11,10 +11,12 @@ public class ElevatorConstants {
 
     public static final double AMPPose = 0; // TODO
     public static final double shootingPose = 0; // TODO
+    public static final double shootingPoseAuto = 0; // TODO
+    public static final double intakePose = 0; // TODO
 
     public static final double defaultPose = 0; // TODO
 
-    public static final double extendClimbPose = 0; //TODO
+    public static final double climbPose = 0; //TODO
     public static final double closeClimbPose = 0; //TODO
 
     public static final double positionConversionFactor = 0; // TODO

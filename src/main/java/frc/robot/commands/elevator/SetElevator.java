@@ -1,17 +1,22 @@
 package frc.robot.commands.elevator;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.subsystems.elevator.Elevator;
 
 public class SetElevator extends SequentialCommandGroup {
-
-
-    public SetElevator(double setPoint) {
+    
+    public SetElevator(Supplier<Double> setPoint) {
         addCommands(
             new InstantCommand(() -> Elevator.getInstance().setSetPoint(setPoint)),
             new WaitUntilCommand(Elevator.getInstance()::atPoint)
         );
+    }
+
+    public SetElevator(double setPoint) {
+        this(() -> setPoint);
     }
 }
