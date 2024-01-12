@@ -37,16 +37,8 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
   
   }
 
-  public boolean getSensor1() {
-    return !sensor1.get();
-  }
-
-  public boolean getSensor2() {
-    return !sensor2.get();
-  }
-
   public boolean isGamePieceInIntake(){
-    return getSensor1() || getSensor2();
+    return !sensor1.get() || !sensor2.get();
   }
 
   @Override
@@ -68,8 +60,8 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
 
   @Override
   public void periodic() {
-    board.addBoolean("Sensor 1", getSensor1());
-    board.addBoolean("Sensor 2", getSensor2());
+    board.addBoolean("Sensor 1", !sensor1.get());
+    board.addBoolean("Sensor 2", !sensor2.get());
   }
 
 
