@@ -47,10 +47,6 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
   public double maxVelocity = SwerveConstants.MAX_VELOCITY;
   public double maxAngularVelocity = SwerveConstants.MAX_ANGULAR_VELOCITY;
 
-  private static final String profiled_theta_KP = "Profiled_theta_KP";
-  private static final String profiled_theta_KI = "Profiled_theta_KI";
-  private static final String profiled_theta_KD = "Profiled_theta_KD";
-
   public final MAShuffleboard board;
 
   private final Translation2d frontLeftLocation = new Translation2d(
@@ -145,10 +141,6 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
     resetGyro();
 
     this.board = new MAShuffleboard("swerve");
-
-    board.addNum(profiled_theta_KP, SwerveConstants.PROFILED_THATA_KP);
-    board.addNum(profiled_theta_KI, SwerveConstants.PROFILED_THATA_KI);
-    board.addNum(profiled_theta_KD, SwerveConstants.PROFILED_THATA_KD);
 
     SmartDashboard.putData("Field", field);
 
