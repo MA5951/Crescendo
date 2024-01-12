@@ -28,7 +28,6 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.PortMap;
 
@@ -40,8 +39,6 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
   public boolean isYReversed = false;
   public boolean isXYReversed = true;
 
-  public BooleanSupplier flipPath = () -> false;
-
   private double offsetAngle = 0;
 
   private double acc = 0;
@@ -49,10 +46,6 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
 
   public double maxVelocity = SwerveConstants.MAX_VELOCITY;
   public double maxAngularVelocity = SwerveConstants.MAX_ANGULAR_VELOCITY;
-
-  private static final String theta_KP = "theta_KP";
-  private static final String theta_KI = "theta_KI";
-  private static final String theta_KD = "theta_KD";
 
   public final MAShuffleboard board;
 
@@ -149,15 +142,11 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
 
     this.board = new MAShuffleboard("swerve");
 
-    board.addNum(theta_KP, SwerveConstants.THATA_KP);
-    board.addNum(theta_KI, SwerveConstants.THATA_KI);
-    board.addNum(theta_KD, SwerveConstants.THATA_KD);
-
     SmartDashboard.putData("Field", field);
 
-    if (DriverStation.getAlliance().get() ==  Alliance.Red) {
-      flipPath = () -> true;
-    } 
+    BooleanSupplier flipPath = () -> {
+      return DriverStation.getAlliance().get() == Alliance.Red;
+    };
 
     AutoBuilder.configureHolonomic(
           this::getPose,
@@ -172,7 +161,7 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
             SwerveConstants.RADIUS,
             new ReplanningConfig()
           ),
-          flipPath, 
+          flipPath,
           this
         );
   }

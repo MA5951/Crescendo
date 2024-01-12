@@ -29,13 +29,23 @@ public class PortMap {
     public static final int rightBackDriveID = 2;
     public static final int rightBackTurningID = 3;
 
-    public static final int Pigeon2ID = 12; // TODO
+    public static final int Pigeon2ID = 12;
+  }
+
+  public static class Shooter {
+    public static final int masterID = 0; //TODO
+    public static final int slaveID = 0; //TODO
   }
 
   public static class Intake {
-    public static final int masterID = 0; //TODO
-    public static final int slvaeID = 0; //TODO
+    public static final int motorID = 14; //TODO
 
-    public static final int sensorID = 0; //TODO
+    public static final int sensor1ID = 0; //TODO
+    public static final int sensor2ID = 0; //TODO
+  }
+
+  public static class Elevator {
+    public static final int masterID = 0; //TODO
+    public static final int slaveID = 0; //TODO
   }
 }
