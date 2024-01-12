@@ -32,6 +32,6 @@ public class IntakeCommand extends Command {
 
   @Override
   public boolean isFinished() {
-    return intake.getSensor();
+    return intake.getHighSensor();
   }
 }

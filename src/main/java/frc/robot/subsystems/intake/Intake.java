@@ -18,7 +18,8 @@ import com.revrobotics.CANSparkMax;
 public class Intake extends SubsystemBase implements MotorSubsystem{
   private static Intake intake;
   
-  private DigitalInput sensor;
+  private DigitalInput highSensor;
+  private DigitalInput lowSensor; 
   private CANSparkMax master;
   private CANSparkMax slave;
 
@@ -29,7 +30,8 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
     master = new CANSparkMax(PortMap.Intake.masterID, MotorType.kBrushless);
     slave = new CANSparkMax(PortMap.Intake.slvaeID, MotorType.kBrushless);
 
-    sensor = new DigitalInput(PortMap.Intake.sensorID);
+    highSensor = new DigitalInput(PortMap.Intake.highSensorID);
+    lowSensor = new DigitalInput(PortMap.Intake.lowSensorID);
     board = new MAShuffleboard("Intake");
 
     master.setIdleMode(IdleMode.kBrake);
@@ -40,8 +42,12 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
   
   }
 
-  public boolean getSensor() {
-    return sensor.get();
+  public boolean getHighSensor() {
+    return highSensor.get();
+  }
+
+  public boolean getLowSensor() {
+    return lowSensor.get();
   }
 
   public double getIntakeCurrent() {
@@ -68,7 +74,8 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
   @Override
   public void periodic() {
     board.addNum("Avrage current", getIntakeCurrent());
-    board.addBoolean("Sensor", getSensor());
+    board.addBoolean("High Sensor", getHighSensor());
+    board.addBoolean("Low Sensor", getLowSensor());
   }
 
 
