@@ -8,31 +8,30 @@ import frc.robot.subsystems.intake.IntakeConstants;
 
 public class IntakeCommand extends Command {
   private Intake intake;
-  private MotorCommand intakeMotorCommand;
+  private MotorCommand intakeCommand;
   
   public IntakeCommand() {
     intake = Intake.getInstance();
-    intakeMotorCommand = new MotorCommand(intake, IntakeConstants.intakePower, 0);
+    intakeCommand = new MotorCommand(intake, IntakeConstants.intakePower, 0);
   }
 
   @Override
   public void initialize() {
-    intakeMotorCommand.initialize();
+    intakeCommand.initialize();
   }
 
   @Override
   public void execute() {
-    intakeMotorCommand.execute();
+    intakeCommand.execute();
   }
 
   @Override
   public void end(boolean interrupted) {
-    intakeMotorCommand.end(interrupted);
+    intakeCommand.end(interrupted);
   }
 
   @Override
   public boolean isFinished() {
-    return (intake.getSensor1() && !intake.getSensor2()) 
-    || (intake.getSensor2() && !intake.getSensor1());
+    return intake.isGamePiece();
   }
 }

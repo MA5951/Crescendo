@@ -50,6 +50,10 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
     return sensor2.get();
   }
 
+  public boolean isGamePiece(){
+    return getSensor1() || getSensor2();
+  }
+
   public double getIntakeCurrent() {
     return (master.getOutputCurrent() + slave.getOutputCurrent()) / 2;
   }
@@ -76,6 +80,7 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
     board.addNum("Avrage current", getIntakeCurrent());
     board.addBoolean("High Sensor", getSensor1());
     board.addBoolean("Low Sensor", getSensor2());
+    board.addBoolean("Is Game Piece", isGamePiece());
   }
 
 
