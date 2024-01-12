@@ -18,19 +18,19 @@ public class LockModules extends Command {
     states = new SwerveModuleState[] {
       new SwerveModuleState(
         0.00000000000000000000000000000000000000001,
-        Rotation2d.fromDegrees(45)
-      ),
-      new SwerveModuleState(
-        0.00000000000000000000000000000000000000001,
-        Rotation2d.fromDegrees(-45)
-      ),
-      new SwerveModuleState(
-        0.00000000000000000000000000000000000000001,
         Rotation2d.fromDegrees(-45)
       ),
       new SwerveModuleState(
         0.00000000000000000000000000000000000000001,
         Rotation2d.fromDegrees(45)
+      ),
+      new SwerveModuleState(
+        0.00000000000000000000000000000000000000001,
+        Rotation2d.fromDegrees(45)
+      ),
+      new SwerveModuleState(
+        0.00000000000000000000000000000000000000001,
+        Rotation2d.fromDegrees(-45)
       ),
     };
   }
