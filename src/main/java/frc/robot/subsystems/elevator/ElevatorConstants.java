@@ -10,8 +10,7 @@ public class ElevatorConstants {
     public static final double maxPose = 0; // TODO
 
     public static final double AMPPose = 0; // TODO
-    public static final double shooterPoseSpeaker = 0; // TODO
-    public static final double shooterPosePodium = 0; // TODO
+    public static final double shootingPose = 0; // TODO
 
     public static final double defaultPose = 0; // TODO
 

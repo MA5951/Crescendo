@@ -90,6 +90,10 @@ public class Shooter extends SubsystemBase implements InternallyControlledSubsys
     this.setPoint = setPoint;
   }
 
+  public double getVelocityForShooting() {
+    return 0; // TODO need to craete a graph
+  }
+
   public static Shooter getInstance() {
     if (instance == null) {
       instance = new Shooter();

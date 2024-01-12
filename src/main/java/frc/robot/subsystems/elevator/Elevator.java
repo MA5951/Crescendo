@@ -18,7 +18,7 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
 
     private static Elevator elevator;
 
-    //to add absolute encoder TODO
+    // TODO to add absolute encoder
 
     private CANSparkMax master;
     private CANSparkMax slave;
