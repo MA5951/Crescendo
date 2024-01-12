@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
 import frc.robot.commands.Intake.IntakeCommand;
+import frc.robot.commands.elevator.SetElevator;
+import frc.robot.subsystems.elevator.ElevatorConstants;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeConstants;
 
@@ -49,6 +51,12 @@ public class RobotContainer {
 
     driverController.L2().whileTrue(
       new MotorCommand(Intake.getInstance(), IntakeConstants.ejectPower, 0)
+    );
+
+    operatorController.triangle().whileTrue(
+      new SetElevator(ElevatorConstants.extendClimbPose)
+    ).whileFalse(
+      new SetElevator(ElevatorConstants.closeClimbPose)
     );
   }
   public Command getAutonomousCommand() {

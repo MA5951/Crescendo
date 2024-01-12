@@ -38,4 +38,9 @@ public class PortMap {
     public static final int sensor1ID = 0; //TODO
     public static final int sensor2ID = 0; //TODO
   }
+
+  public static class Elevator {
+    public static final int masterID = 0; //TODO
+    public static final int slaveID = 0; //TODO
+  }
 }

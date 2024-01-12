@@ -9,12 +9,14 @@ public class ElevatorConstants {
     public static final double minPose = 0; // TODO
     public static final double maxPose = 0; // TODO
 
-    public static final double pose1 = 0; // TODO
-    public static final double pose2 = 0; // TODO
+    public static final double AMPPose = 0; // TODO
+    public static final double shooterPoseSpeaker = 0; // TODO
+    public static final double shooterPosePodium = 0; // TODO
 
-    public static final double extendClimbePose = 0; //TODO
-    public static final double closeClimbePose = 0; //TODO
+    public static final double defaultPose = 0; // TODO
+
+    public static final double extendClimbPose = 0; //TODO
+    public static final double closeClimbPose = 0; //TODO
 
     public static final double positionConversionFactor = 0; // TODO
-    public static final double velocityConversionFactor = positionConversionFactor / 60; // TODO
 }
