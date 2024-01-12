@@ -16,20 +16,25 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
   private static Intake intake;
   
   private DigitalInput sensor1;
-  private DigitalInput sensor2; 
-  private CANSparkMax motor;
+  private DigitalInput sensor2;
+
+  private CANSparkMax master;
+  private CANSparkMax slave;
 
   private MAShuffleboard board;
 
   private Intake() {
-    motor = new CANSparkMax(PortMap.Intake.motorID, MotorType.kBrushless);
+    master = new CANSparkMax(PortMap.Intake.masterID, MotorType.kBrushless);
+    master = new CANSparkMax(PortMap.Intake.slaveID, MotorType.kBrushless);
 
     sensor1 = new DigitalInput(PortMap.Intake.sensor1ID);
     sensor2 = new DigitalInput(PortMap.Intake.sensor2ID);
     board = new MAShuffleboard("Intake");
 
-    motor.setIdleMode(IdleMode.kBrake);
-    motor.setInverted(false);
+    master.setIdleMode(IdleMode.kBrake);
+    master.setInverted(false);
+    slave.setIdleMode(IdleMode.kBrake);
+    slave.follow(master, true);
   
   }
 
@@ -44,7 +49,7 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
 
   @Override
   public void setVoltage(double voltage) {
-      motor.set(voltage / 12);
+      master.set(voltage / 12);
   }
 
   public static Intake getInstance() {

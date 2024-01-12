@@ -11,7 +11,7 @@ public class ShooterConstants {
     
     public static final double kv = 0; // TODO
 
-    public static final double pos1 = 0; // TODO
-    public static final double pos2 = 0; // TODO
-    public static final double pos3 = 0; // TODO
+    public static final double podiumV = 0; // TODO
+    public static final double speakerV = 0; // TODO
+    public static final double AMPV = 0; // TODO
 }
