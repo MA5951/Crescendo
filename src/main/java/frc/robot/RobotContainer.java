@@ -99,15 +99,22 @@ public class RobotContainer {
       time = -5;
     }
 
-    if ((time > 90 && time < 90.2) || (time > 90.4 && time < 90.6) || (time > 90.8 && time < 91)) {
+    // start of endgame (20 seconds left)
+    if ((time > 115 && time < 115.2) || (time > 115.4 && time < 115.6) || (time > 115.8 && time < 91)) {
       operatorController.getHID().setRumble(RumbleType.kBothRumble, 1);
       driverController.getHID().setRumble(RumbleType.kBothRumble, 1);
-    } else if ((time > 90.2 && time < 90.4) || (time > 90.6 && time < 90.8)) {
-      operatorController.getHID().setRumble(RumbleType.kBothRumble, 0);
-      driverController.getHID().setRumble(RumbleType.kBothRumble, 0);
     } else {
       operatorController.getHID().setRumble(RumbleType.kBothRumble, 0);
       driverController.getHID().setRumble(RumbleType.kBothRumble, 0);  
+    }
+
+    // last 3 seconds of match
+    if ((time > 132 && time < 132.5) || (time > 133 && time < 133.5) || (time > 134 && time < 135)) {
+      operatorController.getHID().setRumble(RumbleType.kLeftRumble, 1);
+      driverController.getHID().setRumble(RumbleType.kLeftRumble, 1);
+    } else {
+      operatorController.getHID().setRumble(RumbleType.kLeftRumble, 0);
+      driverController.getHID().setRumble(RumbleType.kLeftRumble, 0);  
     }
   }
   public Command getAutonomousCommand() {
