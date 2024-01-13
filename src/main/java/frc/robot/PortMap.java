@@ -49,4 +49,8 @@ public class PortMap {
     public static final int masterID = 0; //TODO
     public static final int slaveID = 0; //TODO
   }
+
+  public static class LED {
+    public static final int ledPort = 0; //TODO
+  }
 }

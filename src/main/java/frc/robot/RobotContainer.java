@@ -15,6 +15,7 @@ import frc.robot.automations.RunShoot;
 import frc.robot.automations.ScoreWithoutAdjust;
 import frc.robot.commands.Intake.IntakeCommand;
 import frc.robot.commands.elevator.SetElevator;
+import frc.robot.subsystems.LED.LED;
 import frc.robot.subsystems.elevator.ElevatorConstants;
 import frc.robot.subsystems.shooter.ShooterConstants;
 
@@ -76,6 +77,14 @@ public class RobotContainer {
 
     operatorController.povUp().whileTrue(
       new InstantCommand(() -> scoringOption = ScoringOptions.AMP)
+    );
+
+    operatorController.touchpad().whileTrue(
+      new InstantCommand(() -> LED.getInstance().activateAmp())
+    );
+
+    operatorController.options().whileTrue(
+      new InstantCommand(() -> LED.getInstance().activateCoalition())
     );
   }
   public Command getAutonomousCommand() {
