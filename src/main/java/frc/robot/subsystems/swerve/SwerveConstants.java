@@ -85,6 +85,7 @@ public class SwerveConstants {
         public final static double THATA_KI = 0;
         public final static double THATA_KD = 0;
 
+        // ------------2024--------------------
         public final static double speakerTargetXBlue = 0; // TODO
         public final static double speakerTargetYBlue = 0; // TODO
 
@@ -95,5 +96,8 @@ public class SwerveConstants {
         public final static double maxSpeakerDistanceY = 0; // TODO
 
         public final static double anglePIDTolorance = 0; // TODO
+
+        public final static double poduimAngleRed = 0; // TODO
+        public final static double poduimAngleBlue = 0; // TODO
 
 }

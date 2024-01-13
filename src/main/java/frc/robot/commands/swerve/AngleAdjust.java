@@ -4,21 +4,19 @@
 
 package frc.robot.commands.swerve;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.swerve.SwerveConstants;
 import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
 
-public class SpeakerAngleAdjust extends Command {
-  /** Creates a new SpeakerAngleAdjust. */
+public class AngleAdjust extends Command {
   private SwerveDrivetrainSubsystem swerve;
   private PIDController pid;
-  private double xDis;
-  private double  yDis;
+  private Supplier<Double> angle;
 
-  public SpeakerAngleAdjust() {
+  public AngleAdjust(Supplier<Double> angle) {
     swerve = SwerveDrivetrainSubsystem.getInstance();
     addRequirements(swerve);
 
@@ -27,27 +25,18 @@ public class SpeakerAngleAdjust extends Command {
       SwerveConstants.THATA_KI,
       SwerveConstants.THATA_KD
     );
-
+    this.angle = angle;
     pid.setTolerance(SwerveConstants.anglePIDTolorance);
+  }
+
+  public AngleAdjust(double angle) {
+    this(() -> angle);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    double xTrget = DriverStation.getAlliance().get() == Alliance.Red ? 
-      SwerveConstants.speakerTargetXRed : SwerveConstants.speakerTargetXBlue;
-    double yTrget = DriverStation.getAlliance().get() == Alliance.Red ? 
-      SwerveConstants.speakerTargetYRed : SwerveConstants.speakerTargetYBlue;
-    xDis = Math.abs(swerve.getPose().getX() - xTrget);
-    yDis = Math.abs(swerve.getPose().getY() - yTrget);
-    double angle = Math.atan(yDis / xDis);
-    angle = DriverStation.getAlliance().get() == Alliance.Blue ?
-      angle - Math.PI : angle;
-    if (swerve.getPose().getY() > yTrget) {
-      angle = -angle;
-    }
-
-    pid.setSetpoint(angle); 
+    pid.setSetpoint(angle.get());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -68,8 +57,6 @@ public class SpeakerAngleAdjust extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return xDis > SwerveConstants.maxSpeakerDistanceX || 
-            yDis > SwerveConstants.maxSpeakerDistanceY ||
-              pid.atSetpoint();
+    return pid.atSetpoint();
   }
 }

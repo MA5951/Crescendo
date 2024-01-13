@@ -10,18 +10,31 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
-import frc.robot.automations.ScoreAutomation;
+import frc.robot.automations.RunShoot;
+import frc.robot.automations.ScoreWithoutAdjust;
 import frc.robot.commands.Intake.IntakeCommand;
 import frc.robot.commands.elevator.SetElevator;
 import frc.robot.subsystems.elevator.ElevatorConstants;
 import frc.robot.subsystems.shooter.ShooterConstants;
 
 public class RobotContainer {
+  private enum ScoringOptions {
+    AMP,
+    SPEAKER
+  }
+
+  public static ScoringOptions scoringOption = ScoringOptions.SPEAKER;
 
   public static final CommandPS5Controller
     driverController = new CommandPS5Controller(PortMap.Controllers.driveID);
   public static final CommandPS5Controller
     operatorController = new CommandPS5Controller(PortMap.Controllers.operatorID);
+  
+  private static Command GetScoreAutomation() {
+    return scoringOption == ScoringOptions.SPEAKER ?
+      new RunShoot(false) :
+      new ScoreWithoutAdjust(() -> ShooterConstants.AMPV, ElevatorConstants.AMPPose);
+  }
 
   private void registerCommands() {
   }
@@ -43,18 +56,26 @@ public class RobotContainer {
       new InstantCommand(SwerveDrivetrainSubsystem.getInstance()::updateOffset)
     );
 
-    new CreateButton(driverController.L2(), 
-      new ScoreAutomation(() -> ShooterConstants.speakerV,
-      () -> ElevatorConstants.shootingPose));
-
     new CreateButton(driverController.R1(), new IntakeCommand());
+
+    new CreateButton(driverController.L2(), new ScoreWithoutAdjust(
+      () -> ShooterConstants.speakerV, ElevatorConstants.shootingPose));
+
+    new CreateButton(driverController.L1(), new RunShoot(true));
+    
+    new CreateButton(driverController.circle(), RobotContainer::GetScoreAutomation);
 
     new CreateButton(operatorController.triangle(),
       new SetElevator(ElevatorConstants.climbPose),
       ElevatorConstants.closeClimbPose);
+    
+    operatorController.povUp().whileTrue(
+      new InstantCommand(() -> scoringOption = ScoringOptions.SPEAKER)
+    );
 
-    // TODO add L1 shoting from poduim
-    // TODO add o shoting / amp
+    operatorController.povUp().whileTrue(
+      new InstantCommand(() -> scoringOption = ScoringOptions.AMP)
+    );
   }
   public Command getAutonomousCommand() {
     return null;
