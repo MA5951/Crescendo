@@ -14,4 +14,6 @@ public class ShooterConstants {
     public static final double podiumV = 0; // TODO
     public static final double speakerV = 0; // TODO
     public static final double AMPV = 0; // TODO
+
+    public static final double ejectPower = 0; // TODO
 }
