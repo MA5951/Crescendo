@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
+import frc.robot.automations.AMPSpeaker;
 import frc.robot.automations.RunShoot;
 import frc.robot.automations.ScoreWithoutAdjust;
 import frc.robot.commands.Intake.IntakeCommand;
@@ -63,7 +64,7 @@ public class RobotContainer {
 
     new CreateButton(driverController.L1(), new RunShoot(true));
     
-    new CreateButton(driverController.circle(), RobotContainer::GetScoreAutomation);
+    new CreateButton(driverController.circle(), new AMPSpeaker(RobotContainer::GetScoreAutomation));
 
     new CreateButton(operatorController.triangle(),
       new SetElevator(ElevatorConstants.climbPose),
