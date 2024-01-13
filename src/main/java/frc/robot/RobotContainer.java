@@ -4,6 +4,10 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+
 // import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -31,6 +35,8 @@ public class RobotContainer {
     driverController = new CommandPS5Controller(PortMap.Controllers.driveID);
   public static final CommandPS5Controller
     operatorController = new CommandPS5Controller(PortMap.Controllers.operatorID);
+
+  double time = -5;
   
   private static Command GetScoreAutomation() {
     return scoringOption == ScoringOptions.SPEAKER ?
@@ -86,6 +92,23 @@ public class RobotContainer {
     operatorController.options().whileTrue(
       new InstantCommand(() -> LED.getInstance().activateCoalition())
     );
+
+    if (DriverStation.isEnabled() && time == -5) {
+      time = Timer.getFPGATimestamp();
+    } else if (DriverStation.isDisabled()) {
+      time = -5;
+    }
+
+    if ((time > 90 && time < 90.2) || (time > 90.4 && time < 90.6) || (time > 90.8 && time < 91)) {
+      operatorController.getHID().setRumble(RumbleType.kBothRumble, 1);
+      driverController.getHID().setRumble(RumbleType.kBothRumble, 1);
+    } else if ((time > 90.2 && time < 90.4) || (time > 90.6 && time < 90.8)) {
+      operatorController.getHID().setRumble(RumbleType.kBothRumble, 0);
+      driverController.getHID().setRumble(RumbleType.kBothRumble, 0);
+    } else {
+      operatorController.getHID().setRumble(RumbleType.kBothRumble, 0);
+      driverController.getHID().setRumble(RumbleType.kBothRumble, 0);  
+    }
   }
   public Command getAutonomousCommand() {
     return null;
