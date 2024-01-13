@@ -109,13 +109,15 @@ public class RobotContainer {
     }
 
     // last 3 seconds of match
-    if ((time > 132 && time < 132.5) || (time > 133 && time < 133.5) || (time > 134 && time < 135)) {
+    if ((time > 132 && time < 132.3) || (time > 133 && time < 133.3) || (time > 134 && time < 135)) {
       operatorController.getHID().setRumble(RumbleType.kLeftRumble, 1);
       driverController.getHID().setRumble(RumbleType.kLeftRumble, 1);
     } else {
       operatorController.getHID().setRumble(RumbleType.kLeftRumble, 0);
       driverController.getHID().setRumble(RumbleType.kLeftRumble, 0);  
     }
+
+
   }
   public Command getAutonomousCommand() {
     return null;
