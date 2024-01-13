@@ -116,8 +116,6 @@ public class RobotContainer {
       operatorController.getHID().setRumble(RumbleType.kLeftRumble, 0);
       driverController.getHID().setRumble(RumbleType.kLeftRumble, 0);  
     }
-
-
   }
   public Command getAutonomousCommand() {
     return null;
