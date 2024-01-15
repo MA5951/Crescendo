@@ -25,7 +25,7 @@ public class ScoreAutomation extends SequentialCommandGroup {
       new ParallelCommandGroup(
         new RunInternallyControlledSubsystem(
           Shooter.getInstance(), vel,
-          true),
+          false),
         new MotorCommand(Intake.getInstance(),
           IntakeConstants.intakePower, 0)
       )

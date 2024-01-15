@@ -16,11 +16,11 @@ import frc.robot.subsystems.shooter.Shooter;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class GettingReadyForScore extends SequentialCommandGroup {
+public class GettingReadyToScore extends SequentialCommandGroup {
 
-  public GettingReadyForScore(Supplier<Double> vel, double elevatorPose) {
+  public GettingReadyToScore(Supplier<Double> vel, double elevatorPose) {
     addCommands(
-         new ParallelCommandGroup(
+      new ParallelCommandGroup(
         new SetElevator(elevatorPose),
         new RunInternallyControlledSubsystem(
           Shooter.getInstance(), vel,

@@ -4,10 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-
 // import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -35,8 +31,6 @@ public class RobotContainer {
     driverController = new CommandPS5Controller(PortMap.Controllers.driveID);
   public static final CommandPS5Controller
     operatorController = new CommandPS5Controller(PortMap.Controllers.operatorID);
-
-  double time = -5;
   
   private static Command GetScoreAutomation() {
     return scoringOption == ScoringOptions.SPEAKER ?
@@ -66,17 +60,27 @@ public class RobotContainer {
 
     new CreateButton(driverController.R1(), new IntakeCommand());
 
+    // shooting linked to the speaker 
     new CreateButton(driverController.L2(), new ScoreWithoutAdjust(
       () -> ShooterConstants.speakerV, ElevatorConstants.shootingPose));
 
+    // shootiong linked to the podduim 
     new CreateButton(driverController.L1(), new RunShoot(true));
     
+    // shooting or amp
     new CreateButton(driverController.circle(), new AMPSpeaker(RobotContainer::GetScoreAutomation));
 
+    // climb
     new CreateButton(operatorController.triangle(),
       new SetElevator(ElevatorConstants.climbPose),
       ElevatorConstants.closeClimbPose);
     
+    // eject
+    new CreateButton(operatorController.cross(), new ScoreWithoutAdjust(
+      () -> ShooterConstants.ejectV, ElevatorConstants.ejectPose
+    ));
+    
+    // choosing btween apm score and amp score
     operatorController.povUp().whileTrue(
       new InstantCommand(() -> scoringOption = ScoringOptions.SPEAKER)
     );
@@ -85,6 +89,8 @@ public class RobotContainer {
       new InstantCommand(() -> scoringOption = ScoringOptions.AMP)
     );
 
+    // --------------------LEDS-----------------------
+
     operatorController.touchpad().whileTrue(
       new InstantCommand(() -> LED.getInstance().activateAmp())
     );
@@ -92,30 +98,6 @@ public class RobotContainer {
     operatorController.options().whileTrue(
       new InstantCommand(() -> LED.getInstance().activateCoalition())
     );
-
-    if (DriverStation.isEnabled() && time == -5) {
-      time = Timer.getFPGATimestamp();
-    } else if (DriverStation.isDisabled()) {
-      time = -5;
-    }
-
-    // start of endgame (20 seconds left)
-    if ((time > 115 && time < 115.2) || (time > 115.4 && time < 115.6) || (time > 115.8 && time < 91)) {
-      operatorController.getHID().setRumble(RumbleType.kBothRumble, 1);
-      driverController.getHID().setRumble(RumbleType.kBothRumble, 1);
-    } else {
-      operatorController.getHID().setRumble(RumbleType.kBothRumble, 0);
-      driverController.getHID().setRumble(RumbleType.kBothRumble, 0);  
-    }
-
-    // last 3 seconds of match
-    if ((time > 132 && time < 132.3) || (time > 133 && time < 133.3) || (time > 134 && time < 135)) {
-      operatorController.getHID().setRumble(RumbleType.kLeftRumble, 1);
-      driverController.getHID().setRumble(RumbleType.kLeftRumble, 1);
-    } else {
-      operatorController.getHID().setRumble(RumbleType.kLeftRumble, 0);
-      driverController.getHID().setRumble(RumbleType.kLeftRumble, 0);  
-    }
   }
   public Command getAutonomousCommand() {
     return null;

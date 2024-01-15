@@ -29,21 +29,18 @@ public class RunInternallyControlledSubsystem extends Command {
   public RunInternallyControlledSubsystem(
     InternallyControlledSubsystem subsystem,
     double setPoint, boolean needToStopGivingPowerAtTheEnd) {
-  this.subsystem = subsystem;
-  this.setPoint = () -> setPoint;
-  this.needToStopGivingPowerAtTheEnd = needToStopGivingPowerAtTheEnd;
-  addRequirements(subsystem);
-}
+      this(subsystem, () -> setPoint, needToStopGivingPowerAtTheEnd);
+  }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    subsystem.setSetPoint(setPoint.get());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    subsystem.setSetPoint(setPoint.get());
     subsystem.calculate(setPoint.get());
   }
 

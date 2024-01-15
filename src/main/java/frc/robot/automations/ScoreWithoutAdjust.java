@@ -15,7 +15,7 @@ public class ScoreWithoutAdjust extends SequentialCommandGroup {
 
   public ScoreWithoutAdjust(Supplier<Double> vel, double elevatorPose) {
     addCommands(
-      new GettingReadyForScore(vel, elevatorPose),
+      new GettingReadyToScore(vel, elevatorPose),
       new ScoreAutomation(vel)
     );
   }

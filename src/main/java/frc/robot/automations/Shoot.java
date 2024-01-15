@@ -54,7 +54,7 @@ public class Shoot extends SequentialCommandGroup {
     addCommands(
       new ParallelCommandGroup(
         new AngleAdjust(Shoot::getAngle),
-        new GettingReadyForScore(V, ElevatorConstants.shootingPose)
+        new GettingReadyToScore(V, ElevatorConstants.shootingPose)
       ),
       new ScoreAutomation(V)
     );

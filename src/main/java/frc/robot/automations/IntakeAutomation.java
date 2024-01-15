@@ -5,6 +5,7 @@
 package frc.robot.automations;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.Intake.IntakeCommand;
 import frc.robot.commands.elevator.SetElevator;
 import frc.robot.subsystems.elevator.ElevatorConstants;
 
@@ -16,7 +17,7 @@ public class IntakeAutomation extends SequentialCommandGroup {
   public IntakeAutomation() {
     addCommands(
       new SetElevator(ElevatorConstants.intakePose),
-      new IntakeAutomation()
+      new IntakeCommand()
     );
   }
 }

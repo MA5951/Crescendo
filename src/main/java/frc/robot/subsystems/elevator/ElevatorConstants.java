@@ -13,6 +13,7 @@ public class ElevatorConstants {
     public static final double shootingPose = 0; // TODO
     public static final double shootingPoseAuto = 0; // TODO
     public static final double intakePose = 0; // TODO
+    public static final double ejectPose = 0; // TODO
 
     public static final double defaultPose = 0; // TODO
 

@@ -9,17 +9,17 @@ import java.util.function.Supplier;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class AMPSpeaker extends Command {
-  private Supplier<Command> SupplierCommand;
+  private Supplier<Command> commandSupplier;
   private Command command;
 
-  public AMPSpeaker(Supplier<Command> SupplierCommand) {
-    this.SupplierCommand = SupplierCommand;
+  public AMPSpeaker(Supplier<Command> commandSupplier) {
+    this.commandSupplier = commandSupplier;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    command = SupplierCommand.get();
+    command = commandSupplier.get();
     command.initialize();
   }
 

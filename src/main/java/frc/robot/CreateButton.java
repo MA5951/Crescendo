@@ -7,9 +7,11 @@ package frc.robot;
 import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.elevator.SetElevator;
 import frc.robot.subsystems.elevator.ElevatorConstants;
+import frc.robot.subsystems.shooter.Shooter;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -19,7 +21,9 @@ public class CreateButton {
   public CreateButton(Trigger button, Supplier<Command> automation,
     Supplier<Double> elevatorPoseEnd) {
     button.whileTrue(automation.get()).whileFalse(
-      new SetElevator(elevatorPoseEnd)
+      new SetElevator(elevatorPoseEnd).alongWith(new InstantCommand(
+        () -> Shooter.getInstance().setPower(0)
+      ))
     );
   }
 
