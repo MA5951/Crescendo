@@ -85,7 +85,7 @@ public class RobotContainer {
       new InstantCommand(() -> scoringOption = ScoringOptions.SPEAKER)
     );
 
-    operatorController.povUp().whileTrue(
+    operatorController.povDown().whileTrue(
       new InstantCommand(() -> scoringOption = ScoringOptions.AMP)
     );
 
