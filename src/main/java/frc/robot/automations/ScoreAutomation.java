@@ -11,6 +11,7 @@ import com.ma5951.utils.commands.RunInternallyControlledSubsystem;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.swerve.RunLockModules;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeConstants;
 import frc.robot.subsystems.shooter.Shooter;
@@ -27,7 +28,8 @@ public class ScoreAutomation extends SequentialCommandGroup {
           Shooter.getInstance(), vel,
           false),
         new MotorCommand(Intake.getInstance(),
-          IntakeConstants.intakePower, 0)
+          IntakeConstants.intakePower, 0),
+        new RunLockModules()
       )
     );
   }

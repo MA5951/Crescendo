@@ -16,5 +16,5 @@ public class ShooterConstants {
     public static final double AMPV = 0; // TODO
     public static final double ejectV = 0; // TODO
 
-    public static final double ejectPower = 0; // TODO
+    public static final double ejectSpeed = 0; // TODO
 }

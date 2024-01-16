@@ -7,16 +7,17 @@ package frc.robot;
 // import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
-import frc.robot.automations.AMPSpeaker;
-import frc.robot.automations.RunShoot;
 import frc.robot.automations.ScoreWithoutAdjust;
+import frc.robot.automations.Shoot;
 import frc.robot.commands.Intake.IntakeCommand;
 import frc.robot.commands.elevator.SetElevator;
 import frc.robot.subsystems.LED.LED;
 import frc.robot.subsystems.elevator.ElevatorConstants;
+import frc.robot.subsystems.intake.IntakeConstants;
 import frc.robot.subsystems.shooter.ShooterConstants;
 
 public class RobotContainer {
@@ -32,10 +33,8 @@ public class RobotContainer {
   public static final CommandPS5Controller
     operatorController = new CommandPS5Controller(PortMap.Controllers.operatorID);
   
-  private static Command GetScoreAutomation() {
-    return scoringOption == ScoringOptions.SPEAKER ?
-      new RunShoot(false) :
-      new ScoreWithoutAdjust(() -> ShooterConstants.AMPV, ElevatorConstants.AMPPose);
+  private static boolean IsSpeaker() {
+    return scoringOption == ScoringOptions.SPEAKER;
   }
 
   private void registerCommands() {
@@ -58,17 +57,24 @@ public class RobotContainer {
       new InstantCommand(SwerveDrivetrainSubsystem.getInstance()::updateOffset)
     );
 
-    new CreateButton(driverController.R1(), new IntakeCommand());
+    // ---------------------------------------------------------------
+
+    new CreateButton(driverController.R1(), new IntakeCommand(IntakeConstants.intakePower));
 
     // shooting linked to the speaker 
     new CreateButton(driverController.L2(), new ScoreWithoutAdjust(
       () -> ShooterConstants.speakerV, ElevatorConstants.shootingPose));
 
     // shootiong linked to the podduim 
-    new CreateButton(driverController.L1(), new RunShoot(true));
+    new CreateButton(driverController.L1(), new Shoot(true));
     
     // shooting or amp
-    new CreateButton(driverController.circle(), new AMPSpeaker(RobotContainer::GetScoreAutomation));
+    new CreateButton(driverController.circle(), 
+      new ConditionalCommand(new Shoot(false),
+        new ScoreWithoutAdjust(() -> ShooterConstants.AMPV,
+          ElevatorConstants.AMPPose), RobotContainer::IsSpeaker
+        )
+    );
 
     // climb
     new CreateButton(operatorController.triangle(),

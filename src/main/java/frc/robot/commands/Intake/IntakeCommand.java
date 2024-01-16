@@ -4,15 +4,14 @@ import com.ma5951.utils.commands.MotorCommand;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.intake.IntakeConstants;
 
 public class IntakeCommand extends Command {
   private Intake intake;
   private MotorCommand motorCommand;
   
-  public IntakeCommand() {
+  public IntakeCommand(double power) {
     intake = Intake.getInstance();
-    motorCommand = new MotorCommand(intake, IntakeConstants.intakePower, 0);
+    motorCommand = new MotorCommand(intake, power, 0);
   }
 
   @Override
