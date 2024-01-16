@@ -16,7 +16,7 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
   private static Intake intake;
   
   private DigitalInput upSensor;
-  private DigitalInput downSensor2;
+  private DigitalInput downSensor;
 
   private CANSparkMax master;
   private CANSparkMax slave;
@@ -27,8 +27,8 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
     master = new CANSparkMax(PortMap.Intake.masterID, MotorType.kBrushless);
     slave = new CANSparkMax(PortMap.Intake.slaveID, MotorType.kBrushless);
 
-    sensor1 = new DigitalInput(PortMap.Intake.sensor1ID);
-    sensor2 = new DigitalInput(PortMap.Intake.sensor2ID);
+    upSensor = new DigitalInput(PortMap.Intake.sensor1ID);
+    downSensor = new DigitalInput(PortMap.Intake.sensor2ID);
     board = new MAShuffleboard("Intake");
 
     master.setIdleMode(IdleMode.kBrake);
@@ -39,7 +39,7 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
   }
 
   public boolean isGamePieceInIntake(){
-    return !sensor1.get() || !sensor2.get();
+    return !upSensor.get() || !downSensor.get();
   }
 
   @Override
@@ -61,7 +61,7 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
 
   @Override
   public void periodic() {
-    board.addBoolean("Sensor 1", !sensor1.get());
-    board.addBoolean("Sensor 2", !sensor2.get());
+    board.addBoolean("Sensor down", !downSensor.get());
+    board.addBoolean("Sensor up", !upSensor.get());
   }
 }
