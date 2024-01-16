@@ -212,7 +212,9 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
   }
 
   public double getVelocity() {
-    return frontLeftModule.getDriveVelocity();
+    ChassisSpeeds speeds = getRobotRelativeSpeeds();
+    return Math.sqrt(Math.pow(speeds.vxMetersPerSecond, 2) +
+      Math.pow(speeds.vyMetersPerSecond, 2));
   }
 
   public double getAcceleration() {

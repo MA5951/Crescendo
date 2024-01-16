@@ -76,7 +76,7 @@ public class Shooter extends SubsystemBase implements InternallyControlledSubsys
 
   @Override
   public void calculate(double setPoint) {
-    pidController.setReference(setPoint, ControlType.kPosition, 0,
+    pidController.setReference(setPoint, ControlType.kVelocity, 0,
       feedforward.calculate(setPoint), ArbFFUnits.kPercentOut);
   }
 

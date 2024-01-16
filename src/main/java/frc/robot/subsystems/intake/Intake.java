@@ -25,7 +25,7 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
 
   private Intake() {
     master = new CANSparkMax(PortMap.Intake.masterID, MotorType.kBrushless);
-    master = new CANSparkMax(PortMap.Intake.slaveID, MotorType.kBrushless);
+    slave = new CANSparkMax(PortMap.Intake.slaveID, MotorType.kBrushless);
 
     sensor1 = new DigitalInput(PortMap.Intake.sensor1ID);
     sensor2 = new DigitalInput(PortMap.Intake.sensor2ID);
