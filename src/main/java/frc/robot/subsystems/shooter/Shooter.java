@@ -38,8 +38,8 @@ public class Shooter extends SubsystemBase implements InternallyControlledSubsys
     master = new CANSparkMax(PortMap.Shooter.masterID, MotorType.kBrushless);
     slave = new CANSparkMax(PortMap.Shooter.slaveID, MotorType.kBrushless);
 
-    master.setIdleMode(IdleMode.kBrake);
-    slave.setIdleMode(IdleMode.kBrake);
+    master.setIdleMode(IdleMode.kCoast);
+    slave.setIdleMode(IdleMode.kCoast);
 
     master.setInverted(false);
     slave.follow(master, true);
