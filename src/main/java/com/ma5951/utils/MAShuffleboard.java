@@ -84,9 +84,9 @@ public class MAShuffleboard {
         private pidControllerGainSupplier(MAShuffleboard shuffleboard, String PIDname,
          double KP, double KI, double KD) {
             this.shuffleboard = shuffleboard;
-            KP_STRING = PIDname + " " + "KP";
-            KI_STRING = PIDname + " " + "KI";
-            KD_STRING = PIDname + " " + "KD";
+            KP_STRING = PIDname + " KP";
+            KI_STRING = PIDname + " KI";
+            KD_STRING = PIDname + " KD";
             shuffleboard.addNum(KP_STRING, KP);
             shuffleboard.addNum(KI_STRING, KI);
             shuffleboard.addNum(KD_STRING, KD);
