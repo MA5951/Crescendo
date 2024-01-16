@@ -17,13 +17,13 @@ public class PortMap {
     public static final int leftFrontDriveID = 8;
     public static final int leftFrontTurningID = 5;
 
-    public static final int leftBackAbsoluteEncoder = 23;
-    public static final int leftBackDriveID = 7;
-    public static final int leftBackTurningID = 6;
+    public static final int leftBackAbsoluteEncoder = 21;
+    public static final int leftBackDriveID = 4;
+    public static final int leftBackTurningID = 9;
 
-    public static final int rightFrontAbsoluteEncoder = 21;
-    public static final int rightFrontDriveID = 4;
-    public static final int rightFrontTurningID = 9;
+    public static final int rightFrontAbsoluteEncoder = 23;
+    public static final int rightFrontDriveID = 7;
+    public static final int rightFrontTurningID = 6;
 
     public static final int rightBackAbsoluteEncoder = 24;
     public static final int rightBackDriveID = 2;

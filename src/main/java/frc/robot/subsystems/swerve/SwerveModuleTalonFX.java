@@ -76,7 +76,7 @@ public class SwerveModuleTalonFX extends SwerveModule {
             isTurningMotorReversed ? InvertedValue.Clockwise_Positive : 
             InvertedValue.CounterClockwise_Positive;
 
-        turningConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        turningConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
         turningConfiguration.Slot0.kP = SwerveConstants.turningPIDKP;
         turningConfiguration.Slot0.kI = SwerveConstants.turningPIDKI;

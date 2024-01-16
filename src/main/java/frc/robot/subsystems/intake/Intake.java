@@ -10,6 +10,8 @@ import com.ma5951.utils.subsystem.MotorSubsystem;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.PortMap;
+import frc.robot.subsystems.shooter.Shooter;
+
 import com.revrobotics.CANSparkMax;
 
 public class Intake extends SubsystemBase implements MotorSubsystem{
@@ -20,6 +22,8 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
 
   private CANSparkMax master;
   private CANSparkMax slave;
+
+  private double power = 0;
 
   private MAShuffleboard board;
 
@@ -44,12 +48,14 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
 
   @Override
   public boolean canMove() {
-      return true;
+      return !isGamePieceInIntake() 
+        || Shooter.getInstance().atPoint() || power < 0;
   }
 
   @Override
   public void setVoltage(double voltage) {
-      master.set(voltage / 12);
+    master.set(voltage / 12);
+    power = voltage / 12;
   }
 
   public static Intake getInstance() {
