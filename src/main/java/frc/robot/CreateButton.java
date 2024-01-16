@@ -19,7 +19,7 @@ import frc.robot.subsystems.shooter.Shooter;
 public class CreateButton {
 
   public CreateButton(Trigger button, Supplier<Command> automation,
-    Supplier<Double> elevatorPoseEnd) {
+    double elevatorPoseEnd) {
     button.whileTrue(automation.get()).whileFalse(
       new SetElevator(elevatorPoseEnd).alongWith(new InstantCommand(
         () -> Shooter.getInstance().setPower(0)
@@ -29,7 +29,7 @@ public class CreateButton {
 
   public CreateButton(Trigger button, Command automation,
     double elevatorPoseEnd) {
-    this(button, () -> automation, () -> elevatorPoseEnd);
+    this(button, () -> automation, elevatorPoseEnd);
   }
 
   public CreateButton(Trigger button, Command automation) {
@@ -37,6 +37,6 @@ public class CreateButton {
   }
 
   public CreateButton(Trigger button, Supplier<Command> automation) {
-    this(button, automation, () -> ElevatorConstants.defaultPose);
+    this(button, automation, ElevatorConstants.defaultPose);
   }
 }

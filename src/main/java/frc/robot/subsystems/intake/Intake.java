@@ -15,8 +15,8 @@ import com.revrobotics.CANSparkMax;
 public class Intake extends SubsystemBase implements MotorSubsystem{
   private static Intake intake;
   
-  private DigitalInput sensor1;
-  private DigitalInput sensor2;
+  private DigitalInput upSensor;
+  private DigitalInput downSensor2;
 
   private CANSparkMax master;
   private CANSparkMax slave;

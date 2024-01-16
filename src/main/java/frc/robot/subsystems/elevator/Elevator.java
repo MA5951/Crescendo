@@ -8,8 +8,6 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import java.util.function.Supplier;
-
 import com.ma5951.utils.MAShuffleboard;
 import com.ma5951.utils.MAShuffleboard.pidControllerGainSupplier;
 import com.ma5951.utils.subsystem.DefaultInternallyControlledSubsystem;
@@ -27,7 +25,7 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
     private RelativeEncoder encoder;
 
     private SparkPIDController pidController;
-    private Supplier <Double> setPoint = () -> 0d;
+    private double setPoint = 0;
 
     private pidControllerGainSupplier pidGainSupplier;
 
@@ -68,21 +66,17 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
 
     @Override
     public boolean atPoint() {
-        return Math.abs(getPosition() - setPoint.get()) <= ElevatorConstants.tolerance;
+        return Math.abs(getPosition() - setPoint) <= ElevatorConstants.tolerance;
     }
 
     @Override
     public void setSetPoint(double setPoint) {
-        this.setPoint = () -> setPoint;
-    }
-
-    public void setSetPoint(Supplier<Double> setPoint) {
         this.setPoint = setPoint;
     }
 
     @Override
     public double getSetPoint() {
-        return setPoint.get();
+        return setPoint;
     }
     
     public double getPosition() {
@@ -100,8 +94,8 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
 
     @Override
     public boolean canMove() {
-        return setPoint.get() >= ElevatorConstants.minPose &&
-         setPoint.get() <= ElevatorConstants.maxPose;
+        return setPoint >= ElevatorConstants.minPose &&
+         setPoint <= ElevatorConstants.maxPose;
     }
 
     public static Elevator getInstance() {
