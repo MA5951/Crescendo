@@ -59,6 +59,7 @@ public class Shooter extends SubsystemBase implements InternallyControlledSubsys
 
     board = new MAShuffleboard("shotter");
     pidGainSupplier = board.getPidControllerGainSupplier(
+      "velocity",
       ShooterConstants.kp,
       ShooterConstants.ki,
       ShooterConstants.kd);

@@ -55,7 +55,11 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
       slave.follow(master, true);
 
       board = new MAShuffleboard("Elevator");
-      pidGainSupplier = board.getPidControllerGainSupplier(ElevatorConstants.kP, ElevatorConstants.kI, ElevatorConstants.kD);
+      pidGainSupplier = board.getPidControllerGainSupplier(
+        "position",
+        ElevatorConstants.kP,
+        ElevatorConstants.kI,
+        ElevatorConstants.kD);
     }
 
     
