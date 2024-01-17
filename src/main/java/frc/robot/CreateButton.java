@@ -9,9 +9,10 @@ import java.util.function.Supplier;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.elevator.SetElevator;
+import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorConstants;
-import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.shooter.LowerShooter;
+import frc.robot.subsystems.shooter.UpperShooter;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -21,9 +22,12 @@ public class CreateButton {
   public CreateButton(Trigger button, Supplier<Command> automation,
     double elevatorPoseEnd) {
     button.whileTrue(automation.get()).whileFalse(
-      new SetElevator(elevatorPoseEnd).alongWith(new InstantCommand(
-        () -> Shooter.getInstance().setPower(0)
-      ))
+      new InstantCommand(
+        () -> Elevator.getInstance().setSetPoint(0))
+          .alongWith(new InstantCommand(
+        () -> UpperShooter.getInstance().setSetPoint(0)))
+        .alongWith(new InstantCommand(
+        () -> LowerShooter.getInstance().setSetPoint(0)))
     );
   }
 

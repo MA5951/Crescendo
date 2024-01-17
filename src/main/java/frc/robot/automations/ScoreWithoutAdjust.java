@@ -13,10 +13,11 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ScoreWithoutAdjust extends SequentialCommandGroup {
 
-  public ScoreWithoutAdjust(Supplier<Double> vel, double elevatorPose) {
+  public ScoreWithoutAdjust(Supplier<Double> upperVel,
+    Supplier<Double> lowerVel, double elevatorPose) {
     addCommands(
-      new GettingReadyToScore(vel, elevatorPose),
-      new ScoreAutomation(vel)
+      new GettingReadyToScore(upperVel, lowerVel, elevatorPose),
+      new ScoreAutomation()
     );
   }
 }

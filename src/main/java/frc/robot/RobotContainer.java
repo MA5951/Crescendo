@@ -59,11 +59,13 @@ public class RobotContainer {
 
     // ---------------------------------------------------------------
 
-    new CreateButton(driverController.R1(), new IntakeCommand(IntakeConstants.intakePower));
+    new CreateButton(driverController.R1(), 
+      new IntakeCommand(IntakeConstants.intakePower));
 
     // shooting linked to the speaker 
     new CreateButton(driverController.L2(), new ScoreWithoutAdjust(
-      () -> ShooterConstants.speakerV, ElevatorConstants.shootingPose));
+      () -> ShooterConstants.speakerUpperV, () -> ShooterConstants.speakerLowerV,
+        ElevatorConstants.shootingPose));
 
     // shootiong linked to the podduim 
     new CreateButton(driverController.L1(), new Shoot(true));
@@ -72,7 +74,7 @@ public class RobotContainer {
     new CreateButton(driverController.circle(), 
       new ConditionalCommand(new Shoot(false),
         new ScoreWithoutAdjust(() -> ShooterConstants.AMPV,
-          ElevatorConstants.AMPPose), RobotContainer::IsSpeaker
+          () -> ShooterConstants.AMPV, ElevatorConstants.AMPPose), RobotContainer::IsSpeaker
         )
     );
 
@@ -83,7 +85,7 @@ public class RobotContainer {
     
     // eject
     new CreateButton(operatorController.cross(), new ScoreWithoutAdjust(
-      () -> ShooterConstants.ejectV, ElevatorConstants.ejectPose
+      () -> ShooterConstants.ejectV, () -> ShooterConstants.ejectV, ElevatorConstants.ejectPose
     ));
     
     // choosing btween apm score and amp score

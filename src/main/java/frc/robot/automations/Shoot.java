@@ -12,8 +12,9 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.swerve.AngleAdjust;
 import frc.robot.subsystems.elevator.ElevatorConstants;
-import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.shooter.LowerShooter;
 import frc.robot.subsystems.shooter.ShooterConstants;
+import frc.robot.subsystems.shooter.UpperShooter;
 import frc.robot.subsystems.swerve.SwerveConstants;
 import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
 
@@ -49,14 +50,16 @@ public class Shoot extends SequentialCommandGroup {
 
   public Shoot(boolean isPoduim) {
     Shoot.isPoduim = isPoduim;
-    Supplier<Double> V = isPoduim ?
-      () -> ShooterConstants.podiumV : Shooter.getInstance()::getVelocityForShooting;
+    Supplier<Double> upperV = isPoduim ?
+      () -> ShooterConstants.podiumUpperV : UpperShooter.getInstance()::getVelocityForShooting;
+    Supplier<Double> lowerV = isPoduim ?
+      () -> ShooterConstants.podiumLowerV : LowerShooter.getInstance()::getVelocityForShooting;
     addCommands(
       new ParallelCommandGroup(
         new AngleAdjust(Shoot::getAngle),
-        new GettingReadyToScore(V, ElevatorConstants.shootingPose)
+        new GettingReadyToScore(upperV, lowerV, ElevatorConstants.shootingPose)
       ),
-      new ScoreAutomation(V)
+      new ScoreAutomation()
     );
   }
 }

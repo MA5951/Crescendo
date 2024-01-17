@@ -33,8 +33,8 @@ public class PortMap {
   }
 
   public static class Shooter {
-    public static final int masterID = 0; //TODO
-    public static final int slaveID = 0; //TODO
+    public static final int upperID = 0; //TODO
+    public static final int lowerID = 0; //TODO
   }
 
   public static class Intake {

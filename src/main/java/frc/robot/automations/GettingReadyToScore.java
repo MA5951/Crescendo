@@ -6,25 +6,22 @@ package frc.robot.automations;
 
 import java.util.function.Supplier;
 
-import com.ma5951.utils.commands.RunInternallyControlledSubsystem;
-
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.elevator.SetElevator;
-import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.commands.shooter.SetShooter;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class GettingReadyToScore extends SequentialCommandGroup {
 
-  public GettingReadyToScore(Supplier<Double> vel, double elevatorPose) {
+  public GettingReadyToScore(Supplier<Double> upperVel, 
+    Supplier<Double> lowerVel, double elevatorPose) {
     addCommands(
       new ParallelCommandGroup(
         new SetElevator(elevatorPose),
-        new RunInternallyControlledSubsystem(
-          Shooter.getInstance(), vel,
-          false)
+        new SetShooter(upperVel, lowerVel)
       )
     );
   }

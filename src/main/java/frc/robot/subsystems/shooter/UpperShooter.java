@@ -4,9 +4,11 @@
 
 package frc.robot.subsystems.shooter;
 
+import java.util.function.Supplier;
+
 import com.ma5951.utils.MAShuffleboard;
 import com.ma5951.utils.MAShuffleboard.pidControllerGainSupplier;
-import com.ma5951.utils.subsystem.InternallyControlledSubsystem;
+import com.ma5951.utils.subsystem.DefaultInternallyControlledSubsystem;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
@@ -23,11 +25,10 @@ import frc.robot.PortMap;
 import frc.robot.subsystems.swerve.SwerveConstants;
 import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
 
-public class Shooter extends SubsystemBase implements InternallyControlledSubsystem {
-  private static Shooter instance;
+public class UpperShooter extends SubsystemBase implements DefaultInternallyControlledSubsystem {
+  private static UpperShooter instance;
 
-  private CANSparkMax master;
-  private CANSparkMax slave;
+  private CANSparkMax motor;
 
   private RelativeEncoder encoder;
   private SparkPIDController pidController;
@@ -38,20 +39,17 @@ public class Shooter extends SubsystemBase implements InternallyControlledSubsys
   private MAShuffleboard board;
   private pidControllerGainSupplier pidGainSupplier;
 
-  private Shooter() {
-    master = new CANSparkMax(PortMap.Shooter.masterID, MotorType.kBrushless);
-    slave = new CANSparkMax(PortMap.Shooter.slaveID, MotorType.kBrushless);
+  private UpperShooter() {
+    motor = new CANSparkMax(PortMap.Shooter.upperID, MotorType.kBrushless);
 
-    master.setIdleMode(IdleMode.kCoast);
-    slave.setIdleMode(IdleMode.kCoast);
+    motor.setIdleMode(IdleMode.kCoast);
 
-    master.setInverted(false);
-    slave.follow(master, true);
+    motor.setInverted(false);
 
-    encoder = master.getEncoder();
+    encoder = motor.getEncoder();
     encoder.setVelocityConversionFactor(ShooterConstants.VelocityConversionFactor);
 
-    pidController = master.getPIDController();
+    pidController = motor.getPIDController();
     pidController.setFeedbackDevice(encoder);
 
     pidController.setP(ShooterConstants.kp);
@@ -61,7 +59,7 @@ public class Shooter extends SubsystemBase implements InternallyControlledSubsys
     feedforward = new SimpleMotorFeedforward(0, ShooterConstants.kv);
 
 
-    board = new MAShuffleboard("shotter");
+    board = new MAShuffleboard("Upper shotter");
     pidGainSupplier = board.getPidControllerGainSupplier(
       "velocity",
       ShooterConstants.kp,
@@ -71,7 +69,7 @@ public class Shooter extends SubsystemBase implements InternallyControlledSubsys
 
   @Override
   public void setVoltage(double voltage) {
-    master.set(voltage / 12);
+    motor.set(voltage / 12);
   }
 
   @Override
@@ -106,13 +104,22 @@ public class Shooter extends SubsystemBase implements InternallyControlledSubsys
     this.setPoint = setPoint;
   }
 
+  public void setSetPoint(Supplier<Double> setPoint) {
+    this.setPoint = setPoint.get();
+  }
+
+  @Override
+  public double getSetPoint() {
+    return setPoint;
+  }
+
   public double getVelocityForShooting() {
     return 0; // TODO need to craete a graph
   }
 
-  public static Shooter getInstance() {
+  public static UpperShooter getInstance() {
     if (instance == null) {
-      instance = new Shooter();
+      instance = new UpperShooter();
     }
     return instance;
   }

@@ -10,7 +10,7 @@ import com.ma5951.utils.subsystem.MotorSubsystem;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.PortMap;
-import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.shooter.LowerShooter;
 
 import com.revrobotics.CANSparkMax;
 
@@ -49,7 +49,7 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
   @Override
   public boolean canMove() {
       return !isGamePieceInIntake() 
-        || Shooter.getInstance().atPoint() || power < 0;
+        || LowerShooter.getInstance().atPoint() || power < 0;
   }
 
   @Override
