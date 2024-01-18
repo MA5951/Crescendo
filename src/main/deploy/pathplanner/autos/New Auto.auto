@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 4.362331724663449,
-      "y": 4.723865162016039
+      "x": 0.75,
+      "y": 6.47
     },
-    "rotation": 0
+    "rotation": -121.0
   },
   "command": {
     "type": "sequential",
@@ -14,19 +14,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Example Path"
+            "pathName": "Note 1 intake"
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "wait"
+            "waitTime": 0.3
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "New Path"
+            "pathName": "Note 1 score"
           }
         }
       ]

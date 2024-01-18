@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.777459269204253,
-        "y": 4.723865162016039
+        "x": 2.7,
+        "y": 7.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.078068870423456,
-        "y": 4.637976704524838
+        "x": 2.546873826142019,
+        "y": 6.749544766695167
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.5,
-        "y": 4.6
+        "x": 2.1277372132209056,
+        "y": 6.330408153774054
       },
       "prevControl": {
-        "x": 5.970354512137595,
-        "y": 4.628629485830399
+        "x": 2.48906187953221,
+        "y": 6.865168659914785
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,11 +39,14 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": -160.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
-  "previewStartingState": null,
+  "folder": "Speaker- OneNode",
+  "previewStartingState": {
+    "rotation": 180.0,
+    "velocity": 0
+  },
   "useDefaultConstraints": false
 }
