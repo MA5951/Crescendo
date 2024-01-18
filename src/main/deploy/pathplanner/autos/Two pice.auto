@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.2316520407688707,
-      "y": 5.578852847846542
+      "x": 0.75,
+      "y": 6.47
     },
-    "rotation": 0
+    "rotation": -121.0
   },
   "command": {
     "type": "sequential",
@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Node 2 Intake"
+            "pathName": "Note 1 intake"
           }
         },
         {
@@ -26,7 +26,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Note 3 intake"
+            "pathName": "Note 1 score"
           }
         }
       ]

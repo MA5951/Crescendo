@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.7,
-        "y": 7.0
+        "x": 1.2316520407688707,
+        "y": 5.578852847846542
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.546873826142019,
-        "y": 6.749544766695167
+        "x": 2.0410192933061926,
+        "y": 5.578852847846542
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.1277372132209056,
-        "y": 6.330408153774054
+        "x": 2.5035148661846622,
+        "y": 5.578852847846542
       },
       "prevControl": {
-        "x": 2.48906187953221,
-        "y": 6.865168659914785
+        "x": 2.2722670797454274,
+        "y": 5.56439986119409
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,21 +32,18 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 5.3,
-    "maxAcceleration": 5.0,
+    "maxVelocity": 5.0,
+    "maxAcceleration": 22.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -160.0,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Speaker- 2 Node",
-  "previewStartingState": {
-    "rotation": 180.0,
-    "velocity": 0
-  },
+  "folder": "Seaker- 3 Node",
+  "previewStartingState": null,
   "useDefaultConstraints": false
 }
