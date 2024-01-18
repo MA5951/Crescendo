@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.75,
-      "y": 6.47
+      "x": 1.2316520407688707,
+      "y": 5.578852847846542
     },
-    "rotation": -121.0
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
@@ -24,7 +24,38 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Note 1 intake"
+                  "pathName": "Node 2 Intake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Note 3 intake"
                 }
               },
               {
@@ -45,7 +76,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Note 1 score"
+            "pathName": "Note 3 score"
           }
         },
         {
