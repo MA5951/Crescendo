@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.827701796248663,
-        "y": 7.313211246140803
+        "x": 5.610906996461881,
+        "y": 7.558912019232489
       },
       "isLocked": false,
       "linkedName": null
@@ -20,8 +20,8 @@
         "y": 5.4921349279318274
       },
       "prevControl": {
-        "x": 4.9921746378704075,
-        "y": 5.145263248272974
+        "x": 5.336300250065289,
+        "y": 5.5210409012367325
       },
       "nextControl": null,
       "isLocked": false,
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Seaker- 3 Node",
+  "folder": "Speaker- 3 Node",
   "previewStartingState": null,
   "useDefaultConstraints": false
 }

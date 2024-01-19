@@ -71,7 +71,7 @@ public class SwerveConstants {
 
         // swerve physics
         public final static double MAX_VELOCITY = 5.3;
-        public final static double MAX_ACCELERATION = Math.pow(MAX_VELOCITY, 2) / RADIUS;
+        public final static double MAX_ACCELERATION = Math.pow(MAX_VELOCITY, 2) / RADIUS; 
         public final static double MAX_ANGULAR_VELOCITY = MAX_VELOCITY / RADIUS; // radians
 
         // swerve controllers

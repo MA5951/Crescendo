@@ -14,38 +14,32 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": "Initial Shoot"
           }
         },
         {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Note 2Amp intake"
-                }
-              },
               {
                 "type": "named",
                 "data": {
                   "name": "Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Note 2 intake Ampside"
                 }
               }
             ]
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "Note 2Aamp score"
+            "pathName": "Note 2 score Ampside"
           }
         },
         {

@@ -14,32 +14,26 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": "Initial Shoot"
           }
         },
         {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Node 2 Intake"
-                }
-              },
               {
                 "type": "named",
                 "data": {
                   "name": "Intake"
                 }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Node 2 Intake"
+                }
               }
             ]
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
           }
         },
         {
@@ -49,28 +43,22 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Note 3 intake"
-                }
-              },
               {
                 "type": "named",
                 "data": {
                   "name": "Intake"
                 }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Note 3 intake"
+                }
               }
             ]
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
           }
         },
         {
@@ -82,7 +70,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": "Feed To Shooter"
           }
         }
       ]
