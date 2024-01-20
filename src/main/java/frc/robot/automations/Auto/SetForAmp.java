@@ -4,16 +4,23 @@
 
 package frc.robot.automations.Auto;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.subsystems.elevator.Elevator;
+import frc.robot.subsystems.elevator.ElevatorConstants;
+import frc.robot.subsystems.shooter.ShooterConstants;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class AmpScore extends SequentialCommandGroup {
+public class SetForAmp extends SequentialCommandGroup {
   /** Creates a new AmpScore. */
-  public AmpScore() {
+  public SetForAmp() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands();
+    addCommands(
+      new InstantCommand(() -> Elevator.getInstance().setSetPoint(ElevatorConstants.AMPPose)),
+      new InstantCommand(() -> Elevator.getInstance().setSetPoint(ShooterConstants.AMPV))
+    );
   }
 }

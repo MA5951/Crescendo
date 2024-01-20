@@ -18,12 +18,8 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkPIDController.ArbFFUnits;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.PortMap;
-import frc.robot.subsystems.swerve.SwerveConstants;
-import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
 
 public class UpperShooter extends SubsystemBase implements DefaultInternallyControlledSubsystem {
   private static UpperShooter instance;
@@ -74,18 +70,7 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
 
   @Override
   public boolean canMove() {
-    double xTrget = DriverStation.getAlliance().get() == Alliance.Red ? 
-      SwerveConstants.speakerTargetXRed : SwerveConstants.speakerTargetXBlue;
-    double yTrget = DriverStation.getAlliance().get() == Alliance.Red ? 
-      SwerveConstants.speakerTargetYRed : SwerveConstants.speakerTargetYBlue;
-    double xDis = Math.abs(
-      SwerveDrivetrainSubsystem.getInstance().getPose().getX() - xTrget);
-    double yDis = Math.abs(
-      SwerveDrivetrainSubsystem.getInstance().getPose().getY() - yTrget);
-    return (xDis > SwerveConstants.maxSpeakerDistanceX || 
-            yDis > SwerveConstants.maxSpeakerDistanceY) || 
-            setPoint < 
-            ShooterConstants.AMPV + ShooterConstants.tolorance;
+    return true;
   }
 
   @Override

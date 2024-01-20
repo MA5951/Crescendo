@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.2316520407688707,
-      "y": 5.578852847846542
+      "x": 0.75,
+      "y": 6.47
     },
-    "rotation": 0
+    "rotation": -122.0
   },
   "command": {
     "type": "sequential",
@@ -30,10 +30,16 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Note 2 intake Middle"
+                  "pathName": "Note 2 intake Ampside"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Note 2 score Ampside"
           }
         },
         {
@@ -55,7 +61,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Note 3 intake Middle"
+                  "pathName": "Note 3 intake Ampside"
                 }
               }
             ]
@@ -64,13 +70,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Note 3 score Middle"
+            "pathName": "Note 3 score Ampside"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Feed To Shooter"
+            "name": "Shoot"
           }
         }
       ]

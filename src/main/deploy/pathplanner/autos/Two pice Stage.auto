@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.2316520407688707,
-      "y": 5.578852847846542
+      "x": 0.7836094545428531,
+      "y": 4.596049755479793
     },
-    "rotation": 0
+    "rotation": 122.0
   },
   "command": {
     "type": "sequential",
@@ -30,32 +30,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Note 2 intake Middle"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "deadline",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Note 3 intake Middle"
+                  "pathName": "Node 2 intake Stageside"
                 }
               }
             ]
@@ -64,18 +39,18 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Note 3 score Middle"
+            "pathName": " Node 2 score Stageside"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Feed To Shooter"
+            "name": "Shoot"
           }
         }
       ]
     }
   },
-  "folder": "Theree pice",
+  "folder": "Two pice",
   "choreoAuto": false
 }
