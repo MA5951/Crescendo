@@ -6,6 +6,8 @@ import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.AnalogEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.ma5951.utils.MAShuffleboard;
@@ -18,10 +20,11 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
 
     private static Elevator elevator;
 
-    // TODO to add absolute encoder
+    private AnalogEncoder absEncoder;
 
     private CANSparkMax master;
-    private CANSparkMax slave;
+    private CANSparkMax slave1;
+    private CANSparkMax slave2;
     private RelativeEncoder encoder;
 
     private SparkPIDController pidController;
@@ -34,16 +37,20 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
 
     private Elevator() {
       master = new CANSparkMax(PortMap.Elevator.masterID, MotorType.kBrushless);
-      slave = new CANSparkMax(PortMap.Elevator.slaveID, MotorType.kBrushless);
+      slave1 = new CANSparkMax(PortMap.Elevator.slave1ID, MotorType.kBrushless);
+      slave2 = new CANSparkMax(PortMap.Elevator.slave2ID, MotorType.kBrushless);
+
+      absEncoder = new AnalogEncoder(PortMap.Elevator.absEncoderID);
 
       master.setIdleMode(IdleMode.kBrake);
-      slave.setIdleMode(IdleMode.kBrake);
+      slave1.setIdleMode(IdleMode.kBrake);
 
       encoder = master.getEncoder();
 
       encoder.setPositionConversionFactor(ElevatorConstants.positionConversionFactor);
 
-      resetPose(0);
+      resetPose(absEncoder.getAbsolutePosition() * 
+        ElevatorConstants.absPositionConversionFactor - ElevatorConstants.encoderOffset);
 
       pidController = master.getPIDController();
       pidController.setFeedbackDevice(encoder);
@@ -52,7 +59,8 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
       pidController.setD(ElevatorConstants.kD);
 
 
-      slave.follow(master, true);
+      slave1.follow(master, true);
+      slave2.follow(master, false);
 
       board = new MAShuffleboard("Elevator");
       pidGainSupplier = board.getPidControllerGainSupplier(
@@ -70,7 +78,7 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
 
     @Override
     public boolean atPoint() {
-        return Math.abs(getPosition() - setPoint) <= ElevatorConstants.tolerance;
+        return Math.abs(getPosition() - getSetPoint()) <= ElevatorConstants.tolerance;
     }
 
     @Override

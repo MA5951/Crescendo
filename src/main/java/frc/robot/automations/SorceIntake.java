@@ -4,6 +4,8 @@
 
 package frc.robot.automations;
 
+import com.ma5951.utils.commands.MotorCommand;
+
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
@@ -32,7 +34,7 @@ public class SorceIntake extends SequentialCommandGroup {
         new WaitUntilCommand(() -> {
           return !Intake.getInstance().isGamePieceInIntake();
         }),
-        new IntakeCommand(-IntakeConstants.intakePower))
+        new MotorCommand(Intake.getInstance(), -IntakeConstants.intakePower, 0))
     );
   }
 }

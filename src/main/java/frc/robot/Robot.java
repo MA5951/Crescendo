@@ -40,7 +40,7 @@ public class Robot extends TimedRobot {
 
     CommandScheduler.getInstance().setDefaultCommand(
       UpperShooter.getInstance(), new DefaultRunInternallyControlledSubsystem(
-        LowerShooter.getInstance(), 0));
+        UpperShooter.getInstance(), 0));
   }
 
   @Override

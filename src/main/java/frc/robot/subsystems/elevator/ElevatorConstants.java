@@ -22,4 +22,8 @@ public class ElevatorConstants {
     public static final double closeClimbPose = 0; //TODO
 
     public static final double positionConversionFactor = 0; // TODO
+
+    public static final double encoderOffset = 0; // TODO
+
+    public static final double absPositionConversionFactor = 0; // TODO
 }

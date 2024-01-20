@@ -2,8 +2,8 @@ package frc.robot.subsystems.swerve;
 
 public class SwerveConstants {
         // swerve constants
-        public final static double WIDTH = 0.66;
-        public final static double LENGTH = 0.66;
+        public final static double WIDTH = 0.545;
+        public final static double LENGTH = 0.545;
         public final static double RADIUS = Math.sqrt(
                         Math.pow(WIDTH, 2) + Math.pow(LENGTH, 2)) / 2.0;
 

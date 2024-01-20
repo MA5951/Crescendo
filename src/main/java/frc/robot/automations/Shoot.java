@@ -56,7 +56,7 @@ public class Shoot extends SequentialCommandGroup {
       () -> ShooterConstants.podiumLowerV : LowerShooter.getInstance()::getVelocityForShooting;
     addCommands(
       new ParallelCommandGroup(
-        new AngleAdjust(Shoot::getAngle),
+        new AngleAdjust(Shoot::getAngle, () -> 0d, () -> 0d),
         new GettingReadyToScore(upperV, lowerV, ElevatorConstants.shootingPose)
       ),
       new ScoreAutomation()

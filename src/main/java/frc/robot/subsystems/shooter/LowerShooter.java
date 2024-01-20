@@ -49,8 +49,8 @@ public class LowerShooter extends SubsystemBase implements DefaultInternallyCont
     pidController.setFeedbackDevice(encoder);
 
     pidController.setP(ShooterConstants.kp);
-    pidController.setP(ShooterConstants.ki);
-    pidController.setP(ShooterConstants.kd);
+    pidController.setI(ShooterConstants.ki);
+    pidController.setD(ShooterConstants.kd);
 
     feedforward = new SimpleMotorFeedforward(0, ShooterConstants.kv);
 
@@ -81,7 +81,11 @@ public class LowerShooter extends SubsystemBase implements DefaultInternallyCont
 
   @Override
   public boolean atPoint() {
-    return Math.abs(setPoint - encoder.getVelocity()) < ShooterConstants.tolorance; 
+    return Math.abs(getSetPoint() - getVelocity()) < ShooterConstants.tolorance; 
+  }
+
+  public double getVelocity(){
+    return encoder.getVelocity();
   }
 
   @Override
@@ -115,6 +119,7 @@ public class LowerShooter extends SubsystemBase implements DefaultInternallyCont
     pidController.setI(pidGainSupplier.getKI());
     pidController.setD(pidGainSupplier.getKD());
 
-    board.addNum("v", encoder.getVelocity());
+    board.addNum("v", getVelocity());
+    board.addNum("setPoint", getSetPoint());
   }
 }

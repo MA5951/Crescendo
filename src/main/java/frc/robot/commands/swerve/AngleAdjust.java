@@ -15,10 +15,16 @@ public class AngleAdjust extends Command {
   private SwerveDrivetrainSubsystem swerve;
   private PIDController pid;
   private Supplier<Double> angle;
+  private Supplier<Double> xSupplier;
+  private Supplier<Double> ySupplier;
 
-  public AngleAdjust(Supplier<Double> angle) {
+  public AngleAdjust(Supplier<Double> angle,
+    Supplier<Double> xSupplier, Supplier<Double> ySupplier) {
     swerve = SwerveDrivetrainSubsystem.getInstance();
     addRequirements(swerve);
+
+    this.xSupplier = xSupplier;
+    this.ySupplier = ySupplier;
 
     pid = new PIDController(
       SwerveConstants.THATA_KP,
@@ -27,10 +33,6 @@ public class AngleAdjust extends Command {
     );
     this.angle = angle;
     pid.setTolerance(SwerveConstants.anglePIDTolorance);
-  }
-
-  public AngleAdjust(double angle) {
-    this(() -> angle);
   }
 
   // Called when the command is initially scheduled.
@@ -42,10 +44,23 @@ public class AngleAdjust extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    double xSpeed = SwerveDrivetrainSubsystem.getInstance().isXYReversed ? 
+      ySupplier.get() : xSupplier.get();
+    double ySpeed = SwerveDrivetrainSubsystem.getInstance().isXYReversed ?
+      xSupplier.get() : ySupplier.get();
+    xSpeed = Math.abs(xSpeed) < 0.1 ? 0 : xSpeed;
+    ySpeed = Math.abs(ySpeed) < 0.1 ? 0 : ySpeed;
+    xSpeed = xSpeed *
+      swerve.maxVelocity *
+      (SwerveDrivetrainSubsystem.getInstance().isXReversed ? -1 : 1);
+    ySpeed = ySpeed *
+      swerve.maxVelocity *
+      (SwerveDrivetrainSubsystem.getInstance().isYReversed ? -1 : 1);
+    
     swerve.drive(
-      0, 0,
+      xSpeed, ySpeed,
       pid.calculate(swerve.getPose().getRotation().getRadians())
-      , false);
+      , true);
   }
 
   // Called once the command ends or is interrupted.
