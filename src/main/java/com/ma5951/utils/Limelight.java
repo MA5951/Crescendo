@@ -211,13 +211,7 @@ public class Limelight {
     distanceFromTargetLimelightX = threeDimension.getDoubleArray(new double[] { 0, 0, 0, 0, 0, 0 })[0];
     distanceFromTargetLimelightY = threeDimension.getDoubleArray(new double[] { 0, 0, 0, 0, 0, 0 })[2];
 
-    // isConnected();
     NetworkTableEntry botposeEntry;
-    // if (DriverStation.getAlliance() == Alliance.Red) {
-    //   botposeEntry = botPoseRed;
-    // } else {
-    //   botposeEntry = botPoseBlue;
-    // }
     botposeEntry = botPose;
 
     double[] data = botposeEntry.getDoubleArray(new double[7]);
