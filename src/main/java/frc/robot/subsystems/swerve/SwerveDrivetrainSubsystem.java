@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.PortMap;
+import frc.robot.RobotContainer;
 
 public class SwerveDrivetrainSubsystem extends SubsystemBase {
 
@@ -320,5 +321,10 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
     board.addNum("vfr angle", frontRightModule.getDriveVelocity());
     board.addNum("vrl angle", rearLeftModule.getDriveVelocity());
     board.addNum("vrr angle", rearRightModule.getDriveVelocity());
+
+    Pose2d estPose = RobotContainer.APRILTAGS_LIMELIGHT.getEstPose();
+    if (RobotContainer.APRILTAGS_LIMELIGHT.hasTarget() ) {
+      resetOdometry(estPose);
+    }
   }
 }

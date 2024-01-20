@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorConstants;
+import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.LowerShooter;
 import frc.robot.subsystems.shooter.UpperShooter;
 
@@ -27,7 +28,11 @@ public class CreateButton {
           .alongWith(new InstantCommand(
         () -> UpperShooter.getInstance().setSetPoint(0)))
         .alongWith(new InstantCommand(
-        () -> LowerShooter.getInstance().setSetPoint(0)))
+        () -> LowerShooter.getInstance().setSetPoint(0))).alongWith(
+          new InstantCommand(
+            () -> Intake.getInstance().setPower(0)
+          )
+        )
     );
   }
 

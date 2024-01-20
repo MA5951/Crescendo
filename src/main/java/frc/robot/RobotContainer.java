@@ -4,6 +4,10 @@
 
 package frc.robot;
 
+import com.ma5951.utils.Limelight;
+
+import edu.wpi.first.math.geometry.Transform3d;
+
 // import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -13,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
 import frc.robot.automations.ScoreWithoutAdjust;
 import frc.robot.automations.Shoot;
+import frc.robot.automations.SorceIntake;
 import frc.robot.commands.Intake.IntakeCommand;
 import frc.robot.commands.elevator.SetElevator;
 import frc.robot.subsystems.LED.LED;
@@ -32,6 +37,9 @@ public class RobotContainer {
     driverController = new CommandPS5Controller(PortMap.Controllers.driveID);
   public static final CommandPS5Controller
     operatorController = new CommandPS5Controller(PortMap.Controllers.operatorID);
+
+  public static final Limelight APRILTAGS_LIMELIGHT = new Limelight(
+    "limelight-apriltags", new Transform3d());
   
   private static boolean IsSpeaker() {
     return scoringOption == ScoringOptions.SPEAKER;
@@ -82,6 +90,9 @@ public class RobotContainer {
     new CreateButton(operatorController.triangle(),
       new SetElevator(ElevatorConstants.climbPose),
       ElevatorConstants.closeClimbPose);
+
+    // sorce intake
+    new CreateButton(operatorController.square(), new SorceIntake());
     
     // eject
     new CreateButton(operatorController.cross(), new ScoreWithoutAdjust(
