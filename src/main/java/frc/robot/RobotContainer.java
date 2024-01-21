@@ -13,11 +13,11 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
+import frc.robot.automations.GettingReadyToScore;
 import frc.robot.automations.IntakeAutomation;
 import frc.robot.automations.ScoreWithoutAdjust;
 import frc.robot.automations.Shoot;
 import frc.robot.automations.Auto.FeedToShooter;
-import frc.robot.automations.Auto.InitialShoot;
 import frc.robot.automations.Auto.SetForAmp;
 import frc.robot.commands.Intake.IntakeCommand;
 import frc.robot.commands.elevator.SetElevator;
@@ -48,14 +48,17 @@ public class RobotContainer {
 
   private void registerCommands() {
     NamedCommands.registerCommand("Intake", new IntakeCommand(IntakeConstants.intakePower));
-    NamedCommands.registerCommand("Initial Shoot", new InitialShoot());
+    NamedCommands.registerCommand("Initial Shoot", new 
+      GettingReadyToScore(() ->ShooterConstants.speakerUpperV, () ->ShooterConstants.speakerLowerV, ElevatorConstants.shootingPoseAuto)
+      .andThen(new FeedToShooter()));
+
     NamedCommands.registerCommand("Feed To Shooter", new FeedToShooter());
     NamedCommands.registerCommand("Set Shooter Speed", new 
       SetShooter(
         UpperShooter.getInstance()::getVelocityForShooting,
         LowerShooter.getInstance()::getVelocityForShooting
       ));
-      
+
     NamedCommands.registerCommand("Shoot", new 
       SetShooter(
         UpperShooter.getInstance()::getVelocityForShooting,

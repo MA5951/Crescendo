@@ -1,13 +1,15 @@
 {
-  "robotWidth": 0.62,
-  "robotLength": 0.62,
+  "robotWidth": 0.7,
+  "robotLength": 0.7,
   "holonomicMode": true,
   "pathFolders": [
     "Amp",
-    "Speaker- 3 Node",
-    "Speaker- 2 Node"
+    "Speaker- 4 Node",
+    "Speaker- 2 Node",
+    "Speaker- 3 Node"
   ],
   "autoFolders": [
+    "4Piece",
     "Theree pice",
     "Two pice"
   ],
