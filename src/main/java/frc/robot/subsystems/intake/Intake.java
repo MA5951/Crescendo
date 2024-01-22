@@ -37,7 +37,7 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
     master.setIdleMode(IdleMode.kBrake);
     master.setInverted(false);
     slave.setIdleMode(IdleMode.kBrake);
-    slave.follow(master, true);
+    slave.follow(master, false);
   
   }
 

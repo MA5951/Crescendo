@@ -67,6 +67,7 @@ public class RobotContainer {
 
     // ---------------------------------------------------------------
 
+    // intake
     new CreateButton(driverController.R1(), 
       new IntakeCommand(IntakeConstants.intakePower));
 

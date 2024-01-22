@@ -38,16 +38,16 @@ public class PortMap {
   }
 
   public static class Intake {
-    public static final int masterID = 13; //TODO
-    public static final int slaveID = 14; //TODO
+    public static final int masterID = 17; //TODO
+    public static final int slaveID = 18; //TODO
 
-    public static final int sensor1ID = 0; //TODO
-    public static final int sensor2ID = 1; //TODO
+    public static final int sensor1ID = 8; //TODO
+    public static final int sensor2ID = 9; //TODO
   }
 
   public static class Elevator {
-    public static final int masterID = 17; //TODO
-    public static final int slave1ID = 18; //TODO
+    public static final int masterID = 13; //TODO
+    public static final int slave1ID = 14; //TODO
     public static final int slave2ID = 19; //TODO
 
     public static final int absEncoderID = 0; // TODO
