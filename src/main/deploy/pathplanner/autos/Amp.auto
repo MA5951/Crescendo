@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.33,
-      "y": 7.85
+      "x": 0.4,
+      "y": 7.8
     },
     "rotation": 90.0
   },
@@ -64,6 +64,25 @@
           "type": "named",
           "data": {
             "name": "Feed To Shooter"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Amp to middle"
+                }
+              }
+            ]
           }
         }
       ]
