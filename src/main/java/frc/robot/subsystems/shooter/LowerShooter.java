@@ -55,7 +55,7 @@ public class LowerShooter extends SubsystemBase implements DefaultInternallyCont
     feedforward = new SimpleMotorFeedforward(0, ShooterConstants.kv);
 
 
-    board = new MAShuffleboard("shotter");
+    board = new MAShuffleboard("Lower shotter");
     pidGainSupplier = board.getPidControllerGainSupplier(
       "velocity",
       ShooterConstants.kp,
