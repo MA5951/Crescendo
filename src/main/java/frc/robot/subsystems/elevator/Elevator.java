@@ -44,6 +44,7 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
 
       master.setIdleMode(IdleMode.kBrake);
       slave1.setIdleMode(IdleMode.kBrake);
+      slave2.setIdleMode(IdleMode.kBrake);
 
       encoder = master.getEncoder();
 
