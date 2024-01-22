@@ -100,4 +100,8 @@ public class SwerveConstants {
         public final static double poduimAngleRed = 0; // TODO
         public final static double poduimAngleBlue = 0; // TODO
 
+        public final static double visionKp = 0; // TODO
+        public final static double visionKi = 0; // TODO
+        public final static double visionKd = 0; // TODO
+        public final static double visionTolorance = 0; // TODO
 }

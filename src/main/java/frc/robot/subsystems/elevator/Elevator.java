@@ -71,6 +71,10 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
         ElevatorConstants.kD);
     }
 
+    public double getCurrent() {
+        return master.getOutputCurrent();
+    }
+
     
     @Override
     public void calculate(double setPoint) {
@@ -122,6 +126,7 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
     public void periodic() {
         board.addNum("pose", getPosition());
         board.addNum("setPoint", getSetPoint());
+        board.addNum("current", getCurrent());
 
         pidController.setP(pidGainSupplier.getKP());
         pidController.setI(pidGainSupplier.getKI());

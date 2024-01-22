@@ -26,4 +26,9 @@ public class ElevatorConstants {
     public static final double encoderOffset = 0; // TODO
 
     public static final double absPositionConversionFactor = 0; // TODO
+
+    public static final double closePower = 0; // TODO
+    
+    public static final double currentThreshold = 0; // TODO
+    public static final double timeWithCurrentJump = 0.3; // TODO
 }
