@@ -5,8 +5,10 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.shooter.SetShooter;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorConstants;
 import frc.robot.subsystems.shooter.LowerShooter;
@@ -22,10 +24,18 @@ public class CreateButton {
     button.whileTrue(automation).whileFalse(
       new InstantCommand(
         () -> Elevator.getInstance().setSetPoint(elevatorPoseEnd))
-          .alongWith(new InstantCommand(
-        () -> UpperShooter.getInstance().setSetPoint(0)))
+          .alongWith(
+      new ConditionalCommand(
+       new SetShooter(() -> 1000d, () -> 1000d), new InstantCommand(), 
+       () -> {
+        return UpperShooter.getInstance().getSetPoint() != 0;
+       })
+      .andThen(
+      new InstantCommand(
+        () -> UpperShooter.getInstance().setSetPoint(0))//)
         .alongWith(new InstantCommand(
-        () -> LowerShooter.getInstance().setSetPoint(0)))
+        () -> LowerShooter.getInstance().setSetPoint(0))))
+      )
     );
   }
 

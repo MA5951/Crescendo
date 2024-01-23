@@ -38,7 +38,7 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
   private UpperShooter() {
     motor = new CANSparkMax(PortMap.Shooter.upperID, MotorType.kBrushless);
 
-    motor.setIdleMode(IdleMode.kCoast);
+    motor.setIdleMode(IdleMode.kBrake);
 
     motor.setInverted(false);
 

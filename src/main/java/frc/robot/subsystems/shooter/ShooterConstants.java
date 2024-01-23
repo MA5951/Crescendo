@@ -4,26 +4,26 @@ public class ShooterConstants {
 
     public static final double VelocityConversionFactorUpper = 1.36;
     public static final double VelocityConversionFactorLower = 1.33;
-    public static final double tolorance = 0; // TODO
+    public static final double tolorance = 170;
 
-    public static final double kpUp = 0; // TODO
-    public static final double kiUp = 0; // TODO
-    public static final double kdUp = 0; // TODO
+    public static final double kpUp = 0.0003;
+    public static final double kiUp = 0;
+    public static final double kdUp = 0;
 
-    public static final double kpLow = 0; // TODO
-    public static final double kiLow = 0; // TODO
-    public static final double kdLow = 0; // TODO
+    public static final double kpLow = 0.0007;
+    public static final double kiLow = 0;
+    public static final double kdLow = 0;
     
-    public static final double kvUp = 0; // TODO
-    public static final double kvLow = 0; // TODO
+    public static final double kvUp = 1.46e-4;
+    public static final double kvLow = 1.7e-4;
 
     public static final double podiumUpperV = 0; // TODO
     public static final double podiumLowerV = 0; // TODO
 
-    public static final double speakerUpperV = 0; // TODO
-    public static final double speakerLowerV = 0; // TODO
+    public static final double speakerUpperV = 4000; // TODO
+    public static final double speakerLowerV = 4000; // TODO
 
     public static final double AMPV = 0; // TODO
     public static final double ejectV = 0; // TODO
-    public static final double intakeSorceV = 0; // TODO
+    public static final double intakeSorceV = -0.4; // TODO
 }

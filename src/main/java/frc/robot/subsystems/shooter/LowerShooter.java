@@ -38,7 +38,7 @@ public class LowerShooter extends SubsystemBase implements DefaultInternallyCont
   private LowerShooter() {
     motor = new CANSparkMax(PortMap.Shooter.lowerID, MotorType.kBrushless);
 
-    motor.setIdleMode(IdleMode.kCoast);
+    motor.setIdleMode(IdleMode.kBrake);
 
     motor.setInverted(true);
 
@@ -120,6 +120,5 @@ public class LowerShooter extends SubsystemBase implements DefaultInternallyCont
     pidController.setD(pidGainSupplier.getKD());
 
     board.addNum("v", getVelocity());
-    board.addNum("setPoint", getSetPoint());
   }
 }

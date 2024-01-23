@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
 import frc.robot.automations.ScoreWithoutAdjust;
 import frc.robot.automations.Shoot;
-import frc.robot.automations.SorceIntake;
+import frc.robot.automations.SourceIntake;
 import frc.robot.commands.Intake.IntakeCommand;
 import frc.robot.commands.elevator.SetElevator;
 import frc.robot.subsystems.LED.LED;
@@ -94,7 +94,7 @@ public class RobotContainer {
       ElevatorConstants.closeClimbPose);
 
     // sorce intake
-    new CreateButton(operatorController.square(), new SorceIntake());
+    new CreateButton(operatorController.square(), new SourceIntake());
     
     // eject
     new CreateButton(operatorController.cross(), new ScoreWithoutAdjust(
@@ -110,7 +110,7 @@ public class RobotContainer {
       new InstantCommand(() -> scoringOption = ScoringOptions.AMP)
     );
 
-    // --------------------LEDS-----------------------
+    //--------------------LEDS-----------------------
 
     operatorController.touchpad().whileTrue(
       new InstantCommand(() -> LED.getInstance().activateAmp())
