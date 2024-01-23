@@ -2,8 +2,8 @@ package frc.robot.subsystems.shooter;
 
 public class ShooterConstants {
 
-    public static final double VelocityConversionFactorUpper = 1; // TODO
-    public static final double VelocityConversionFactorLower = 1; // TODO
+    public static final double VelocityConversionFactorUpper = 1.36;
+    public static final double VelocityConversionFactorLower = 1.33;
     public static final double tolorance = 0; // TODO
 
     public static final double kpUp = 0; // TODO
