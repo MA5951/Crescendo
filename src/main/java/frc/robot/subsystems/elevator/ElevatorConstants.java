@@ -11,7 +11,6 @@ public class ElevatorConstants {
 
     public static final double AMPPose = 0; // TODO
     public static final double shootingPose = 0; // TODO
-    public static final double shootingPoseAuto = 0; // TODO
     public static final double intakePose = 0; // TODO
     public static final double ejectPose = 0; // TODO
     public static final double sorcePose = 0; // TODO
@@ -21,7 +20,8 @@ public class ElevatorConstants {
     public static final double climbPose = 0; //TODO
     public static final double closeClimbPose = 0; //TODO
 
-    public static final double positionConversionFactor = 0; // TODO
+    public static final double positionConversionFactor = 
+        (2 * 1.61671 * Math.PI) / 11.9;
 
     public static final double encoderOffset = 0; // TODO
 
