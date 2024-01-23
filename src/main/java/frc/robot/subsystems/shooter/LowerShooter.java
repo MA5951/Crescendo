@@ -43,14 +43,14 @@ public class LowerShooter extends SubsystemBase implements DefaultInternallyCont
     motor.setInverted(true);
 
     encoder = motor.getEncoder();
-    encoder.setVelocityConversionFactor(ShooterConstants.VelocityConversionFactor);
+    encoder.setVelocityConversionFactor(ShooterConstants.VelocityConversionFactorLower);
 
     pidController = motor.getPIDController();
     pidController.setFeedbackDevice(encoder);
 
-    pidController.setP(ShooterConstants.kp);
-    pidController.setI(ShooterConstants.ki);
-    pidController.setD(ShooterConstants.kd);
+    pidController.setP(ShooterConstants.kpLow);
+    pidController.setI(ShooterConstants.kiLow);
+    pidController.setD(ShooterConstants.kdLow);
 
     feedforward = new SimpleMotorFeedforward(0, ShooterConstants.kv);
 
@@ -58,9 +58,9 @@ public class LowerShooter extends SubsystemBase implements DefaultInternallyCont
     board = new MAShuffleboard("Lower shotter");
     pidGainSupplier = board.getPidControllerGainSupplier(
       "velocity",
-      ShooterConstants.kp,
-      ShooterConstants.ki,
-      ShooterConstants.kd);
+      ShooterConstants.kpLow,
+      ShooterConstants.kiLow,
+      ShooterConstants.kdLow);
   }
 
   @Override

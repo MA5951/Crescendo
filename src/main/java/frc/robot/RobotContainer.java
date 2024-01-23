@@ -83,7 +83,8 @@ public class RobotContainer {
     new CreateButton(driverController.circle(), 
       new ConditionalCommand(new Shoot(false),
         new ScoreWithoutAdjust(() -> ShooterConstants.AMPV,
-          () -> ShooterConstants.AMPV, ElevatorConstants.AMPPose), RobotContainer::IsSpeaker
+          () -> ShooterConstants.AMPV, ElevatorConstants.AMPPose),
+            RobotContainer::IsSpeaker
         )
     );
 

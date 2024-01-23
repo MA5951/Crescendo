@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import java.util.function.Supplier;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -19,11 +17,11 @@ import frc.robot.subsystems.shooter.UpperShooter;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class CreateButton {
 
-  public CreateButton(Trigger button, Supplier<Command> automation,
+  public CreateButton(Trigger button, Command automation,
     double elevatorPoseEnd) {
-    button.whileTrue(automation.get()).whileFalse(
+    button.whileTrue(automation).whileFalse(
       new InstantCommand(
-        () -> Elevator.getInstance().setSetPoint(0))
+        () -> Elevator.getInstance().setSetPoint(elevatorPoseEnd))
           .alongWith(new InstantCommand(
         () -> UpperShooter.getInstance().setSetPoint(0)))
         .alongWith(new InstantCommand(
@@ -31,16 +29,7 @@ public class CreateButton {
     );
   }
 
-  public CreateButton(Trigger button, Command automation,
-    double elevatorPoseEnd) {
-    this(button, () -> automation, elevatorPoseEnd);
-  }
-
   public CreateButton(Trigger button, Command automation) {
-    this(button, automation, ElevatorConstants.defaultPose);
-  }
-
-  public CreateButton(Trigger button, Supplier<Command> automation) {
     this(button, automation, ElevatorConstants.defaultPose);
   }
 }

@@ -6,7 +6,6 @@ package frc.robot;
 
 import com.ma5951.utils.commands.DefaultRunInternallyControlledSubsystem;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
@@ -85,18 +84,15 @@ public class Robot extends TimedRobot {
         RobotContainer.driverController::getLeftX,
         RobotContainer.driverController::getLeftY,
         RobotContainer.driverController::getRightX));
+
+    time = Timer.getFPGATimestamp();
   }
 
   @Override
   public void teleopPeriodic() {
-    if (DriverStation.isEnabled() && time == -5) {
-      time = Timer.getFPGATimestamp();
-    } else if (DriverStation.isDisabled()) {
-      time = -5;
-    }
-
+    double timePassed = Timer.getFPGATimestamp() - time;
     // start of endgame (20 seconds left)
-    if ((time > 115 && time < 115.2) || (time > 115.4 && time < 115.6) || (time > 115.8 && time < 91)) {
+    if ((timePassed > 115 && timePassed < 115.2) || (timePassed > 115.4 && timePassed < 115.6) || (timePassed > 115.8 && timePassed < 116)) {
       RobotContainer.operatorController.getHID().setRumble(RumbleType.kBothRumble, 1);
       RobotContainer.driverController.getHID().setRumble(RumbleType.kBothRumble, 1);
     } else {
@@ -105,7 +101,7 @@ public class Robot extends TimedRobot {
     }
 
     // last 3 seconds of match
-    if ((time > 132 && time < 132.3) || (time > 133 && time < 133.3) || (time > 134 && time < 135)) {
+    if ((timePassed > 132 && timePassed < 132.3) || (timePassed > 133 && timePassed < 133.3) || (timePassed > 134 && timePassed < 134.3)) {
       RobotContainer.operatorController.getHID().setRumble(RumbleType.kLeftRumble, 1);
       RobotContainer.driverController.getHID().setRumble(RumbleType.kLeftRumble, 1);
     } else {
