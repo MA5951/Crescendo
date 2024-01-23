@@ -52,7 +52,7 @@ public class LowerShooter extends SubsystemBase implements DefaultInternallyCont
     pidController.setI(ShooterConstants.kiLow);
     pidController.setD(ShooterConstants.kdLow);
 
-    feedforward = new SimpleMotorFeedforward(0, ShooterConstants.kv);
+    feedforward = new SimpleMotorFeedforward(0, ShooterConstants.kvLow);
 
 
     board = new MAShuffleboard("Lower shotter");

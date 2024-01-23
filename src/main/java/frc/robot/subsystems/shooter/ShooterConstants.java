@@ -14,7 +14,8 @@ public class ShooterConstants {
     public static final double kiLow = 0; // TODO
     public static final double kdLow = 0; // TODO
     
-    public static final double kv = 0; // TODO
+    public static final double kvUp = 0; // TODO
+    public static final double kvLow = 0; // TODO
 
     public static final double podiumUpperV = 0; // TODO
     public static final double podiumLowerV = 0; // TODO

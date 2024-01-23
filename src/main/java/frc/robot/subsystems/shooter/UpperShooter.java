@@ -52,7 +52,7 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
     pidController.setI(ShooterConstants.kiUp);
     pidController.setD(ShooterConstants.kdUp);
 
-    feedforward = new SimpleMotorFeedforward(0, ShooterConstants.kv);
+    feedforward = new SimpleMotorFeedforward(0, ShooterConstants.kvUp);
 
 
     board = new MAShuffleboard("Upper shotter");
