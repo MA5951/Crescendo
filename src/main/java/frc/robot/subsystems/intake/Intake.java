@@ -49,7 +49,8 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
   public boolean canMove() {
       return !isGamePieceInIntake() 
         || (LowerShooter.getInstance().atPoint() && 
-        UpperShooter.getInstance().atPoint()) || getPower() < 0;
+        UpperShooter.getInstance().atPoint()) || 
+          -getPower() < 0;
   }
 
   @Override
