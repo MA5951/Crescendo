@@ -7,7 +7,6 @@ package frc.robot.subsystems.shooter;
 import java.util.function.Supplier;
 
 import com.ma5951.utils.MAShuffleboard;
-import com.ma5951.utils.MAShuffleboard.pidControllerGainSupplier;
 import com.ma5951.utils.subsystem.DefaultInternallyControlledSubsystem;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -18,8 +17,10 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkPIDController.ArbFFUnits;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.PortMap;
+import frc.robot.subsystems.intake.Intake;
 
 public class UpperShooter extends SubsystemBase implements DefaultInternallyControlledSubsystem {
   private static UpperShooter instance;
@@ -30,20 +31,22 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
   private SparkPIDController pidController;
   private SimpleMotorFeedforward feedforward;
 
-  private double setPoint;
+  private DigitalInput sensor;
+
+  private double setPoint = ShooterConstants.defaultV;
 
   private MAShuffleboard board;
-  private pidControllerGainSupplier pidGainSupplier;
 
   private UpperShooter() {
     motor = new CANSparkMax(PortMap.Shooter.upperID, MotorType.kBrushless);
 
-    motor.setIdleMode(IdleMode.kBrake);
+    motor.setIdleMode(IdleMode.kCoast);
 
     motor.setInverted(false);
 
     encoder = motor.getEncoder();
-    encoder.setVelocityConversionFactor(ShooterConstants.VelocityConversionFactorUpper);
+    encoder.setVelocityConversionFactor(ShooterConstants.ConversionFactorUpper);
+    encoder.setPositionConversionFactor(ShooterConstants.ConversionFactorUpper);
 
     pidController = motor.getPIDController();
     pidController.setFeedbackDevice(encoder);
@@ -52,20 +55,21 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
     pidController.setI(ShooterConstants.kiUp);
     pidController.setD(ShooterConstants.kdUp);
 
+    sensor = new DigitalInput(PortMap.Shooter.sensorID);
+
     feedforward = new SimpleMotorFeedforward(0, ShooterConstants.kvUp);
 
 
     board = new MAShuffleboard("Upper shotter");
-    pidGainSupplier = board.getPidControllerGainSupplier(
-      "velocity",
-      ShooterConstants.kpUp,
-      ShooterConstants.kiUp,
-      ShooterConstants.kdUp);
   }
 
   @Override
   public void setVoltage(double voltage) {
     motor.set(voltage / 12);
+  }
+
+  public boolean isGamePiceInShooter() {
+    return !sensor.get();
   }
 
   @Override
@@ -101,6 +105,14 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
   public double getSetPoint() {
     return setPoint;
   }
+  
+  public double getDistance() {
+    return encoder.getPosition();
+  }
+
+  public void resetEncoder(double pose) {
+    encoder.setPosition(pose);
+  }
 
   public double getVelocityForShooting() {
     return 0; // TODO need to craete a graph
@@ -115,10 +127,14 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
 
   @Override
   public void periodic() {
-    pidController.setP(pidGainSupplier.getKP());
-    pidController.setI(pidGainSupplier.getKI());
-    pidController.setD(pidGainSupplier.getKD());
-
     board.addNum("v", getVelocity());
+
+    board.addBoolean("sensor", isGamePiceInShooter());
+
+    if (Intake.getInstance().isGamePieceInIntake()) {
+      ShooterConstants.defaultV = 1000;
+    } else {
+      ShooterConstants.defaultV = 0;
+    }
   }
 }

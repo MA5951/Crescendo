@@ -25,7 +25,7 @@ public class ElevatorConstants {
 
     public static final double encoderOffset = 0; // TODO
 
-    public static final double absPositionConversionFactor = 0; // TODO
+    public static final double absPositionConversionFactor = 1;
 
     public static final double closePower = 0; // TODO
     

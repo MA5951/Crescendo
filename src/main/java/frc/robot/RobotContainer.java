@@ -15,6 +15,9 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
+import frc.robot.automations.AMPScore;
+import frc.robot.automations.IntakeAndRingCenter;
+import frc.robot.automations.RunIntake;
 import frc.robot.automations.ScoreWithoutAdjust;
 import frc.robot.automations.Shoot;
 import frc.robot.automations.SourceIntake;
@@ -38,8 +41,8 @@ public class RobotContainer {
   public static final CommandPS5Controller
     operatorController = new CommandPS5Controller(PortMap.Controllers.operatorID);
 
-  public static final Limelight APRILTAGS_LIMELIGHT = new Limelight(
-    "limelight-apriltags", new Transform3d());
+  // public static final Limelight APRILTAGS_LIMELIGHT = new Limelight(
+  //   "limelight-apriltags", new Transform3d());
   
   private static boolean IsSpeaker() {
     return scoringOption == ScoringOptions.SPEAKER;
@@ -67,58 +70,57 @@ public class RobotContainer {
 
     // ---------------------------------------------------------------
 
-    // intake
-    new CreateButton(driverController.R1(), 
-      new IntakeCommand(IntakeConstants.intakePower));
+    // // intake
+    // new CreateButton(driverController.R1(), 
+    //   new RunIntake(IntakeConstants.intakePower));
 
-    // shooting linked to the speaker 
-    new CreateButton(driverController.L2(), new ScoreWithoutAdjust(
-      () -> ShooterConstants.speakerUpperV, () -> ShooterConstants.speakerLowerV,
-        ElevatorConstants.shootingPose));
+    // // shooting linked to the speaker 
+    // new CreateButton(driverController.L2(), new ScoreWithoutAdjust(
+    //   () -> ShooterConstants.speakerUpperV, () -> ShooterConstants.speakerLowerV,
+    //     ElevatorConstants.shootingPose));
 
-    // shootiong linked to the podduim 
-    new CreateButton(driverController.L1(), new Shoot(true));
+    // // shootiong linked to the podduim 
+    // new CreateButton(driverController.L1(), new Shoot(true));
     
-    // shooting or amp
-    new CreateButton(driverController.circle(), 
-      new ConditionalCommand(new Shoot(false),
-        new ScoreWithoutAdjust(() -> ShooterConstants.AMPV,
-          () -> ShooterConstants.AMPV, ElevatorConstants.AMPPose),
-            RobotContainer::IsSpeaker
-        )
-    );
+    // // shooting or amp
+    // new CreateButton(driverController.circle(), 
+    //   new ConditionalCommand(new Shoot(false),
+    //     new AMPScore(),
+    //     RobotContainer::IsSpeaker
+    //   )
+    // );
 
-    // climb
-    new CreateButton(operatorController.triangle(),
-      new SetElevator(ElevatorConstants.climbPose),
-      ElevatorConstants.closeClimbPose);
+    // // climb
+    // new CreateButton(operatorController.triangle(),
+    //   new SetElevator(ElevatorConstants.climbPose),
+    //   ElevatorConstants.closeClimbPose);
 
-    // sorce intake
-    new CreateButton(operatorController.square(), new SourceIntake());
+    // // sorce intake
+    // new CreateButton(operatorController.square(), new SourceIntake());
     
-    // eject
-    new CreateButton(operatorController.cross(), new ScoreWithoutAdjust(
-      () -> ShooterConstants.ejectV, () -> ShooterConstants.ejectV, ElevatorConstants.ejectPose
-    ));
+    // // eject
+    // new CreateButton(operatorController.cross(), new ScoreWithoutAdjust(
+    //   () -> ShooterConstants.defaultV, () -> ShooterConstants.defaultV, ElevatorConstants.ejectPose
+    // ));
     
-    // choosing btween apm score and amp score
-    operatorController.povUp().whileTrue(
-      new InstantCommand(() -> scoringOption = ScoringOptions.SPEAKER)
-    );
+    // // choosing btween apm score and amp score
+    // operatorController.povUp().whileTrue(
+    //   new InstantCommand(() -> scoringOption = ScoringOptions.SPEAKER)
+    // );
 
-    operatorController.povDown().whileTrue(
-      new InstantCommand(() -> scoringOption = ScoringOptions.AMP)
-    );
+    // operatorController.povDown().whileTrue(
+    //   new InstantCommand(() -> scoringOption = ScoringOptions.AMP)
+    // );
 
-    //--------------------LEDS-----------------------
+    // //--------------------LEDS-----------------------
 
-    operatorController.touchpad().whileTrue(
-      new InstantCommand(() -> LED.getInstance().activateAmp())
-    );
+    // operatorController.touchpad().whileTrue(
+    //   new InstantCommand(() -> LED.getInstance().activateAmp())
+    // );
 
-    operatorController.options().whileTrue(
-      new InstantCommand(() -> LED.getInstance().activateCoalition())
-    );
+    // operatorController.options().whileTrue(
+    //   new InstantCommand(() -> LED.getInstance().activateCoalition())
+    // );
   }
   public Command getAutonomousCommand() {
     return null;

@@ -16,6 +16,7 @@ import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorConstants;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.LowerShooter;
+import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.shooter.UpperShooter;
 import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
 
@@ -32,18 +33,19 @@ public class Robot extends TimedRobot {
     UpperShooter.getInstance();
     LowerShooter.getInstance();
     Intake.getInstance();
+    Elevator.getInstance();
 
-    CommandScheduler.getInstance().setDefaultCommand(
-      Elevator.getInstance(), new DefaultRunInternallyControlledSubsystem(
-        Elevator.getInstance(), ElevatorConstants.defaultPose));
+    // CommandScheduler.getInstance().setDefaultCommand(
+    //   Elevator.getInstance(), new DefaultRunInternallyControlledSubsystem(
+    //     Elevator.getInstance(), ElevatorConstants.defaultPose));
 
-    CommandScheduler.getInstance().setDefaultCommand(
-      LowerShooter.getInstance(), new DefaultRunInternallyControlledSubsystem(
-        LowerShooter.getInstance(), 0));
+    // CommandScheduler.getInstance().setDefaultCommand(
+    //   LowerShooter.getInstance(), new DefaultRunInternallyControlledSubsystem(
+    //     LowerShooter.getInstance(), ShooterConstants.defaultV));
 
-    CommandScheduler.getInstance().setDefaultCommand(
-      UpperShooter.getInstance(), new DefaultRunInternallyControlledSubsystem(
-        UpperShooter.getInstance(), 0));
+    // CommandScheduler.getInstance().setDefaultCommand(
+    //   UpperShooter.getInstance(), new DefaultRunInternallyControlledSubsystem(
+    //     UpperShooter.getInstance(), ShooterConstants.defaultV));
   }
 
   @Override

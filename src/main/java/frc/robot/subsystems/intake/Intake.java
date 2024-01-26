@@ -38,7 +38,6 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
     master.setInverted(false);
     slave.setIdleMode(IdleMode.kBrake);
     slave.follow(master, false);
-  
   }
 
   public boolean isGamePieceInIntake(){
@@ -56,7 +55,16 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
   @Override
   public void setVoltage(double voltage) {
     master.set(voltage / 12);
+    slave.set(voltage / 12);
   }
+
+  // public void masterSet(double power) {
+  //   master.set(power);
+  // }
+
+  // public void slaveSet(double power) {
+  //   slave.set(power);
+  // }
 
   public double getPower() {
     return master.get();

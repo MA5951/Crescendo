@@ -39,12 +39,17 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
       master = new CANSparkMax(PortMap.Elevator.masterID, MotorType.kBrushless);
       slave1 = new CANSparkMax(PortMap.Elevator.slave1ID, MotorType.kBrushless);
       slave2 = new CANSparkMax(PortMap.Elevator.slave2ID, MotorType.kBrushless);
+      slave1.restoreFactoryDefaults();
+      slave2.restoreFactoryDefaults();
+      master.restoreFactoryDefaults();
 
       absEncoder = new AnalogEncoder(PortMap.Elevator.absEncoderID);
 
-      master.setIdleMode(IdleMode.kBrake);
-      slave1.setIdleMode(IdleMode.kBrake);
-      slave2.setIdleMode(IdleMode.kBrake);
+      master.setIdleMode(IdleMode.kCoast);
+      slave1.setIdleMode(IdleMode.kCoast);
+      slave2.setIdleMode(IdleMode.kCoast);
+      slave1.follow(master, true);
+      slave2.follow(master, true);
 
       encoder = master.getEncoder();
 
@@ -53,6 +58,8 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
       resetPose(absEncoder.getAbsolutePosition() * 
         ElevatorConstants.absPositionConversionFactor - ElevatorConstants.encoderOffset);
 
+      resetPose(0);
+
       pidController = master.getPIDController();
       pidController.setFeedbackDevice(encoder);
       pidController.setP(ElevatorConstants.kP);
@@ -60,8 +67,8 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
       pidController.setD(ElevatorConstants.kD);
 
 
-      slave1.follow(master, true);
-      slave2.follow(master, false);
+    //   slave1.follow(master, true);
+    //   slave2.follow(master, true);
 
       board = new MAShuffleboard("Elevator");
       pidGainSupplier = board.getPidControllerGainSupplier(
@@ -124,7 +131,11 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
 
     @Override
     public void periodic() {
-        board.addNum("pose", getPosition());
+        board.addNum("slev1 pose", getPosition());
+        board.addNum("slev2 pose", slave2.getEncoder().getPosition());
+        board.addNum("maseter pose", master.getEncoder().getPosition());
+
+        board.addNum("abs encoder", absEncoder.getAbsolutePosition());
         board.addNum("setPoint", getSetPoint());
         board.addNum("current", getCurrent());
 

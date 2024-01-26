@@ -7,7 +7,6 @@ package frc.robot.subsystems.shooter;
 import java.util.function.Supplier;
 
 import com.ma5951.utils.MAShuffleboard;
-import com.ma5951.utils.MAShuffleboard.pidControllerGainSupplier;
 import com.ma5951.utils.subsystem.DefaultInternallyControlledSubsystem;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -30,20 +29,20 @@ public class LowerShooter extends SubsystemBase implements DefaultInternallyCont
   private SparkPIDController pidController;
   private SimpleMotorFeedforward feedforward;
 
-  private double setPoint;
+  private double setPoint = ShooterConstants.defaultV;
 
   private MAShuffleboard board;
-  private pidControllerGainSupplier pidGainSupplier;
 
   private LowerShooter() {
     motor = new CANSparkMax(PortMap.Shooter.lowerID, MotorType.kBrushless);
 
-    motor.setIdleMode(IdleMode.kBrake);
+    motor.setIdleMode(IdleMode.kCoast);
 
     motor.setInverted(true);
 
     encoder = motor.getEncoder();
-    encoder.setVelocityConversionFactor(ShooterConstants.VelocityConversionFactorLower);
+    encoder.setVelocityConversionFactor(ShooterConstants.ConversionFactorLower);
+    encoder.setPositionConversionFactor(ShooterConstants.ConversionFactorLower);
 
     pidController = motor.getPIDController();
     pidController.setFeedbackDevice(encoder);
@@ -56,11 +55,6 @@ public class LowerShooter extends SubsystemBase implements DefaultInternallyCont
 
 
     board = new MAShuffleboard("Lower shotter");
-    pidGainSupplier = board.getPidControllerGainSupplier(
-      "velocity",
-      ShooterConstants.kpLow,
-      ShooterConstants.kiLow,
-      ShooterConstants.kdLow);
   }
 
   @Override
@@ -102,6 +96,14 @@ public class LowerShooter extends SubsystemBase implements DefaultInternallyCont
     return setPoint;
   }
 
+  public double getDistance() {
+    return encoder.getPosition();
+  }
+
+  public void resetEncoder(double pose) {
+    encoder.setPosition(pose);
+  }
+
   public double getVelocityForShooting() {
     return 0; // TODO need to craete a graph
   }
@@ -115,10 +117,6 @@ public class LowerShooter extends SubsystemBase implements DefaultInternallyCont
 
   @Override
   public void periodic() {
-    pidController.setP(pidGainSupplier.getKP());
-    pidController.setI(pidGainSupplier.getKI());
-    pidController.setD(pidGainSupplier.getKD());
-
     board.addNum("v", getVelocity());
   }
 }
