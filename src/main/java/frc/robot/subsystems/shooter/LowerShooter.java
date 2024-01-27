@@ -23,15 +23,15 @@ import frc.robot.PortMap;;
 public class LowerShooter extends SubsystemBase implements DefaultInternallyControlledSubsystem {
   private static LowerShooter instance;
 
-  private CANSparkMax motor;
+  private final CANSparkMax motor;
 
-  private RelativeEncoder encoder;
-  private SparkPIDController pidController;
-  private SimpleMotorFeedforward feedforward;
+  private final RelativeEncoder encoder;
+  private final SparkPIDController pidController;
+  private final SimpleMotorFeedforward feedforward;
 
   private double setPoint = ShooterConstants.defaultV;
 
-  private MAShuffleboard board;
+  private final MAShuffleboard board;
 
   private LowerShooter() {
     motor = new CANSparkMax(PortMap.Shooter.lowerID, MotorType.kBrushless);
@@ -41,17 +41,17 @@ public class LowerShooter extends SubsystemBase implements DefaultInternallyCont
     motor.setInverted(true);
 
     encoder = motor.getEncoder();
-    encoder.setVelocityConversionFactor(ShooterConstants.ConversionFactorLower);
-    encoder.setPositionConversionFactor(ShooterConstants.ConversionFactorLower);
+    encoder.setVelocityConversionFactor(ShooterConstants.CONVERTION_FACTOR_LOWER);
+    encoder.setPositionConversionFactor(ShooterConstants.CONVERTION_FACTOR_LOWER);
 
     pidController = motor.getPIDController();
     pidController.setFeedbackDevice(encoder);
 
-    pidController.setP(ShooterConstants.kpLow);
-    pidController.setI(ShooterConstants.kiLow);
-    pidController.setD(ShooterConstants.kdLow);
+    pidController.setP(ShooterConstants.KP_LOW);
+    pidController.setI(ShooterConstants.KI_LOW);
+    pidController.setD(ShooterConstants.KD_LOW);
 
-    feedforward = new SimpleMotorFeedforward(0, ShooterConstants.kvLow);
+    feedforward = new SimpleMotorFeedforward(0, ShooterConstants.KV_LOW);
 
 
     board = new MAShuffleboard("Lower shotter");
@@ -75,7 +75,7 @@ public class LowerShooter extends SubsystemBase implements DefaultInternallyCont
 
   @Override
   public boolean atPoint() {
-    return Math.abs(getSetPoint() - getVelocity()) < ShooterConstants.tolorance; 
+    return Math.abs(getSetPoint() - getVelocity()) < ShooterConstants.TOLORANCE; 
   }
 
   public double getVelocity(){

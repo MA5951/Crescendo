@@ -24,9 +24,9 @@ public class AdjustRing extends SequentialCommandGroup {
         new WaitUntilCommand(() -> {
           return !Intake.getInstance().isGamePieceInIntake();
         }),
-        new MotorCommand(Intake.getInstance(), -IntakeConstants.intakePower, 0)
+        new MotorCommand(Intake.getInstance(), -IntakeConstants.INTAKE_POWER, 0)
       ),
-      new IntakeCommand(IntakeConstants.intakePower)
+      new IntakeCommand(IntakeConstants.INTAKE_POWER)
     );
   }
 }

@@ -17,10 +17,10 @@ import frc.robot.commands.shooter.SetShooter;
 public class GettingReadyToScore extends SequentialCommandGroup {
 
   public GettingReadyToScore(Supplier<Double> upperVel, 
-    Supplier<Double> lowerVel, double elevatorPose) {
+    Supplier<Double> lowerVel, Supplier<Double> elevatorPose) {
     addCommands(
       new ParallelCommandGroup(
-        new SetElevator(elevatorPose),
+        new SetElevator(elevatorPose.get()),
         new SetShooter(upperVel, lowerVel)
       )
     );

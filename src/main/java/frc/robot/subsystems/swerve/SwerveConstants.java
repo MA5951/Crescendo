@@ -44,24 +44,24 @@ public class SwerveConstants {
 
         // Modules turning config
         // PID
-        public final static double turningPIDKP = 3.6;
-        public final static double turningPIDKI = 0;
-        public final static double turningPIDKD = 0;
+        public final static double TURNING_PID_KP = 3.6;
+        public final static double TURNING_PID_KI = 0;
+        public final static double TURNING_PID_KD = 0;
         // Ramp
-        public final static double openloopRamp = 0.25;
-        public final static double closedloopRamp = 0;
+        public final static double OPEN_LOOP_RAMP = 0.25;
+        public final static double CLOSED_LOOP_RAMP = 0;
         // Current Limit
-        public final static int turningContinuousCurrentLimit = 25;
-        public final static int turningPeakCurrentLimit = 400;
-        public final static double turningPeakCurrentDuration = 0.1;
+        public final static int TURNING_CONTINUOUS_CURRENT_LIMIT = 25;
+        public final static int TURNING_PEAK_CURRENT_LIMIT = 400;
+        public final static double TURNING_PEAK_CURRENTDURATION = 0.1;
         public final static boolean turningEnableCurrentLimit = true;
 
         // Modules drive config
         // PID
         public final static double DRIVE_PID_KP = 3.1;
         public final static double DRIVE_PID_KI = 0;
-        public final static double DRIVE_PID_KD = 0;//0.03;
-        public final static double DRIVE_KS = 0; //
+        public final static double DRIVE_PID_KD = 0;
+        public final static double DRIVE_KS = 0;
         public final static double DRIVE_KV = 0.18 * 12;
         // Current Limit
         public final static int DRIVE_CONTINUOS_CURRENT_LIMIT = 35;
@@ -86,22 +86,19 @@ public class SwerveConstants {
         public final static double THATA_KD = 0;
 
         // ------------2024--------------------
-        public final static double speakerTargetXBlue = 0; // TODO
-        public final static double speakerTargetYBlue = 0; // TODO
+        public final static double SPEAKER_TARGET_X_BLUE = 0; // TODO
+        public final static double SPEAKER_TARGET_Y_BLUE = 0; // TODO
 
-        public final static double speakerTargetXRed = 0; // TODO
-        public final static double speakerTargetYRed = 0; // TODO
+        public final static double SPEAKER_TAGET_X_RED = 0; // TODO
+        public final static double SPEAKER_TARGET_Y_RED = 0; // TODO
 
-        public final static double maxSpeakerDistanceX = 0; // TODO
-        public final static double maxSpeakerDistanceY = 0; // TODO
+        public final static double ANGLE_PID_TOLORANCE = 0; // TODO
 
-        public final static double anglePIDTolorance = 0; // TODO
+        public final static double PODUIM_ANGLE_RED = 0; // TODO
+        public final static double PODUIM_ANGLE_BLUE = 0; // TODO
 
-        public final static double poduimAngleRed = 0; // TODO
-        public final static double poduimAngleBlue = 0; // TODO
-
-        public final static double visionKp = 0; // TODO
-        public final static double visionKi = 0; // TODO
-        public final static double visionKd = 0; // TODO
-        public final static double visionTolorance = 0; // TODO
+        public final static double VISION_KP = 0; // TODO
+        public final static double VISION_KI = 0; // TODO
+        public final static double VISION_KD = 0; // TODO
+        public final static double VISION_TOLORANCE = 0; // TODO
 }

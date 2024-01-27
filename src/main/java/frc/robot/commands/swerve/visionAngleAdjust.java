@@ -19,9 +19,9 @@ public class visionAngleAdjust extends Command {
   public visionAngleAdjust(Supplier<Double> visionAngleSupplier, double setpoint) {
     this.visionAngleSupplier = visionAngleSupplier;
     swerve = SwerveDrivetrainSubsystem.getInstance();
-    pid = new PIDController(SwerveConstants.visionKp,
-      SwerveConstants.visionKi, SwerveConstants.visionKd);
-    pid.setTolerance(SwerveConstants.visionTolorance);
+    pid = new PIDController(SwerveConstants.VISION_KP,
+      SwerveConstants.VISION_KI, SwerveConstants.VISION_KD);
+    pid.setTolerance(SwerveConstants.VISION_TOLORANCE);
     pid.setSetpoint(setpoint);
     addRequirements(swerve);
   }

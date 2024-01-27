@@ -18,13 +18,13 @@ import com.revrobotics.CANSparkMax;
 public class Intake extends SubsystemBase implements MotorSubsystem{
   private static Intake intake;
   
-  private DigitalInput upSensor;
-  private DigitalInput downSensor;
+  private final DigitalInput upSensor;
+  private final DigitalInput downSensor;
 
-  private CANSparkMax master;
-  private CANSparkMax slave;
+  private final CANSparkMax master;
+  private final CANSparkMax slave;
 
-  private MAShuffleboard board;
+  private final MAShuffleboard board;
 
   private Intake() {
     master = new CANSparkMax(PortMap.Intake.masterID, MotorType.kBrushless);

@@ -15,7 +15,7 @@ public class IntakeAutomation extends SequentialCommandGroup {
 
   public IntakeAutomation(double power) {
     addCommands(
-      new SetElevator(ElevatorConstants.intakePose),
+      new SetElevator(ElevatorConstants.INTAKE_POSE),
       new IntakeAndRingCenter(power)
     );
   }

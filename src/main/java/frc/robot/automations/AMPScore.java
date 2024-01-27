@@ -24,14 +24,14 @@ public class AMPScore extends SequentialCommandGroup {
 
   public AMPScore() {
     addCommands(
-      new SetElevator(ElevatorConstants.AMPPose),
+      new SetElevator(ElevatorConstants.AMP_POSE),
       new ParallelCommandGroup(
       new InstantCommand(() -> 
-          Intake.getInstance().setPower(IntakeConstants.intakePower)),
+          Intake.getInstance().setPower(IntakeConstants.INTAKE_POWER)),
         new MotorCommand(UpperShooter.getInstance(),
-          ShooterConstants.AMPVUpper, 0),
+          ShooterConstants.AMP_V_UPPER, 0),
         new MotorCommand(LowerShooter.getInstance(),
-          ShooterConstants.AMPVLower, 0)
+          ShooterConstants.AMP_V_LOWER, 0)
       )
     );
   }

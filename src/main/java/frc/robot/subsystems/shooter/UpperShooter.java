@@ -25,17 +25,17 @@ import frc.robot.subsystems.intake.Intake;
 public class UpperShooter extends SubsystemBase implements DefaultInternallyControlledSubsystem {
   private static UpperShooter instance;
 
-  private CANSparkMax motor;
+  private final CANSparkMax motor;
 
-  private RelativeEncoder encoder;
-  private SparkPIDController pidController;
-  private SimpleMotorFeedforward feedforward;
+  private final RelativeEncoder encoder;
+  private final SparkPIDController pidController;
+  private final SimpleMotorFeedforward feedforward;
 
-  private DigitalInput sensor;
+  private final DigitalInput sensor;
 
   private double setPoint = ShooterConstants.defaultV;
 
-  private MAShuffleboard board;
+  private final MAShuffleboard board;
 
   private UpperShooter() {
     motor = new CANSparkMax(PortMap.Shooter.upperID, MotorType.kBrushless);
@@ -45,19 +45,19 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
     motor.setInverted(false);
 
     encoder = motor.getEncoder();
-    encoder.setVelocityConversionFactor(ShooterConstants.ConversionFactorUpper);
-    encoder.setPositionConversionFactor(ShooterConstants.ConversionFactorUpper);
+    encoder.setVelocityConversionFactor(ShooterConstants.CONVERTION_FACTOR_UPPER);
+    encoder.setPositionConversionFactor(ShooterConstants.CONVERTION_FACTOR_UPPER);
 
     pidController = motor.getPIDController();
     pidController.setFeedbackDevice(encoder);
 
-    pidController.setP(ShooterConstants.kpUp);
-    pidController.setI(ShooterConstants.kiUp);
-    pidController.setD(ShooterConstants.kdUp);
+    pidController.setP(ShooterConstants.KP_UP);
+    pidController.setI(ShooterConstants.KI_UP);
+    pidController.setD(ShooterConstants.KD_UP);
 
     sensor = new DigitalInput(PortMap.Shooter.sensorID);
 
-    feedforward = new SimpleMotorFeedforward(0, ShooterConstants.kvUp);
+    feedforward = new SimpleMotorFeedforward(0, ShooterConstants.KV_UP);
 
 
     board = new MAShuffleboard("Upper shotter");
@@ -85,7 +85,7 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
 
   @Override
   public boolean atPoint() {
-    return Math.abs(getSetPoint() - getVelocity()) < ShooterConstants.tolorance; 
+    return Math.abs(getSetPoint() - getVelocity()) < ShooterConstants.TOLORANCE; 
   }
 
   public double getVelocity(){

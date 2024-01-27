@@ -23,11 +23,11 @@ public class SourceIntake extends SequentialCommandGroup {
 
   public SourceIntake() {
     addCommands(
-      new SetElevator(ElevatorConstants.sourcePose),
+      new SetElevator(ElevatorConstants.SOURCE_POSE),
       new ParallelDeadlineGroup(
-        new IntakeCommand(-IntakeConstants.intakePower),
-        new MotorCommand(UpperShooter.getInstance(), ShooterConstants.intakeSorceV, ShooterConstants.intakeSorceV),
-        new MotorCommand(LowerShooter.getInstance(), ShooterConstants.intakeSorceV, ShooterConstants.intakeSorceV)
+        new IntakeCommand(-IntakeConstants.INTAKE_POWER),
+        new MotorCommand(UpperShooter.getInstance(), ShooterConstants.INTAKE_SOURCE_V, ShooterConstants.INTAKE_SOURCE_V),
+        new MotorCommand(LowerShooter.getInstance(), ShooterConstants.INTAKE_SOURCE_V, ShooterConstants.INTAKE_SOURCE_V)
       ),
       new AdjustRing()
     );

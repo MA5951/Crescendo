@@ -20,7 +20,7 @@ public class ScoreAutomation extends SequentialCommandGroup {
     addCommands(
       new ParallelCommandGroup(
         new MotorCommand(Intake.getInstance(),
-          IntakeConstants.intakePower, 0).repeatedly(),
+          IntakeConstants.INTAKE_POWER, 0).repeatedly(),
         new RunLockModules()
       )
     );

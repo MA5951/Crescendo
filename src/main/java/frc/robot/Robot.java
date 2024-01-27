@@ -35,9 +35,9 @@ public class Robot extends TimedRobot {
     Intake.getInstance();
     Elevator.getInstance();
 
-    // CommandScheduler.getInstance().setDefaultCommand(
-    //   Elevator.getInstance(), new DefaultRunInternallyControlledSubsystem(
-    //     Elevator.getInstance(), ElevatorConstants.defaultPose));
+    CommandScheduler.getInstance().setDefaultCommand(
+      Elevator.getInstance(), new DefaultRunInternallyControlledSubsystem(
+        Elevator.getInstance(), ElevatorConstants.DEFAULT_POSE));
 
     // CommandScheduler.getInstance().setDefaultCommand(
     //   LowerShooter.getInstance(), new DefaultRunInternallyControlledSubsystem(

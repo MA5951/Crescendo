@@ -5,6 +5,7 @@
 package frc.robot;
 
 import com.ma5951.utils.Limelight;
+import com.ma5951.utils.commands.MotorCommand;
 
 import edu.wpi.first.math.geometry.Transform3d;
 
@@ -22,8 +23,10 @@ import frc.robot.automations.ScoreWithoutAdjust;
 import frc.robot.automations.Shoot;
 import frc.robot.automations.SourceIntake;
 import frc.robot.commands.Intake.IntakeCommand;
+import frc.robot.commands.elevator.ResetElevator;
 import frc.robot.commands.elevator.SetElevator;
 import frc.robot.subsystems.LED.LED;
+import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorConstants;
 import frc.robot.subsystems.intake.IntakeConstants;
 import frc.robot.subsystems.shooter.ShooterConstants;
@@ -70,6 +73,21 @@ public class RobotContainer {
 
     // ---------------------------------------------------------------
 
+    new CreateButton(driverController.povLeft(), new ResetElevator());
+
+    driverController.povUp().whileTrue(new MotorCommand(
+      Elevator.getInstance(), 0.3, 0
+    )).whileFalse(
+      new InstantCommand(() -> Elevator.getInstance().setSetPoint(Elevator.getInstance().getPosition()))
+    );
+    
+    driverController.povDown().whileTrue(new MotorCommand(
+      Elevator.getInstance(), -0.3, 0
+    )).whileFalse(
+      new InstantCommand(() -> Elevator.getInstance().setSetPoint(Elevator.getInstance().getPosition()))
+    );
+
+
     // // intake
     // new CreateButton(driverController.R1(), 
     //   new RunIntake(IntakeConstants.intakePower));
@@ -77,7 +95,7 @@ public class RobotContainer {
     // // shooting linked to the speaker 
     // new CreateButton(driverController.L2(), new ScoreWithoutAdjust(
     //   () -> ShooterConstants.speakerUpperV, () -> ShooterConstants.speakerLowerV,
-    //     ElevatorConstants.shootingPose));
+    //     ElevatorConstants.shootingPoseSpeaker));
 
     // // shootiong linked to the podduim 
     // new CreateButton(driverController.L1(), new Shoot(true));
@@ -90,7 +108,7 @@ public class RobotContainer {
     //   )
     // );
 
-    // // climb
+    // climb
     // new CreateButton(operatorController.triangle(),
     //   new SetElevator(ElevatorConstants.climbPose),
     //   ElevatorConstants.closeClimbPose);

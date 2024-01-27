@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorConstants;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.LowerShooter;
@@ -20,11 +21,11 @@ import frc.robot.subsystems.shooter.UpperShooter;
 public class CreateButton {
 
   public CreateButton(Trigger button, Command automation,
-    double elevatorPoseEnd) {
+    double elevatorEndPose) {
     button.whileTrue(automation).whileFalse(
-      // new InstantCommand(
-      //   () -> Elevator.getInstance().setSetPoint(elevatorPoseEnd))
-      //     .alongWith(
+      new InstantCommand(
+        () -> Elevator.getInstance().setSetPoint(elevatorEndPose))
+          .alongWith(
       new InstantCommand(() -> Intake.getInstance().setPower(0)).alongWith(
       new InstantCommand(() -> 
         RobotContainer.driverController.getHID()
@@ -33,12 +34,12 @@ public class CreateButton {
       new InstantCommand(
         () -> UpperShooter.getInstance().setSetPoint(ShooterConstants.defaultV))
         .alongWith(new InstantCommand(
-        () -> LowerShooter.getInstance().setSetPoint(ShooterConstants.defaultV))))//)
+        () -> LowerShooter.getInstance().setSetPoint(ShooterConstants.defaultV)))))
       )
     );
   }
 
   public CreateButton(Trigger button, Command automation) {
-    this(button, automation, ElevatorConstants.defaultPose);
+    this(button, automation, ElevatorConstants.DEFAULT_POSE);
   }
 }

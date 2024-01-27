@@ -26,24 +26,26 @@ public class ResetElevator extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (elevator.getCurrent() < ElevatorConstants.currentThreshold) {
+    if (elevator.getCurrent() < ElevatorConstants.CURRENT_THRESHOLD) {
       lastTimeWithNoJump = Timer.getFPGATimestamp();
     }
-    elevator.setPower(ElevatorConstants.closePower);
+    elevator.setPower(ElevatorConstants.CLOSING_POWER);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     if (!interrupted) {
-      elevator.resetPose(ElevatorConstants.minPose);
+      elevator.resetPose(0);
     }
+    elevator.setPower(0);
+    elevator.setSetPoint(ElevatorConstants.MIN_POSE);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return Timer.getFPGATimestamp() - lastTimeWithNoJump > 
-      ElevatorConstants.timeWithCurrentJump;
+      ElevatorConstants.TIME_WITH_CURRENT_JUMP;
   }
 }

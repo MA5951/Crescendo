@@ -32,7 +32,7 @@ public class AngleAdjust extends Command {
       SwerveConstants.THATA_KD
     );
     this.angle = angle;
-    pid.setTolerance(SwerveConstants.anglePIDTolorance);
+    pid.setTolerance(SwerveConstants.ANGLE_PID_TOLORANCE);
   }
 
   // Called when the command is initially scheduled.

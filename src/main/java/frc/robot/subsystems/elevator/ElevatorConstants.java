@@ -1,34 +1,37 @@
 package frc.robot.subsystems.elevator;
 
 public class ElevatorConstants {
-    public static final double kP = 0; // TODO
-    public static final double kI = 0; // TODO
-    public static final double kD = 0; // TODO
-    public static final double tolerance = 0; // TODO
+    public static final double KP = 42;
+    public static final double KI = 0;
+    public static final double KD = 0;
+    public static final double TOLERANCE = 0.01;
 
-    public static final double minPose = 0; // TODO
-    public static final double maxPose = 0; // TODO
+    public static final double MIN_POSE = 0.01;
+    public static final double MAX_POSE = 0.5; // TODO
 
-    public static final double AMPPose = 0; // TODO
-    public static final double shootingPose = 0; // TODO
-    public static final double intakePose = 0; // TODO
-    public static final double ejectPose = 0; // TODO
-    public static final double sourcePose = 0; // TODO
+    public static final double AMP_POSE = MAX_POSE;
+    public static final double SHOOTING_POSE_PODUIM = 0; // TODO
+    public static final double SHOOTING_POSE_SPEAKER = 0; // TODO
+    public static final double INTAKE_POSE = MIN_POSE;
+    public static final double EJECT_POSE = MAX_POSE;
+    public static final double SOURCE_POSE = MAX_POSE;
 
-    public static final double defaultPose = 0; // TODO
+    public static final double DEFAULT_POSE = 0.1;
 
-    public static final double climbPose = 0; //TODO
-    public static final double closeClimbPose = 0; //TODO
+    public static final double CLIMB_POSE = MAX_POSE;
+    public static final double CLOSE_CLIMB_POSE = 0.37;
 
-    public static final double positionConversionFactor = 
-        (2 * 1.61671 * Math.PI) / 11.9;
+    public static final double WHEEL_RADIUS = 1.61671;
 
-    public static final double encoderOffset = 0; // TODO
+    public static final double GEAR = 11.9;
 
-    public static final double absPositionConversionFactor = 1;
+    public static final double POSITION_CONVERSION_FACTOR =
+        ((2 * WHEEL_RADIUS * Math.PI) / GEAR) / 100;
 
-    public static final double closePower = 0; // TODO
+    public static final double ABS_POSITION_CONVERTION_FACTOR = 1;
+
+    public static final double CLOSING_POWER = -0.3;
     
-    public static final double currentThreshold = 0; // TODO
-    public static final double timeWithCurrentJump = 0.3; // TODO
+    public static final double CURRENT_THRESHOLD = 30;
+    public static final double TIME_WITH_CURRENT_JUMP = 0.1;
 }
