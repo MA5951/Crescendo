@@ -5,7 +5,10 @@
 package frc.robot;
 
 import com.ma5951.utils.commands.DefaultRunInternallyControlledSubsystem;
+import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
@@ -19,6 +22,7 @@ import frc.robot.subsystems.shooter.LowerShooter;
 import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.shooter.UpperShooter;
 import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
+import com.revrobotics.CANSparkBase.IdleMode;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
@@ -26,6 +30,8 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
 
   private double time = -5;
+
+  private static boolean isBreak = false;
 
   @Override
   public void robotInit() {
@@ -51,7 +57,14 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
+    if (HALUtil.getFPGAButton()) {
+      isBreak = !isBreak;
+    }
     // RobotContainer.APRILTAGS_LIMELIGHT.periodic();
+  }
+
+  public static IdleMode getIsBreak() {
+    return isBreak ? IdleMode.kBrake : IdleMode.kCoast;
   }
 
   @Override
