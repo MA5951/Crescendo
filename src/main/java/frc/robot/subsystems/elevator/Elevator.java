@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.AnalogEncoder;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.ma5951.utils.MAShuffleboard;
@@ -15,6 +16,7 @@ import com.ma5951.utils.MAShuffleboard.pidControllerGainSupplier;
 import com.ma5951.utils.subsystem.DefaultInternallyControlledSubsystem;
 
 import frc.robot.PortMap;
+import frc.robot.Robot;
 
 public class Elevator extends SubsystemBase implements DefaultInternallyControlledSubsystem{
 
@@ -142,5 +144,11 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
         pidController.setP(pidGainSupplier.getKP());
         pidController.setI(pidGainSupplier.getKI());
         pidController.setD(pidGainSupplier.getKD());
+
+        if (!DriverStation.isEnabled()){
+            master.setIdleMode(Robot.getIsBreak());
+            slave1.setIdleMode(Robot.getIsBreak());
+            slave2.setIdleMode(Robot.getIsBreak());
+        }
     }
 }
