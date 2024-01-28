@@ -40,6 +40,8 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
   private UpperShooter() {
     motor = new CANSparkMax(PortMap.Shooter.upperID, MotorType.kBrushless);
 
+    motor.restoreFactoryDefaults();
+
     motor.setIdleMode(IdleMode.kBrake);
 
     motor.setInverted(false);
@@ -61,6 +63,10 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
 
 
     board = new MAShuffleboard("Upper shotter");
+  }
+
+  public void chengeIDLmode(IdleMode mode) {
+    motor.setIdleMode(mode);
   }
 
   @Override

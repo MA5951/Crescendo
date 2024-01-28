@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
 import frc.robot.automations.AMPScore;
 import frc.robot.automations.IntakeAndRingCenter;
+import frc.robot.automations.IntakeAutomation;
 import frc.robot.automations.RunIntake;
 import frc.robot.automations.ScoreWithoutAdjust;
 import frc.robot.automations.Shoot;
@@ -88,14 +89,17 @@ public class RobotContainer {
     );
 
 
-    // // intake
-    // new CreateButton(driverController.R1(), 
-    //   new RunIntake(IntakeConstants.intakePower));
+    // intake
+    new CreateButton(driverController.R1(), 
+      new IntakeAutomation(IntakeConstants.INTAKE_POWER));
 
-    // // shooting linked to the speaker 
-    // new CreateButton(driverController.L2(), new ScoreWithoutAdjust(
-    //   () -> ShooterConstants.speakerUpperV, () -> ShooterConstants.speakerLowerV,
-    //     ElevatorConstants.shootingPoseSpeaker));
+    new CreateButton(driverController.circle(), new AMPScore());
+
+    // shooting linked to the speaker 
+    new CreateButton(driverController.L2(), new ScoreWithoutAdjust(
+      () -> ShooterConstants.SPEAKER_UPPER_V, 
+      () -> ShooterConstants.SPEAKER_LOWER_V,
+        ElevatorConstants.DEFAULT_POSE));
 
     // // shootiong linked to the podduim 
     // new CreateButton(driverController.L1(), new Shoot(true));

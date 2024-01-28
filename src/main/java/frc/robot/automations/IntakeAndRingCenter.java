@@ -5,12 +5,16 @@
 package frc.robot.automations;
 
 import com.ma5951.utils.commands.MotorCommand;
+import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.commands.Intake.IntakeCommand;
+import frc.robot.commands.elevator.SetElevator;
+import frc.robot.subsystems.elevator.ElevatorConstants;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.LowerShooter;
 import frc.robot.subsystems.shooter.UpperShooter;
@@ -25,15 +29,29 @@ public class IntakeAndRingCenter extends SequentialCommandGroup {
     addCommands(
       new ParallelDeadlineGroup(
         new SequentialCommandGroup(
-          new IntakeCommand(power),
+          new IntakeCommand(power)
+            .alongWith(new InstantCommand(
+              () -> LowerShooter.getInstance().chengeIDLmode(IdleMode.kCoast)))
+              .alongWith(
+                new InstantCommand(
+              () -> UpperShooter.getInstance().chengeIDLmode(IdleMode.kCoast))
+              ),
+          new SetElevator(ElevatorConstants.DEFAULT_POSE),
           new ParallelDeadlineGroup(
-            new WaitCommand(0.8),
-            new InstantCommand(() -> Intake.getInstance().setPower(power))
+            new SequentialCommandGroup(
+              new WaitUntilCommand(
+                UpperShooter.getInstance()::isGamePiceInShooter),
+                new WaitCommand(0.15)
+            ),
+            new InstantCommand(() -> Intake.getInstance().setPower(-0.8)),
+            new MotorCommand(LowerShooter.getInstance(), 0.1, 0)
           ),
-          new AdjustRing()
-        ),
-      new MotorCommand(UpperShooter.getInstance(), 0, 0),
-      new MotorCommand(LowerShooter.getInstance(), 0, 0))
+          new AdjustRing().alongWith(
+            new MotorCommand(LowerShooter.getInstance(), -0.4, 0)
+          )
+      ),
+      new MotorCommand(UpperShooter.getInstance(), 0, 0)
+      )
     );
   }
 }

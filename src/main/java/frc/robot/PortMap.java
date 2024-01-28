@@ -34,17 +34,17 @@ public class PortMap {
 
   public static class Shooter {
     public static final int upperID = 14;
-    public static final int lowerID = 13;
+    public static final int lowerID = 18;
 
-    public static final int sensorID = 7;
+    public static final int sensorID = 9;
   }
 
   public static class Intake {
     public static final int masterID = 17;
-    public static final int slaveID = 18;
+    public static final int slaveID = 13;
 
-    public static final int sensor1ID = 8;
-    public static final int sensor2ID = 9;
+    public static final int sensor1ID = 7; // up
+    public static final int sensor2ID = 8; // down
   }
 
   public static class Elevator {

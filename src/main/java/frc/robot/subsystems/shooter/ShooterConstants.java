@@ -20,12 +20,12 @@ public class ShooterConstants {
     public static final double PODIUM_UPPER_V = 0; // TODO
     public static final double PODUIM_LOWER_V = 0; // TODO
 
-    public static final double SPEAKER_UPPER_V = 4000; // TODO
-    public static final double SPEAKER_LOWER_V = 4000; // TODO
+    public static final double SPEAKER_UPPER_V = 3000;
+    public static final double SPEAKER_LOWER_V = 4500;
 
     public static final double AMP_V_UPPER = 0;
     public static final double AMP_V_LOWER = 0.25;
-    public static final double EJECT_V = 0; // TODO
+    public static final double EJECT_V = 1000;
     public static final double INTAKE_SOURCE_V = -0.4;
 
     public static double defaultV = 0;

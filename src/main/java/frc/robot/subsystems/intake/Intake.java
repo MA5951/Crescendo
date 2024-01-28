@@ -30,6 +30,9 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
     master = new CANSparkMax(PortMap.Intake.masterID, MotorType.kBrushless);
     slave = new CANSparkMax(PortMap.Intake.slaveID, MotorType.kBrushless);
 
+    master.restoreFactoryDefaults();
+    slave.restoreFactoryDefaults();
+
     upSensor = new DigitalInput(PortMap.Intake.sensor1ID);
     downSensor = new DigitalInput(PortMap.Intake.sensor2ID);
     board = new MAShuffleboard("Intake");
@@ -55,16 +58,7 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
   @Override
   public void setVoltage(double voltage) {
     master.set(voltage / 12);
-    slave.set(voltage / 12);
   }
-
-  // public void masterSet(double power) {
-  //   master.set(power);
-  // }
-
-  // public void slaveSet(double power) {
-  //   slave.set(power);
-  // }
 
   public double getPower() {
     return master.get();
