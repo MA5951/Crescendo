@@ -1,5 +1,8 @@
 package frc.robot.subsystems.swerve;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+
 public class SwerveConstants {
         // swerve constants
         public final static double WIDTH = 0.545;
@@ -101,4 +104,6 @@ public class SwerveConstants {
         public final static double VISION_KI = 0; // TODO
         public final static double VISION_KD = 0; // TODO
         public final static double VISION_TOLORANCE = 0; // TODO
+
+        public final static double MAX_SHOOTING_DISTANCE = DriverStation.getAlliance().get() == Alliance.Blue ? 0 : 0;
 }

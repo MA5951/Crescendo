@@ -44,8 +44,8 @@ public class RobotContainer {
   public static final CommandPS5Controller
     operatorController = new CommandPS5Controller(PortMap.Controllers.operatorID);
 
-  // public static final Limelight APRILTAGS_LIMELIGHT = new Limelight(
-  //   "limelight-apriltags", new Transform3d());
+  public static final Limelight APRILTAGS_LIMELIGHT = new Limelight(
+    "limelight-apriltags", new Transform3d());
   
   private static boolean IsSpeaker() {
     return scoringOption == ScoringOptions.SPEAKER;
