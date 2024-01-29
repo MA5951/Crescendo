@@ -29,7 +29,7 @@ public class ShootInMotion extends Command {
   public ShootInMotion() {
     swerve = SwerveDrivetrainSubsystem.getInstance();
     feeCommand = new MotorCommand(Intake.getInstance(),
-     IntakeConstants.INTAKE_POWER, IntakeConstants.INTAKE_POWER);
+     IntakeConstants.INTAKE_POWER, IntakeConstants.INTAKE_POWER).repeatedly();
     addRequirements(swerve);
   }
 
