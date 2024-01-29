@@ -93,6 +93,7 @@ public class RobotContainer {
     new CreateButton(driverController.R1(), 
       new IntakeAutomation(IntakeConstants.INTAKE_POWER));
 
+    // AMP
     new CreateButton(driverController.circle(), new AMPScore());
 
     // shooting linked to the speaker 
