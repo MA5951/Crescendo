@@ -156,44 +156,45 @@ public class LED extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if (DriverStation.isDisabled()) {
-      setAllianceColor();
-    } 
-    else {
-      if (activateAmp) {
-        if (Timer.getFPGATimestamp() - startAmpTime < LedConstants.activateTime) {
-          setBlinking(LedConstants.BLUE, LedConstants.WHITE, 0.3);
-        } else if (Timer.getFPGATimestamp() - startAmpTime < 10 && Timer.getFPGATimestamp() - startAmpTime > LedConstants.activateTime) {
-          if (Intake.getInstance().isGamePieceInIntake()) {
-            setSmoothWave(2, 1, 1, new Color [] {LedConstants.GREEN, LedConstants.BLUE}); 
-          } else if (!Intake.getInstance().isGamePieceInIntake()) {
-            setSmoothWave(2, 1, 1, new Color [] {LedConstants.Ring, LedConstants.BLUE});
-          }
-        } else {
-          activateAmp = false;
-        }
-      } else if (activateCoOp) {
-        if (Timer.getFPGATimestamp() - startCoOpTime < LedConstants.activateTime) {
-          setBlinking(LedConstants.YELLOW, LedConstants.WHITE, 0.3);
-        } else if (Timer.getFPGATimestamp() - startCoOpTime < 10 && Timer.getFPGATimestamp() - startCoOpTime > LedConstants.activateTime) {
-          if (Intake.getInstance().isGamePieceInIntake()) {
-            setSmoothWave(2, 1, 1, new Color [] {LedConstants.GREEN, LedConstants.YELLOW}); 
-          } else if (!Intake.getInstance().isGamePieceInIntake()) {
-            setSmoothWave(2, 1, 1, new Color [] {LedConstants.Ring, LedConstants.YELLOW});
-          }
-        } else {
-          activateCoOp = false;
-        }
-      }  
-      else {
-        if (Intake.getInstance().isGamePieceInIntake()) {
-          setSmoothWave(2, 1, 1, new Color [] {LedConstants.GREEN, LedConstants.WHITE}); 
-        } else if (!Intake.getInstance().isGamePieceInIntake()) {
-          setSmoothWave(2, 1, 1, new Color [] {LedConstants.Ring, LedConstants.WHITE});
-        }
-      }
-    }
+    // if (DriverStation.isDisabled()) {
+    //   setAllianceColor();
+    // } 
+    // else {
+    //   if (activateAmp) {
+    //     if (Timer.getFPGATimestamp() - startAmpTime < LedConstants.activateTime) {
+    //       setBlinking(LedConstants.BLUE, LedConstants.WHITE, 0.3);
+    //     } else if (Timer.getFPGATimestamp() - startAmpTime < 10 && Timer.getFPGATimestamp() - startAmpTime > LedConstants.activateTime) {
+    //       if (Intake.getInstance().isGamePieceInIntake()) {
+    //         setSmoothWave(2, 1, 1, new Color [] {LedConstants.GREEN, LedConstants.BLUE}); 
+    //       } else if (!Intake.getInstance().isGamePieceInIntake()) {
+    //         setSmoothWave(2, 1, 1, new Color [] {LedConstants.Ring, LedConstants.BLUE});
+    //       }
+    //     } else {
+    //       activateAmp = false;
+    //     }
+    //   } else if (activateCoOp) {
+    //     if (Timer.getFPGATimestamp() - startCoOpTime < LedConstants.activateTime) {
+    //       setBlinking(LedConstants.YELLOW, LedConstants.WHITE, 0.3);
+    //     } else if (Timer.getFPGATimestamp() - startCoOpTime < 10 && Timer.getFPGATimestamp() - startCoOpTime > LedConstants.activateTime) {
+    //       if (Intake.getInstance().isGamePieceInIntake()) {
+    //         setSmoothWave(2, 1, 1, new Color [] {LedConstants.GREEN, LedConstants.YELLOW}); 
+    //       } else if (!Intake.getInstance().isGamePieceInIntake()) {
+    //         setSmoothWave(2, 1, 1, new Color [] {LedConstants.Ring, LedConstants.YELLOW});
+    //       }
+    //     } else {
+    //       activateCoOp = false;
+    //     }
+    //   }  
+    //   else {
+    //     if (Intake.getInstance().isGamePieceInIntake()) {
+    //       setSmoothWave(2, 1, 1, new Color [] {LedConstants.GREEN, LedConstants.WHITE}); 
+    //     } else if (!Intake.getInstance().isGamePieceInIntake()) {
+    //       setSmoothWave(2, 1, 1, new Color [] {LedConstants.Ring, LedConstants.WHITE});
+    //     }
+    //   }
+    // }
 
+    setSolidColor(LedConstants.MAcolor); 
     board.addBoolean("activateAmp", activateAmp);
     board.addBoolean("activateCoOp", activateCoOp);
   }

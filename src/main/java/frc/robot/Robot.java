@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.swerve.DriveSwerveCommand;
+import frc.robot.subsystems.LED.LED;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorConstants;
 import frc.robot.subsystems.intake.Intake;
@@ -34,6 +35,7 @@ public class Robot extends TimedRobot {
     LowerShooter.getInstance();
     Intake.getInstance();
     Elevator.getInstance();
+    LED.getInstance();
 
     CommandScheduler.getInstance().setDefaultCommand(
       Elevator.getInstance(), new DefaultRunInternallyControlledSubsystem(
@@ -83,7 +85,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-
+    
     CommandScheduler.getInstance().setDefaultCommand(
       SwerveDrivetrainSubsystem.getInstance(), 
       new DriveSwerveCommand(
@@ -92,28 +94,31 @@ public class Robot extends TimedRobot {
         RobotContainer.driverController::getRightX));
 
     time = Timer.getFPGATimestamp();
+
   }
 
   @Override
   public void teleopPeriodic() {
     double timePassed = Timer.getFPGATimestamp() - time;
     // start of endgame (20 seconds left)
-    if ((timePassed > 115 && timePassed < 115.2) || (timePassed > 115.4 && timePassed < 115.6) || (timePassed > 115.8 && timePassed < 116)) {
-      RobotContainer.operatorController.getHID().setRumble(RumbleType.kBothRumble, 1);
-      RobotContainer.driverController.getHID().setRumble(RumbleType.kBothRumble, 1);
-    } else {
-      RobotContainer.operatorController.getHID().setRumble(RumbleType.kBothRumble, 0);
-      RobotContainer.driverController.getHID().setRumble(RumbleType.kBothRumble, 0);  
-    }
+    
 
-    // last 3 seconds of match
-    if ((timePassed > 132 && timePassed < 132.3) || (timePassed > 133 && timePassed < 133.3) || (timePassed > 134 && timePassed < 134.3)) {
-      RobotContainer.operatorController.getHID().setRumble(RumbleType.kLeftRumble, 1);
-      RobotContainer.driverController.getHID().setRumble(RumbleType.kLeftRumble, 1);
-    } else {
-      RobotContainer.operatorController.getHID().setRumble(RumbleType.kLeftRumble, 0);
-      RobotContainer.driverController.getHID().setRumble(RumbleType.kLeftRumble, 0);  
-    }
+    // if ((timePassed > 115 && timePassed < 115.2) || (timePassed > 115.4 && timePassed < 115.6) || (timePassed > 115.8 && timePassed < 116)) {
+    //   RobotContainer.operatorController.getHID().setRumble(RumbleType.kBothRumble, 1);
+    //   RobotContainer.driverController.getHID().setRumble(RumbleType.kBothRumble, 1);
+    // } else {
+    //   RobotContainer.operatorController.getHID().setRumble(RumbleType.kBothRumble, 0);
+    //   RobotContainer.driverController.getHID().setRumble(RumbleType.kBothRumble, 0);  
+    // }
+
+    // // last 3 seconds of match
+    // if ((timePassed > 132 && timePassed < 132.3) || (timePassed > 133 && timePassed < 133.3) || (timePassed > 134 && timePassed < 134.3)) {
+    //   RobotContainer.operatorController.getHID().setRumble(RumbleType.kLeftRumble, 1);
+    //   RobotContainer.driverController.getHID().setRumble(RumbleType.kLeftRumble, 1);
+    // } else {
+    //   RobotContainer.operatorController.getHID().setRumble(RumbleType.kLeftRumble, 0);
+    //   RobotContainer.driverController.getHID().setRumble(RumbleType.kLeftRumble, 0);  
+    // }
   }
 
   @Override

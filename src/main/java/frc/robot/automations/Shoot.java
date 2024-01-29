@@ -62,10 +62,10 @@ public class Shoot extends SequentialCommandGroup {
       Elevator.getInstance()::getPoseForShoot;
     addCommands(
       new ParallelCommandGroup(
-        new AngleAdjust(Shoot::getAngle, () -> 0d, () -> 0d),
-        new GettingReadyToScore(upperV, lowerV, elevatorPose)
-      ),
-      new ScoreAutomation()
+        new AngleAdjust(Shoot::getAngle, () -> 0d, () -> 0d)
+        //new GettingReadyToScore(upperV, lowerV, elevatorPose)
+      )// ,
+      //new ScoreAutomation()
     );
   }
 }

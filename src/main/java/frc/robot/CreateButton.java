@@ -29,23 +29,15 @@ public class CreateButton {
         () -> Elevator.getInstance().setSetPoint(elevatorEndPose))
           .alongWith(
       new InstantCommand(() -> Intake.getInstance().setPower(0)).alongWith(
-      new InstantCommand(() -> 
-        RobotContainer.driverController.getHID()
-          .setRumble(RumbleType.kLeftRumble, 0)
-      ).alongWith(
       new InstantCommand(
         () -> UpperShooter.getInstance().setSetPoint(ShooterConstants.defaultV))
         .alongWith(new InstantCommand(
-        () -> LowerShooter.getInstance().setSetPoint(ShooterConstants.defaultV)))))
+        () -> LowerShooter.getInstance().setSetPoint(ShooterConstants.defaultV))))
       ).alongWith(new InstantCommand(
         () -> LowerShooter.getInstance().chengeIDLmode(IdleMode.kBrake)))
         .alongWith(
           new InstantCommand(
         () -> UpperShooter.getInstance().chengeIDLmode(IdleMode.kBrake))
-      ).alongWith(
-        new InstantCommand(() -> 
-          RobotContainer.driverController.getHID()
-          .setRumble(RumbleType.kBothRumble, 0))
       )
     );
   }
