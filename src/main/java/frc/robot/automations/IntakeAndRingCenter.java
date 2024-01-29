@@ -29,7 +29,8 @@ public class IntakeAndRingCenter extends SequentialCommandGroup {
   public IntakeAndRingCenter(double power) {
 
     addCommands(
-      new ParallelDeadlineGroup(
+      new SequentialCommandGroup(
+        new ParallelDeadlineGroup(
         new SequentialCommandGroup(
           new IntakeCommand(power)
             .alongWith(new InstantCommand(
@@ -53,7 +54,8 @@ public class IntakeAndRingCenter extends SequentialCommandGroup {
           )
       ),
       new MotorCommand(UpperShooter.getInstance(), 0, 0)
-      )
+      ),
+      new ControllerRumble(0.3))
     );
   }
 }
