@@ -4,6 +4,7 @@
 
 package frc.robot.automations;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -20,6 +21,7 @@ public class ControllerRumble extends Command {
   public boolean driverRumble;
   public boolean operatorRumble;
   public double rumblePower;
+  public Timer stopwatch;
 
   public ControllerRumble(double time , double power ,boolean drive , boolean operator) {
    driverController = RobotContainer.driverController;
@@ -51,14 +53,15 @@ public class ControllerRumble extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    stopwatch.reset();
+    stopwatch.start();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    new ParallelDeadlineGroup(
-      new WaitCommand(rumbleTime),
-      new InstantCommand(() -> rumbleControllers(driverRumble, operatorRumble)));
+    rumbleControllers(driverRumble, operatorRumble);
   }
 
   // Called once the command ends or is interrupted.
@@ -66,11 +69,12 @@ public class ControllerRumble extends Command {
   public void end(boolean interrupted) {
     driverController.getHID().setRumble(RumbleType.kBothRumble, 0);
     operaController.getHID().setRumble(RumbleType.kBothRumble, 0);
+    stopwatch.stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return rumbleTime >= stopwatch.get() ;
   }
 }
