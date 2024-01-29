@@ -197,7 +197,7 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
   public double getFusedHeading() {
     StatusSignal<Double> yaw = gyro.getYaw();
     yaw.refresh();
-    return -yaw.getValue();
+    return yaw.getValue();
   }
 
   public double getRoll() {
@@ -262,7 +262,8 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
     SwerveModuleState[] states = kinematics
         .toSwerveModuleStates(
             fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(x, y, omega,
-                new Rotation2d(Math.toRadians((getFusedHeading() - offsetAngle))))
+                new Rotation2d(
+                  Math.toRadians((offsetAngle - getFusedHeading()))))
                 : new ChassisSpeeds(x, y, omega));
     setModules(states);
   }
@@ -307,6 +308,8 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
     board.addNum("roll", getRoll());
     board.addNum("pitch", getPitch());
 
+    board.addNum("yaw pose", getPose().getRotation().getDegrees());
+
     board.addNum("afl", frontLeftModule.getAbsoluteEncoderPosition());
     board.addNum("afr", frontRightModule.getAbsoluteEncoderPosition());
     board.addNum("arl", rearLeftModule.getAbsoluteEncoderPosition());
@@ -324,9 +327,11 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
 
     board.addNum("flV", frontLeftModule.getDriveVelocity());
 
-    // Pose2d estPose = RobotContainer.APRILTAGS_LIMELIGHT.getEstPose();
-    // if (RobotContainer.APRILTAGS_LIMELIGHT.hasTarget() ) {
-    //   resetOdometry(estPose);
-    // }
+    board.addBoolean("has target", RobotContainer.APRILTAGS_LIMELIGHT.hasTarget());
+
+    Pose2d estPose = RobotContainer.APRILTAGS_LIMELIGHT.getEstPose();
+    if (RobotContainer.APRILTAGS_LIMELIGHT.hasTarget()) {
+      resetOdometry(estPose);
+    }
   }
 }

@@ -81,7 +81,7 @@ public class SwerveConstants {
         public final static double KI_TRANSLATION = 0; //0.0009;
 
         // swerve theta PID_CONTROLLER radians
-        public final static double THATA_KP = 2.9;
+        public final static double THATA_KP = 4.3;
         public final static double THATA_KI = 0;
         public final static double THATA_KD = 0;
 
@@ -92,10 +92,10 @@ public class SwerveConstants {
         public final static double SPEAKER_TAGET_X_RED = 0; // TODO
         public final static double SPEAKER_TARGET_Y_RED = 0; // TODO
 
-        public final static double ANGLE_PID_TOLORANCE = 0; // TODO
+        public final static double ANGLE_PID_TOLORANCE = Math.toRadians(2.5);
 
         public final static double PODUIM_ANGLE_RED = 0; // TODO
-        public final static double PODUIM_ANGLE_BLUE = 0; // TODO
+        public final static double PODUIM_ANGLE_BLUE = Math.toRadians(155);
 
         public final static double VISION_KP = 0; // TODO
         public final static double VISION_KI = 0; // TODO

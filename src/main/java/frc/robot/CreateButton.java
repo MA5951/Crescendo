@@ -42,6 +42,10 @@ public class CreateButton {
         .alongWith(
           new InstantCommand(
         () -> UpperShooter.getInstance().chengeIDLmode(IdleMode.kBrake))
+      ).alongWith(
+        new InstantCommand(() -> 
+          RobotContainer.driverController.getHID()
+          .setRumble(RumbleType.kBothRumble, 0))
       )
     );
   }

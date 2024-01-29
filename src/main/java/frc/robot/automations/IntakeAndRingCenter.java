@@ -7,11 +7,13 @@ package frc.robot.automations;
 import com.ma5951.utils.commands.MotorCommand;
 import com.revrobotics.CANSparkBase.IdleMode;
 
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import frc.robot.RobotContainer;
 import frc.robot.commands.Intake.IntakeCommand;
 import frc.robot.commands.elevator.SetElevator;
 import frc.robot.subsystems.elevator.ElevatorConstants;
@@ -41,7 +43,7 @@ public class IntakeAndRingCenter extends SequentialCommandGroup {
             new SequentialCommandGroup(
               new WaitUntilCommand(
                 UpperShooter.getInstance()::isGamePiceInShooter),
-                new WaitCommand(0.15)
+                new WaitCommand(0.2)
             ),
             new InstantCommand(() -> Intake.getInstance().setPower(-0.8)),
             new MotorCommand(LowerShooter.getInstance(), 0.1, 0)

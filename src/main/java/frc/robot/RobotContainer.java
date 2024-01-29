@@ -45,8 +45,8 @@ public class RobotContainer {
   public static final CommandPS5Controller
     operatorController = new CommandPS5Controller(PortMap.Controllers.operatorID);
 
-  // public static final Limelight APRILTAGS_LIMELIGHT = new Limelight(
-  //   "limelight-apriltags", new Transform3d());
+  public static final Limelight APRILTAGS_LIMELIGHT = new Limelight(
+    "limelight-one", new Transform3d());
   
   private static boolean IsSpeaker() {
     return scoringOption == ScoringOptions.SPEAKER;
@@ -101,8 +101,8 @@ public class RobotContainer {
       () -> ShooterConstants.SPEAKER_LOWER_V,
         ElevatorConstants.DEFAULT_POSE));
 
-    // // shootiong linked to the podduim 
-    // new CreateButton(driverController.L1(), new Shoot(true));
+    // shootiong linked to the podduim 
+    new CreateButton(driverController.L1(), new Shoot(true));
     
     // // shooting or amp
     // new CreateButton(driverController.circle(), 

@@ -51,7 +51,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-    // RobotContainer.APRILTAGS_LIMELIGHT.periodic();
+    RobotContainer.APRILTAGS_LIMELIGHT.periodic();
   }
 
   @Override

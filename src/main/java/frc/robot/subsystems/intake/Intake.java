@@ -49,10 +49,10 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
 
   @Override
   public boolean canMove() {
-    return !isGamePieceInIntake() 
+    return (!isGamePieceInIntake() && getPower() < 0)
       || (LowerShooter.getInstance().atPoint() && 
       UpperShooter.getInstance().atPoint()) || 
-        -getPower() < 0;
+        (-getPower() < 0 && isGamePieceInIntake());
   }
 
   @Override
@@ -75,6 +75,8 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
   public void periodic() {
     board.addBoolean("Sensor down", !downSensor.get());
     board.addBoolean("Sensor up", !upSensor.get());
+
+    board.addBoolean("is ring", isGamePieceInIntake());
 
     board.addNum("current", master.getOutputCurrent());
   }
