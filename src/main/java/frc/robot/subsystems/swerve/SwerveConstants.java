@@ -105,5 +105,9 @@ public class SwerveConstants {
         public final static double VISION_KD = 0; // TODO
         public final static double VISION_TOLORANCE = 0; // TODO
 
-        public final static double MAX_SHOOTING_DISTANCE = DriverStation.getAlliance().get() == Alliance.Blue ? 0 : 0;
+        public final static double MAX_SHOOTING_DISTANCE_RED = 13.5; 
+        public final static double MAX_SHOOTING_DISTANCE_BLUE = 2.6; 
+
+        public final static double SHOOTING_POSE_MOTION = 1.8;
+        public final static double SHOOTING_POSE_MOTION_TOLORANCE = 0.3;
 }
