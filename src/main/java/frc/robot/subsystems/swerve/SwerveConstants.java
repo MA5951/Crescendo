@@ -1,8 +1,5 @@
 package frc.robot.subsystems.swerve;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-
 public class SwerveConstants {
         // swerve constants
         public final static double WIDTH = 0.545;
@@ -108,6 +105,6 @@ public class SwerveConstants {
         public final static double MAX_SHOOTING_DISTANCE_RED = 13.5; 
         public final static double MAX_SHOOTING_DISTANCE_BLUE = 2.6; 
 
-        public final static double SHOOTING_POSE_MOTION = 1.8;
-        public final static double SHOOTING_POSE_MOTION_TOLORANCE = 0.3;
+        public final static double SHOOTING_POSE_MOTION = 5.57;
+        public final static double SHOOTING_POSE_MOTION_TOLORANCE = 0.2;
 }

@@ -23,8 +23,6 @@ public class ShootInMotion extends Command {
   private SwerveDrivetrainSubsystem swerve;
   private Command feeCommand;
   private Double angle;
-  private Boolean shoot;
-
 
   public ShootInMotion() {
     swerve = SwerveDrivetrainSubsystem.getInstance();
@@ -77,9 +75,9 @@ public class ShootInMotion extends Command {
   //Returns if the robot is in a valid shooting range
   public boolean validShootingRange() {
     if (DriverStation.getAlliance().get() == Alliance.Blue) {
-        return swerve.getPose().getX() < SwerveConstants.MAX_SHOOTING_DISTANCE_BLUE || feeCommand.isFinished();
+        return swerve.getPose().getX() < SwerveConstants.MAX_SHOOTING_DISTANCE_BLUE;
      } else {
-       return swerve.getPose().getX() > SwerveConstants.MAX_SHOOTING_DISTANCE_RED || feeCommand.isFinished();
+       return swerve.getPose().getX() > SwerveConstants.MAX_SHOOTING_DISTANCE_RED;
      }
   }
 
@@ -99,7 +97,7 @@ public class ShootInMotion extends Command {
 
 
     if (Math.abs(swerve.getPose().getX() - SwerveConstants.SHOOTING_POSE_MOTION)
-     <= SwerveConstants.SHOOTING_POSE_MOTION_TOLORANCE) {
+     <= SwerveConstants.SHOOTING_POSE_MOTION_TOLORANCE && validShootingRange()) {
       feeCommand.execute();
     }
     
@@ -108,13 +106,13 @@ public class ShootInMotion extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    swerve.FactorVelocityTo(1);
+    swerve.FactorVelocityTo(1);// Return velocity to 5.3m/s
     Intake.getInstance().setPower(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-     return false;
+     return false ;//add ramp rate
   }
 }
