@@ -6,6 +6,7 @@ package frc.robot.subsystems.swerve;
 
 import java.util.function.BooleanSupplier;
 
+import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ma5951.utils.MAShuffleboard;
@@ -36,9 +37,9 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
 
   private static SwerveDrivetrainSubsystem swerve;
 
-  public boolean isXReversed = true;
-  public boolean isYReversed = false;
-  public boolean isXYReversed = true;
+  public final boolean isXReversed = true;
+  public final boolean isYReversed = false;
+  public final boolean isXYReversed = true;
 
   private double offsetAngle = 0;
 
@@ -48,7 +49,11 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
   public double maxVelocity = SwerveConstants.MAX_VELOCITY;
   public double maxAngularVelocity = SwerveConstants.MAX_ANGULAR_VELOCITY;
 
+  public double disFormSpeaker = 0;
+
   public final MAShuffleboard board;
+
+  private boolean canShoot;
 
   private final Translation2d frontLeftLocation = new Translation2d(
       -SwerveConstants.WIDTH / 2,
@@ -288,6 +293,10 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
     offsetAngle = offset;
   }
 
+  public boolean canShoot() {
+    return canShoot;
+  }
+
   public static SwerveDrivetrainSubsystem getInstance() {
     if (swerve == null) {
       swerve = new SwerveDrivetrainSubsystem();
@@ -327,7 +336,22 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
 
     board.addNum("flV", frontLeftModule.getDriveVelocity());
 
-    board.addBoolean("has target", RobotContainer.APRILTAGS_LIMELIGHT.hasTarget());
+    board.addNum("dis from speaker", disFormSpeaker);
+
+    double ySpeaker = DriverStation.getAlliance().get() == Alliance.Blue ? 
+      SwerveConstants.SPEAKER_TARGET_Y_BLUE : SwerveConstants.SPEAKER_TARGET_Y_RED;
+    double xSpeaker =  DriverStation.getAlliance().get() == Alliance.Blue ? 
+      SwerveConstants.SPEAKER_TARGET_X_BLUE : SwerveConstants.SPEAKER_TAGET_X_RED;
+
+    canShoot = getPose().getTranslation()
+      .getDistance(new Translation2d(xSpeaker, ySpeaker)) < 
+        SwerveConstants.MAX_SHOOT_DISTANCE;
+
+    board.addBoolean("can shoot", canShoot);
+
+    disFormSpeaker = new Translation2d(xSpeaker, ySpeaker).getDistance(
+      getPose().getTranslation()
+    );
 
     Pose2d estPose = RobotContainer.APRILTAGS_LIMELIGHT.getEstPose();
     if (RobotContainer.APRILTAGS_LIMELIGHT.hasTarget()) {

@@ -39,12 +39,12 @@ public class AngleAdjust extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    pid.setSetpoint(angle.get());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    pid.setSetpoint(angle.get());
     double xSpeed = SwerveDrivetrainSubsystem.getInstance().isXYReversed ? 
       ySupplier.get() : xSupplier.get();
     double ySpeed = SwerveDrivetrainSubsystem.getInstance().isXYReversed ?

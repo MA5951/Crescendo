@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.PortMap;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
 
 public class UpperShooter extends SubsystemBase implements DefaultInternallyControlledSubsystem {
   private static UpperShooter instance;
@@ -63,6 +64,8 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
 
 
     board = new MAShuffleboard("Upper shotter");
+
+    board.addNum("setPonit poduim", ShooterConstants.PODIUM_UPPER_V);
   }
 
   public void chengeIDLmode(IdleMode mode) {
@@ -121,7 +124,13 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
   }
 
   public double getVelocityForShooting() {
-    return 0; // TODO need to craete a graph
+    double dis = SwerveDrivetrainSubsystem.getInstance().disFormSpeaker;
+    double factor = 1;
+    return ShooterConstants.semple()[0] * factor;
+  }
+
+  public double getPoduim() {
+    return board.getNum("setPonit poduim");
   }
 
   public static UpperShooter getInstance() {
@@ -138,9 +147,13 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
     board.addBoolean("sensor", isGamePiceInShooter());
 
     if (Intake.getInstance().isGamePieceInIntake()) {
-      ShooterConstants.defaultV = 1000;
+      ShooterConstants.defaultV = 1500;
     } else {
       ShooterConstants.defaultV = 0;
     }
+
+    board.addBoolean("atpoint", atPoint());
+
+    board.addNum("set", setPoint);
   }
 }

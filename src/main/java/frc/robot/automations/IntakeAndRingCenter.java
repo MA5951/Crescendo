@@ -37,7 +37,7 @@ public class IntakeAndRingCenter extends SequentialCommandGroup {
                 new InstantCommand(
               () -> UpperShooter.getInstance().chengeIDLmode(IdleMode.kCoast))
               ),
-          new SetElevator(ElevatorConstants.DEFAULT_POSE),
+          // new SetElevator(ElevatorConstants.DEFAULT_POSE),
           new ParallelDeadlineGroup(
             new SequentialCommandGroup(
               new WaitUntilCommand(
@@ -53,7 +53,6 @@ public class IntakeAndRingCenter extends SequentialCommandGroup {
       ),
       new MotorCommand(UpperShooter.getInstance(), 0, 0)
       ))
-      //new ControllerRumble(3))
     );
   }
 }

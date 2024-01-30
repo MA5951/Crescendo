@@ -37,9 +37,9 @@ public class Robot extends TimedRobot {
     Elevator.getInstance();
     LED.getInstance();
 
-    CommandScheduler.getInstance().setDefaultCommand(
-      Elevator.getInstance(), new DefaultRunInternallyControlledSubsystem(
-        Elevator.getInstance(), ElevatorConstants.DEFAULT_POSE));
+    // CommandScheduler.getInstance().setDefaultCommand(
+    //   Elevator.getInstance(), new DefaultRunInternallyControlledSubsystem(
+    //     Elevator.getInstance(), ElevatorConstants.DEFAULT_POSE));
 
     CommandScheduler.getInstance().setDefaultCommand(
       LowerShooter.getInstance(), new DefaultRunInternallyControlledSubsystem(
@@ -85,6 +85,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+    SwerveDrivetrainSubsystem.getInstance().resetEncoders();
     
     CommandScheduler.getInstance().setDefaultCommand(
       SwerveDrivetrainSubsystem.getInstance(), 

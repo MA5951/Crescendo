@@ -75,10 +75,6 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
         return master.getOutputCurrent();
     }
 
-    public double getPoseForShoot() {
-        return 0; // TODO graph
-    }
-
     @Override
     public void calculate(double setPoint) {
         pidController.setReference(setPoint, ControlType.kPosition);
