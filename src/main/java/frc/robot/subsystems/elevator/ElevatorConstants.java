@@ -1,5 +1,7 @@
 package frc.robot.subsystems.elevator;
 
+import edu.wpi.first.wpilibj2.command.Command;
+
 public class ElevatorConstants {
     public static final double KP = 42;
     public static final double KI = 0;
@@ -33,4 +35,7 @@ public class ElevatorConstants {
     
     public static final double CURRENT_THRESHOLD = 30;
     public static final double TIME_WITH_CURRENT_JUMP = 0.1;
+    public static double closeClimbPose;
+    public static Command climbPose;
+    public static double ejectPose;
 }
