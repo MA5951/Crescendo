@@ -29,7 +29,7 @@ public class Shoot extends SequentialCommandGroup {
   public static double yDis;
   public static double xDis;
 
-  private static double getAngle() {
+  public static double getAngle() {
     if (isPoduim) {
       return DriverStation.getAlliance().get() == Alliance.Red ?
         SwerveConstants.PODUIM_ANGLE_RED : SwerveConstants.PODUIM_ANGLE_BLUE; 
