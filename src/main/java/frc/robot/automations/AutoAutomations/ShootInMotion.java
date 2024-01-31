@@ -9,7 +9,7 @@ import com.ma5951.utils.commands.MotorCommand;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.RobotContainer;
+import frc.robot.commands.swerve.SwereDriveWhileShooting;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeConstants;
@@ -20,45 +20,19 @@ import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
 
 public class ShootInMotion extends Command {
   /** Creates a new ShootInMotion. */
+  private SwereDriveWhileShooting swerveCommand;
   private SwerveDrivetrainSubsystem swerve;
   private Command feeCommand;
-  private Double angle;
 
   public ShootInMotion() {
     swerve = SwerveDrivetrainSubsystem.getInstance();
+    swerveCommand = new SwereDriveWhileShooting();
     feeCommand = new MotorCommand(Intake.getInstance(),
      IntakeConstants.INTAKE_POWER, IntakeConstants.INTAKE_POWER).repeatedly();
-    addRequirements(swerve);
+    addRequirements(SwerveDrivetrainSubsystem.getInstance());
   }
 
-  //Swerve drive command that includes larger dead zone on Y and rotation lock when not spining
-  public void swerveDrive() {
-    double xSpeed = SwerveDrivetrainSubsystem.getInstance().isXYReversed ?
-     RobotContainer.driverController.getLeftY() : RobotContainer.driverController.getLeftX();
-    double ySpeed = SwerveDrivetrainSubsystem.getInstance().isXYReversed ?
-     RobotContainer.driverController.getLeftX() : RobotContainer.driverController.getLeftY();
-    
-     double turningSpeed = RobotContainer.driverController.getRightX();
-
-    xSpeed = Math.abs(xSpeed) < 0.1 ? 0 : xSpeed;
-    ySpeed = Math.abs(ySpeed) < 0.25 ? 0 : ySpeed;
-
-    turningSpeed = (Math.abs(turningSpeed) < 0.25 ? 
-    angle = DriverStation.getAlliance().get() == Alliance.Blue ?
-    angle - Math.PI : angle 
-    : turningSpeed) * -1;
-
-    xSpeed = xSpeed *
-        swerve.maxVelocity *
-        (SwerveDrivetrainSubsystem.getInstance().isXReversed ? -1 : 1);
-    ySpeed = ySpeed *
-        swerve.maxVelocity *
-        (SwerveDrivetrainSubsystem.getInstance().isYReversed ? -1 : 1);
-    turningSpeed = turningSpeed *
-        swerve.maxAngularVelocity;
-
-    swerve.drive(xSpeed, ySpeed, turningSpeed, true);
-  }
+  
 
   //Function that sets the shooter and elevator based on the distance to the speaker
   public void setShooterAndElevator() {
@@ -85,6 +59,7 @@ public class ShootInMotion extends Command {
   @Override
   public void initialize() {
     swerve.FactorVelocityTo(0.4); //Factor velocity to 2.6m/s
+    swerveCommand.initialize();;
     feeCommand.initialize();
     setShooterAndElevator();
   }
@@ -92,11 +67,11 @@ public class ShootInMotion extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    swerveDrive();
+    swerveCommand.execute();
     setShooterAndElevator();
 
 
-    if (Math.abs(swerve.getPose().getX() - SwerveConstants.SHOOTING_POSE_MOTION)
+    if (Math.abs(swerve.getPose().getY() - SwerveConstants.SHOOTING_POSE_MOTION)
      <= SwerveConstants.SHOOTING_POSE_MOTION_TOLORANCE && validShootingRange()) {
       feeCommand.execute();
     }
@@ -106,6 +81,7 @@ public class ShootInMotion extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    swerveCommand.end(interrupted);
     swerve.FactorVelocityTo(1);// Return velocity to 5.3m/s
     Intake.getInstance().setPower(0);
   }
