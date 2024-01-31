@@ -6,6 +6,7 @@ package frc.robot.subsystems.swerve;
 
 import java.util.function.BooleanSupplier;
 
+import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ma5951.utils.MAShuffleboard;
@@ -35,9 +36,9 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
 
   private static SwerveDrivetrainSubsystem swerve;
 
-  public boolean isXReversed = true;
-  public boolean isYReversed = false;
-  public boolean isXYReversed = true;
+  public final boolean isXReversed = true;
+  public final boolean isYReversed = false;
+  public final boolean isXYReversed = true;
 
   private double offsetAngle = 0;
 
@@ -47,7 +48,11 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
   public double maxVelocity = SwerveConstants.MAX_VELOCITY;
   public double maxAngularVelocity = SwerveConstants.MAX_ANGULAR_VELOCITY;
 
+  public double disFormSpeaker = 0;
+
   public final MAShuffleboard board;
+
+  private boolean canShoot;
 
   private final Translation2d frontLeftLocation = new Translation2d(
       -SwerveConstants.WIDTH / 2,
@@ -196,7 +201,7 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
   public double getFusedHeading() {
     StatusSignal<Double> yaw = gyro.getYaw();
     yaw.refresh();
-    return -yaw.getValue();
+    return yaw.getValue();
   }
 
   public double getRoll() {
@@ -261,7 +266,8 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
     SwerveModuleState[] states = kinematics
         .toSwerveModuleStates(
             fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(x, y, omega,
-                new Rotation2d(Math.toRadians((getFusedHeading() - offsetAngle))))
+                new Rotation2d(
+                  Math.toRadians((offsetAngle - getFusedHeading()))))
                 : new ChassisSpeeds(x, y, omega));
     setModules(states);
   }
@@ -286,6 +292,10 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
     offsetAngle = offset;
   }
 
+  public boolean canShoot() {
+    return canShoot;
+  }
+
   public static SwerveDrivetrainSubsystem getInstance() {
     if (swerve == null) {
       swerve = new SwerveDrivetrainSubsystem();
@@ -306,6 +316,8 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
     board.addNum("roll", getRoll());
     board.addNum("pitch", getPitch());
 
+    board.addNum("yaw pose", getPose().getRotation().getDegrees());
+
     board.addNum("afl", frontLeftModule.getAbsoluteEncoderPosition());
     board.addNum("afr", frontRightModule.getAbsoluteEncoderPosition());
     board.addNum("arl", rearLeftModule.getAbsoluteEncoderPosition());
@@ -323,9 +335,26 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
 
     board.addNum("flV", frontLeftModule.getDriveVelocity());
 
-    // Pose2d estPose = RobotContainer.APRILTAGS_LIMELIGHT.getEstPose();
-    // if (RobotContainer.APRILTAGS_LIMELIGHT.hasTarget() ) {
-    //   resetOdometry(estPose);
-    // }
+    board.addNum("dis from speaker", disFormSpeaker);
+
+    double ySpeaker = DriverStation.getAlliance().get() == Alliance.Blue ? 
+      SwerveConstants.SPEAKER_TARGET_Y_BLUE : SwerveConstants.SPEAKER_TARGET_Y_RED;
+    double xSpeaker =  DriverStation.getAlliance().get() == Alliance.Blue ? 
+      SwerveConstants.SPEAKER_TARGET_X_BLUE : SwerveConstants.SPEAKER_TAGET_X_RED;
+
+    canShoot = getPose().getTranslation()
+      .getDistance(new Translation2d(xSpeaker, ySpeaker)) < 
+        SwerveConstants.MAX_SHOOT_DISTANCE;
+
+    board.addBoolean("can shoot", canShoot);
+
+    disFormSpeaker = new Translation2d(xSpeaker, ySpeaker).getDistance(
+      getPose().getTranslation()
+    );
+
+    Pose2d estPose = RobotContainer.APRILTAGS_LIMELIGHT.getEstPose();
+    if (RobotContainer.APRILTAGS_LIMELIGHT.hasTarget()) {
+      resetOdometry(estPose);
+    }
   }
 }

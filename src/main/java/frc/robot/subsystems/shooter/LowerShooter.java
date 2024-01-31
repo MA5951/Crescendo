@@ -18,7 +18,8 @@ import com.revrobotics.SparkPIDController.ArbFFUnits;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.PortMap;;
+import frc.robot.PortMap;
+import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
 
 public class LowerShooter extends SubsystemBase implements DefaultInternallyControlledSubsystem {
   private static LowerShooter instance;
@@ -35,6 +36,8 @@ public class LowerShooter extends SubsystemBase implements DefaultInternallyCont
 
   private LowerShooter() {
     motor = new CANSparkMax(PortMap.Shooter.lowerID, MotorType.kBrushless);
+
+    motor.restoreFactoryDefaults();
 
     motor.setIdleMode(IdleMode.kBrake);
 
@@ -55,6 +58,12 @@ public class LowerShooter extends SubsystemBase implements DefaultInternallyCont
 
 
     board = new MAShuffleboard("Lower shotter");
+
+    board.addNum("setPonit poduim", ShooterConstants.PODUIM_LOWER_V);
+  }
+
+  public void chengeIDLmode(IdleMode mode) {
+    motor.setIdleMode(mode);
   }
 
   @Override
@@ -105,7 +114,13 @@ public class LowerShooter extends SubsystemBase implements DefaultInternallyCont
   }
 
   public double getVelocityForShooting() {
-    return 0; // TODO need to craete a graph
+    double dis = SwerveDrivetrainSubsystem.getInstance().disFormSpeaker;
+    double factor = 1;
+    return ShooterConstants.semple()[1] * factor;
+  }
+
+  public double getPoduim() {
+    return board.getNum("setPonit poduim");
   }
 
   public static LowerShooter getInstance() {
@@ -118,5 +133,9 @@ public class LowerShooter extends SubsystemBase implements DefaultInternallyCont
   @Override
   public void periodic() {
     board.addNum("v", getVelocity());
+
+    board.addBoolean("atpoint", atPoint());
+
+    board.addNum("set", setPoint);
   }
 }

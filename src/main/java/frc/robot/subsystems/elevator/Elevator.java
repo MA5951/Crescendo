@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.AnalogEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.ma5951.utils.MAShuffleboard;
-import com.ma5951.utils.MAShuffleboard.pidControllerGainSupplier;
 import com.ma5951.utils.subsystem.DefaultInternallyControlledSubsystem;
 
 import frc.robot.PortMap;
@@ -30,23 +29,29 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
     private final SparkPIDController pidController;
     private double setPoint = 0;
 
-    private final pidControllerGainSupplier pidGainSupplier;
-
     private final MAShuffleboard board;
-
 
     private Elevator() {
       master = new CANSparkMax(PortMap.Elevator.masterID, MotorType.kBrushless);
       slave1 = new CANSparkMax(PortMap.Elevator.slave1ID, MotorType.kBrushless);
       slave2 = new CANSparkMax(PortMap.Elevator.slave2ID, MotorType.kBrushless);
 
+      master.restoreFactoryDefaults();
+      slave1.restoreFactoryDefaults();
+      slave2.restoreFactoryDefaults();
+
+      master.setInverted(false);
+      slave1.setInverted(true);
+      slave2.setInverted(true);
+
+      slave1.follow(master, true);
+      slave2.follow(master, true);
+
       absEncoder = new AnalogEncoder(PortMap.Elevator.absEncoderID);
 
       master.setIdleMode(IdleMode.kBrake);
       slave1.setIdleMode(IdleMode.kBrake);
       slave2.setIdleMode(IdleMode.kBrake);
-      slave1.follow(master, true);
-      slave2.follow(master, true);
 
       encoder = master.getEncoder();
 
@@ -60,27 +65,14 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
       pidController.setI(ElevatorConstants.KI);
       pidController.setD(ElevatorConstants.KD);
 
-
-      slave1.follow(master, true);
-      slave2.follow(master, true);
-
       board = new MAShuffleboard("Elevator");
-      pidGainSupplier = board.getPidControllerGainSupplier(
-        "position",
-        ElevatorConstants.KP,
-        ElevatorConstants.KI,
-        ElevatorConstants.KD);
 
-        board.addNum("setPoint", getSetPoint());
+      board.addNum("setPoint", getSetPoint());
 
     }
 
     public double getCurrent() {
         return master.getOutputCurrent();
-    }
-
-    public double getPoseForShoot() {
-        return 0; // TODO graph
     }
 
     @Override
@@ -95,6 +87,11 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
 
     @Override
     public void setSetPoint(double setPoint) {
+        if (setPoint > ElevatorConstants.MAX_POSE) {
+            setPoint = ElevatorConstants.MAX_POSE;
+        } else if (setPoint < ElevatorConstants.MIN_POSE) {
+            setPoint = ElevatorConstants.MIN_POSE;
+        }
         board.addNum("setPoint", setPoint);
         this.setPoint = setPoint;
     }
@@ -139,10 +136,6 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
         board.addNum("pose", getPosition());
 
         board.addBoolean("at point", atPoint());
-
-        pidController.setP(pidGainSupplier.getKP());
-        pidController.setI(pidGainSupplier.getKI());
-        pidController.setD(pidGainSupplier.getKD());
 
         setSetPoint(board.getNum("setPoint"));
 
