@@ -24,7 +24,7 @@ public class AMPScore extends SequentialCommandGroup {
 
   public AMPScore() {
     addCommands(
-      new SetElevator(ElevatorConstants.AMP_POSE),
+      // new SetElevator(ElevatorConstants.AMP_POSE),
       new ParallelCommandGroup(
       new InstantCommand(() -> 
           Intake.getInstance().setPower(IntakeConstants.INTAKE_POWER)),

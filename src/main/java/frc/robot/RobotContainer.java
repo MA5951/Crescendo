@@ -8,6 +8,9 @@ import com.ma5951.utils.Limelight;
 import com.ma5951.utils.commands.MotorCommand;
 
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.wpilibj.PS4Controller;
+import edu.wpi.first.wpilibj.PS5Controller;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 
 // import com.pathplanner.lib.auto.NamedCommands;
 
@@ -18,7 +21,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
 import frc.robot.automations.AMPScore;
 import frc.robot.automations.IntakeAndRingCenter;
+import frc.robot.automations.IntakeAutomation;
 import frc.robot.automations.RunIntake;
+import frc.robot.automations.RunShoot;
 import frc.robot.automations.ScoreWithoutAdjust;
 import frc.robot.automations.Shoot;
 import frc.robot.automations.SourceIntake;
@@ -37,18 +42,30 @@ public class RobotContainer {
     SPEAKER
   }
 
+  private enum IntakePose {
+    FLOOR,
+    SOURCE,
+  }
+
   public static ScoringOptions scoringOption = ScoringOptions.SPEAKER;
+  public static IntakePose intakepose = IntakePose.FLOOR;
+
 
   public static final CommandPS5Controller
     driverController = new CommandPS5Controller(PortMap.Controllers.driveID);
   public static final CommandPS5Controller
     operatorController = new CommandPS5Controller(PortMap.Controllers.operatorID);
 
-  // public static final Limelight APRILTAGS_LIMELIGHT = new Limelight(
-  //   "limelight-apriltags", new Transform3d());
+  public static final Limelight APRILTAGS_LIMELIGHT = new Limelight(
+    "limelight-one", new Transform3d());
   
   private static boolean IsSpeaker() {
     return scoringOption == ScoringOptions.SPEAKER;
+  }
+
+  private static boolean IsFlorr() {
+   
+    return intakepose == IntakePose.FLOOR;
   }
 
   private void registerCommands() {
@@ -71,40 +88,52 @@ public class RobotContainer {
       new InstantCommand(SwerveDrivetrainSubsystem.getInstance()::updateOffset)
     );
 
-    // ---------------------------------------------------------------
+    // // ---------------------------------------------------------------
 
     new CreateButton(driverController.povLeft(), new ResetElevator());
 
     driverController.povUp().whileTrue(new MotorCommand(
-      Elevator.getInstance(), 0.3, 0
+      Elevator.getInstance(), 0.15, 0
     )).whileFalse(
       new InstantCommand(() -> Elevator.getInstance().setSetPoint(Elevator.getInstance().getPosition()))
     );
     
     driverController.povDown().whileTrue(new MotorCommand(
-      Elevator.getInstance(), -0.3, 0
+      Elevator.getInstance(), -0.15, 0
     )).whileFalse(
       new InstantCommand(() -> Elevator.getInstance().setSetPoint(Elevator.getInstance().getPosition()))
     );
 
 
-    // // intake
-    // new CreateButton(driverController.R1(), 
-    //   new RunIntake(IntakeConstants.intakePower));
+    // intake
+    new CreateButton(driverController.R1(), 
+      new IntakeAutomation(IntakeConstants.INTAKE_POWER));
 
-    // // shooting linked to the speaker 
-    // new CreateButton(driverController.L2(), new ScoreWithoutAdjust(
-    //   () -> ShooterConstants.speakerUpperV, () -> ShooterConstants.speakerLowerV,
-    //     ElevatorConstants.shootingPoseSpeaker));
+
+    // shooting linked to the speaker 
+    new CreateButton(driverController.L2(), new ScoreWithoutAdjust(
+      () -> ShooterConstants.SPEAKER_UPPER_V, 
+      () -> ShooterConstants.SPEAKER_LOWER_V,
+        ElevatorConstants.DEFAULT_POSE));
 
     // // shootiong linked to the podduim 
     // new CreateButton(driverController.L1(), new Shoot(true));
     
-    // // shooting or amp
-    // new CreateButton(driverController.circle(), 
-    //   new ConditionalCommand(new Shoot(false),
-    //     new AMPScore(),
-    //     RobotContainer::IsSpeaker
+    // shooting or amp
+    new CreateButton(driverController.circle(), 
+      // new ConditionalCommand(new Shoot(false),
+      //   new AMPScore(),
+      //   RobotContainer::IsSpeaker
+      // )
+      // new Shoot(false)
+      new RunShoot()
+    );
+
+    // // floor or source
+    // new CreateButton(driverController.R1(), 
+    //   new ConditionalCommand(new IntakeAutomation(IntakeConstants.INTAKE_POWER),
+    //     new SourceIntake(),
+    //     RobotContainer::IsFlorr
     //   )
     // );
 
@@ -113,12 +142,12 @@ public class RobotContainer {
     //   new SetElevator(ElevatorConstants.climbPose),
     //   ElevatorConstants.closeClimbPose);
 
-    // // sorce intake
+    // // source intake
     // new CreateButton(operatorController.square(), new SourceIntake());
     
     // // eject
     // new CreateButton(operatorController.cross(), new ScoreWithoutAdjust(
-    //   () -> ShooterConstants.defaultV, () -> ShooterConstants.defaultV, ElevatorConstants.ejectPose
+    //   () -> ShooterConstants.defaultV, () -> ShooterConstants.defaultV, ElevatorConstants.DEFAULT_POSE
     // ));
     
     // // choosing btween apm score and amp score
@@ -128,6 +157,15 @@ public class RobotContainer {
 
     // operatorController.povDown().whileTrue(
     //   new InstantCommand(() -> scoringOption = ScoringOptions.AMP)
+    // );
+
+    // // choosing btween floor intake and sou
+    // operatorController.povLeft().whileTrue(
+    //   new InstantCommand(() -> intakepose = IntakePose.FLOOR)
+    // );
+
+    // operatorController.povRight().whileTrue(
+    //   new InstantCommand(() -> intakepose = IntakePose.SOURCE)
     // );
 
     // //--------------------LEDS-----------------------

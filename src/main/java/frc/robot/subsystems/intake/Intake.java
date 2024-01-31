@@ -30,6 +30,9 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
     master = new CANSparkMax(PortMap.Intake.masterID, MotorType.kBrushless);
     slave = new CANSparkMax(PortMap.Intake.slaveID, MotorType.kBrushless);
 
+    master.restoreFactoryDefaults();
+    slave.restoreFactoryDefaults();
+
     upSensor = new DigitalInput(PortMap.Intake.sensor1ID);
     downSensor = new DigitalInput(PortMap.Intake.sensor2ID);
     board = new MAShuffleboard("Intake");
@@ -46,25 +49,16 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
 
   @Override
   public boolean canMove() {
-    return !isGamePieceInIntake() 
+    return (!isGamePieceInIntake() && getPower() < 0)
       || (LowerShooter.getInstance().atPoint() && 
       UpperShooter.getInstance().atPoint()) || 
-        -getPower() < 0;
+        (-getPower() < 0 && isGamePieceInIntake());
   }
 
   @Override
   public void setVoltage(double voltage) {
     master.set(voltage / 12);
-    slave.set(voltage / 12);
   }
-
-  // public void masterSet(double power) {
-  //   master.set(power);
-  // }
-
-  // public void slaveSet(double power) {
-  //   slave.set(power);
-  // }
 
   public double getPower() {
     return master.get();
@@ -81,6 +75,8 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
   public void periodic() {
     board.addBoolean("Sensor down", !downSensor.get());
     board.addBoolean("Sensor up", !upSensor.get());
+
+    board.addBoolean("is ring", isGamePieceInIntake());
 
     board.addNum("current", master.getOutputCurrent());
   }
