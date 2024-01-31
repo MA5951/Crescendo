@@ -81,29 +81,34 @@ public class SwerveConstants {
         public final static double KI_TRANSLATION = 0; //0.0009;
 
         // swerve theta PID_CONTROLLER radians
-        public final static double THATA_KP = 6;
+        public final static double THATA_KP = 4.4;
         public final static double THATA_KI = 0;
         public final static double THATA_KD = 0;
 
         // ------------2024--------------------
         public final static double SPEAKER_TARGET_X_BLUE = 0;
-        public final static double SPEAKER_TARGET_Y_BLUE = 5.575;
+        public final static double SPEAKER_TARGET_Y_BLUE = 5.546;
 
         public final static double SPEAKER_TAGET_X_RED = 16.54;
         public final static double SPEAKER_TARGET_Y_RED = 5.55;
 
-        public final static double ANGLE_PID_TOLORANCE = Math.toRadians(1.5);
+        public final static double ANGLE_PID_TOLORANCE = Math.toRadians(10);
 
-        public final static double MAX_SHOOT_DISTANCE = 2.2;
+        public final static double MAX_SHOOT_DISTANCE = 2.1;
 
         public final static double VISION_KP = 0; // TODO
         public final static double VISION_KI = 0; // TODO
         public final static double VISION_KD = 0; // TODO
         public final static double VISION_TOLORANCE = 0; // TODO
 
-        public final static double MAX_SHOOTING_DISTANCE_RED = 13.5; 
-        public final static double MAX_SHOOTING_DISTANCE_BLUE = 2.6; 
+        public final static double SHOOTING_POSE_MOTION = SPEAKER_TARGET_Y_BLUE;
+        public final static double SHOOTING_POSE_MOTION_TOLORANCE = 0.85; //1.5;
 
-        public final static double SHOOTING_POSE_MOTION = 5.57;
-        public final static double SHOOTING_POSE_MOTION_TOLORANCE = 0.2;
+        public final static double SHOOTING_SPEED = 0.12;
+        public final static double LOWER_SPEED = 0.4;
+
+        public final static double PODUIM_LINE_RED = 13.390;
+        public final static double PODUIM_LINE_BLUE = 3.282;
+        
+        public static double lowerSpeedFactor = LOWER_SPEED;
 }

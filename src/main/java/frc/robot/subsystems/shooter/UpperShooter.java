@@ -18,9 +18,12 @@ import com.revrobotics.SparkPIDController.ArbFFUnits;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.PortMap;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.swerve.SwerveConstants;
 import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
 
 public class UpperShooter extends SubsystemBase implements DefaultInternallyControlledSubsystem {
@@ -35,6 +38,8 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
   private final DigitalInput sensor;
 
   private double setPoint = ShooterConstants.defaultV;
+
+  public boolean changeToDefaultV = false;
 
   private final MAShuffleboard board;
 
@@ -124,9 +129,8 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
   }
 
   public double getVelocityForShooting() {
-    double dis = SwerveDrivetrainSubsystem.getInstance().disFormSpeaker;
-    double factor = 1;
-    return ShooterConstants.semple()[0] * factor;
+    return ShooterConstants.sample(
+      SwerveDrivetrainSubsystem.getInstance().disFormSpeaker)[0];
   }
 
   public double getPoduim() {
@@ -146,10 +150,22 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
 
     board.addBoolean("sensor", isGamePiceInShooter());
 
-    if (Intake.getInstance().isGamePieceInIntake()) {
-      ShooterConstants.defaultV = 1500;
+    double poduimLine = DriverStation.getAlliance().get() == Alliance.Red ?
+      SwerveConstants.PODUIM_LINE_RED : SwerveConstants.PODUIM_LINE_BLUE;
+    double factor = DriverStation.getAlliance().get() == Alliance.Red ?
+      -1 : 1;
+
+    if (Intake.getInstance().isGamePieceInIntake() && 
+      SwerveDrivetrainSubsystem.getInstance().getPose().getX() * factor
+       < poduimLine * factor) {
+        ShooterConstants.defaultV = 3000;
     } else {
       ShooterConstants.defaultV = 0;
+    }
+
+    if (changeToDefaultV) {
+      LowerShooter.getInstance().setSetPoint(ShooterConstants.defaultV);
+      setSetPoint(ShooterConstants.defaultV);
     }
 
     board.addBoolean("atpoint", atPoint());

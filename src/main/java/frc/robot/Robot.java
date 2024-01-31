@@ -7,6 +7,8 @@ package frc.robot;
 import com.ma5951.utils.commands.DefaultRunInternallyControlledSubsystem;
 
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -26,7 +28,7 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
-  private double time = -5;
+  // private double time = -5;
 
   @Override
   public void robotInit() {
@@ -54,7 +56,12 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-    RobotContainer.APRILTAGS_LIMELIGHT.periodic();
+    if (DriverStation.isEnabled()) {
+      RobotContainer.APRILTAGS_LIMELIGHT.periodic();
+    }
+
+    SmartDashboard.putBoolean("isFloor",
+      RobotContainer.intakepose == RobotContainer.IntakePose.FLOOR);
   }
 
   @Override
@@ -96,13 +103,13 @@ public class Robot extends TimedRobot {
         RobotContainer.driverController::getLeftY,
         RobotContainer.driverController::getRightX));
 
-    time = Timer.getFPGATimestamp();
+    // time = Timer.getFPGATimestamp();
 
   }
 
   @Override
   public void teleopPeriodic() {
-    double timePassed = Timer.getFPGATimestamp() - time;
+    // double timePassed = Timer.getFPGATimestamp() - time;
     // start of endgame (20 seconds left)
     
 

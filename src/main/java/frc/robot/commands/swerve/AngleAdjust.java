@@ -58,6 +58,8 @@ public class AngleAdjust extends Command {
       swerve.maxVelocity *
       (SwerveDrivetrainSubsystem.getInstance().isYReversed ? -1 : 1);
     
+    swerve.setAngleSetPoint(angle.get());
+
     swerve.drive(
       xSpeed, ySpeed,
       pid.calculate(swerve.getPose().getRotation().getRadians())
