@@ -24,7 +24,7 @@ public class FeedToShooter extends SequentialCommandGroup {
     addCommands(
       new ParallelDeadlineGroup(
         new WaitCommand(0.3), 
-        new MotorCommand(Intake.getInstance(), IntakeConstants.intakePower, 0))
+        new MotorCommand(Intake.getInstance(), IntakeConstants.INTAKE_POWER, 0))
     );
   }
 }

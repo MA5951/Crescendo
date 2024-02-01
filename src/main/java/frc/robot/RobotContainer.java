@@ -6,6 +6,7 @@ package frc.robot;
 
 import com.ma5951.utils.Limelight;
 import com.ma5951.utils.commands.MotorCommand;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.PS4Controller;
@@ -23,6 +24,7 @@ import frc.robot.subsystems.swerve.SwerveConstants;
 import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
 import frc.robot.automations.AMPScore;
 import frc.robot.automations.CenterRing;
+import frc.robot.automations.GettingReadyToScore;
 import frc.robot.automations.IntakeAndRingCenter;
 import frc.robot.automations.IntakeAutomation;
 import frc.robot.automations.ResetAll;
@@ -31,6 +33,8 @@ import frc.robot.automations.RunShoot;
 import frc.robot.automations.ScoreWithoutAdjust;
 import frc.robot.automations.Shoot;
 import frc.robot.automations.SourceIntake;
+import frc.robot.automations.Auto.FeedToShooter;
+import frc.robot.automations.Auto.SetForAmp;
 import frc.robot.automations.AutoAutomations.ShootInMotion;
 import frc.robot.commands.Intake.IntakeCommand;
 import frc.robot.commands.elevator.ResetElevator;
@@ -68,9 +72,16 @@ public class RobotContainer {
   }
 
   private void registerCommands() {
-    NamedCommands.registerCommand("Intake", new IntakeCommand(IntakeConstants.intakePower));
-    NamedCommands.registerCommand("Initial Shoot", new 
-      GettingReadyToScore(() ->ShooterConstants.speakerUpperV, () ->ShooterConstants.speakerLowerV, ElevatorConstants.shootingPoseAuto)
+    NamedCommands.registerCommand("Intake", new IntakeCommand(IntakeConstants.INTAKE_POWER));
+    // NamedCommands.registerCommand("Initial Shoot", new 
+
+    //   .andThen(new FeedToShooter()));
+    NamedCommands.registerCommand("Initial Shoot", new InstantCommand(
+      () -> UpperShooter.getInstance().setSetPoint(ShooterConstants.SPEAKER_UPPER_V))
+      .alongWith(new InstantCommand(
+        () -> LowerShooter.getInstance().setSetPoint(ShooterConstants.SPEAKER_LOWER_V)))
+      .andThen(new ResetElevator())
+      .andThen(new SetShooter(() -> ShooterConstants.SPEAKER_UPPER_V, () -> ShooterConstants.SPEAKER_LOWER_V))
       .andThen(new FeedToShooter()));
 
     NamedCommands.registerCommand("Feed To Shooter", new FeedToShooter());
@@ -87,7 +98,7 @@ public class RobotContainer {
       ).andThen(new FeedToShooter()));
 
     NamedCommands.registerCommand("SetForAmp", new SetForAmp());
-    NamedCommands.registerCommand("Elvator Intake", new IntakeAutomation(IntakeConstants.intakePower));
+    NamedCommands.registerCommand("Elvator Intake", new IntakeAutomation(IntakeConstants.INTAKE_POWER));
     
   }
 
