@@ -23,6 +23,7 @@ public class ShootInMotion extends Command {
   private AngleAdjust swerveCommand;
   private SwerveDrivetrainSubsystem swerve;
   public static boolean isRunning = false;
+  public double disFromSpeaker;
 
   public ShootInMotion() {
     swerve = SwerveDrivetrainSubsystem.getInstance();
@@ -37,19 +38,18 @@ public class ShootInMotion extends Command {
 
   //Function that sets the shooter and elevator based on the distance to the speaker
   public void setShooter() {
-    double[] shootingValue = ShooterConstants.sample(
-      new Translation2d(
+    disFromSpeaker = new Translation2d(
         SwerveDrivetrainSubsystem.getInstance().getPose().getX(),
          0).getDistance(new Translation2d(
           DriverStation.getAlliance().get() == Alliance.Blue ?
-          SwerveConstants.SPEAKER_TAGET_X_RED : 
-          SwerveConstants.SPEAKER_TAGET_X_RED, 0))
-    );
+          SwerveConstants.SPEAKER_TARGET_X_BLUE : 
+          SwerveConstants.SPEAKER_TAGET_X_RED, 0));
+    double[] shootingValue = ShooterConstants.sample(disFromSpeaker);
     LowerShooter.getInstance().setSetPoint(
-      shootingValue[1]);
+      shootingValue[1] * ShooterConstants.V_FACTOR);
 
     UpperShooter.getInstance().setSetPoint(
-      shootingValue[0]);
+      shootingValue[0] * ShooterConstants.V_FACTOR);
 
   }
 
@@ -58,6 +58,7 @@ public class ShootInMotion extends Command {
   public void initialize() {
     swerve.FactorVelocityTo(0.3);
     swerveCommand.initialize();
+    setShooter();
     isRunning = true;
   }
 
@@ -65,25 +66,23 @@ public class ShootInMotion extends Command {
   @Override
   public void execute() {
     swerveCommand.execute();
-    setShooter();
 
     if (Math.abs(swerve.getPose().getY() - SwerveConstants.SHOOTING_POSE_MOTION)
-     <= SwerveConstants.SHOOTING_POSE_MOTION_TOLORANCE && 
-      SwerveDrivetrainSubsystem.getInstance().canShoot()
+     < (SwerveConstants.SHOOTING_POSE_MOTION_TOLORANCE * 
+     Math.max(1, swerve.getVelocity() * 0.6))
         && UpperShooter.getInstance().atPoint()
         && LowerShooter.getInstance().atPoint()) {
       Intake.getInstance().setPower(IntakeConstants.INTAKE_POWER);
     } else {
       Intake.getInstance().setPower(0);
     }
-    
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     swerveCommand.end(interrupted);
-    swerve.FactorVelocityTo(1);// Return velocity to 5.3m/s
+    swerve.FactorVelocityTo(1);
     Intake.getInstance().setPower(0);
     isRunning = false;
   }

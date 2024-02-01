@@ -94,7 +94,7 @@ public class SwerveConstants {
 
         public final static double ANGLE_PID_TOLORANCE = Math.toRadians(10);
 
-        public final static double MAX_SHOOT_DISTANCE = 2.1;
+        public final static double MAX_SHOOT_DISTANCE = 2.15;
 
         public final static double VISION_KP = 0; // TODO
         public final static double VISION_KI = 0; // TODO
@@ -102,7 +102,7 @@ public class SwerveConstants {
         public final static double VISION_TOLORANCE = 0; // TODO
 
         public final static double SHOOTING_POSE_MOTION = SPEAKER_TARGET_Y_BLUE;
-        public final static double SHOOTING_POSE_MOTION_TOLORANCE = 0.85; //1.5;
+        public final static double SHOOTING_POSE_MOTION_TOLORANCE = 0.57; //1.5;
 
         public final static double SHOOTING_SPEED = 0.12;
         public final static double LOWER_SPEED = 0.4;

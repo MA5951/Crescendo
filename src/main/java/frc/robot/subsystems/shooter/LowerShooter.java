@@ -115,7 +115,8 @@ public class LowerShooter extends SubsystemBase implements DefaultInternallyCont
 
   public double getVelocityForShooting() {
     return ShooterConstants.sample(
-      SwerveDrivetrainSubsystem.getInstance().disFormSpeaker)[1];
+      SwerveDrivetrainSubsystem.getInstance().disFormSpeaker)[1] * 
+        ShooterConstants.V_FACTOR;
   }
 
   public double getPoduim() {

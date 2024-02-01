@@ -41,8 +41,6 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
   public final boolean isYReversed = false;
   public final boolean isXYReversed = true;
 
-  private double angleSetPoint = 0;
-
   private double offsetAngle = 0;
 
   private double acc = 0;
@@ -172,15 +170,6 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
           flipPath,
           this
         );
-  }
-
-  public boolean atAngle() {
-    return Math.abs(angleSetPoint - getPose().getRotation().getRadians()) <= 
-      SwerveConstants.ANGLE_PID_TOLORANCE;
-  }
-
-  public void setAngleSetPoint(double angleSetPoint) {
-      this.angleSetPoint = angleSetPoint;
   }
 
   public void resetEncoders() {
@@ -345,8 +334,6 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
     board.addNum("vrl angle", rearLeftModule.getDriveVelocity());
     board.addNum("vrr angle", rearRightModule.getDriveVelocity());
 
-    board.addBoolean("atAngle", atAngle());
-
     board.addNum("flV", frontLeftModule.getDriveVelocity());
 
     board.addNum("dis from speaker", disFormSpeaker);
@@ -365,11 +352,11 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
     disFormSpeaker = new Translation2d(xSpeaker, ySpeaker).getDistance(
       getPose().getTranslation()
     );
-    if (DriverStation.isEnabled()) {
+    if (DriverStation.isEnabled() && 
+      RobotContainer.APRILTAGS_LIMELIGHT.hasTarget()
+      && RobotContainer.APRILTAGS_LIMELIGHT.getTagId() != -1) {
       Pose2d estPose = RobotContainer.APRILTAGS_LIMELIGHT.getEstPose();
-      if (RobotContainer.APRILTAGS_LIMELIGHT.hasTarget()) {
-        resetOdometry(estPose);
-      }
+      resetOdometry(estPose);
     }
 
     if (ShootInMotion.isRunning) {

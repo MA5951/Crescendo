@@ -48,8 +48,8 @@ public class Shoot extends SequentialCommandGroup {
       new ParallelCommandGroup(
         new AngleAdjust(Shoot::getAngle, () -> 0d, () -> 0d),
         new GettingReadyToScore(
-          UpperShooter.getInstance()::getPoduim,
-          LowerShooter.getInstance()::getPoduim,
+          UpperShooter.getInstance()::getVelocity,
+          LowerShooter.getInstance()::getVelocity,
           elevatorPose)
       ),
       new ScoreAutomation()
