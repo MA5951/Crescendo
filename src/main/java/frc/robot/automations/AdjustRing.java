@@ -4,20 +4,22 @@
 
 package frc.robot.automations;
 
-import java.util.function.Supplier;
+import com.ma5951.utils.commands.MotorCommand;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.Intake.IntakeCommand;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeConstants;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ScoreWithoutAdjust extends SequentialCommandGroup {
+public class AdjustRing extends SequentialCommandGroup {
 
-  public ScoreWithoutAdjust(Supplier<Double> upperVel,
-    Supplier<Double> lowerVel, double elevatorPose) {
+  public AdjustRing() {
     addCommands(
-      new GettingReadyToScore(upperVel, lowerVel, () -> elevatorPose),
-      new ScoreAutomation()
+      new MotorCommand(Intake.getInstance(), 0.8, 0),
+      new IntakeCommand(IntakeConstants.INTAKE_POWER)
     );
   }
 }

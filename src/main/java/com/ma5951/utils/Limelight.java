@@ -60,10 +60,9 @@ public class Limelight {
   public Limelight(
     String cammeraName,Transform3d cameraOffset){
 
-    table = NetworkTableInstance.getDefault().getTable("limelight");//Check the name of the limelight
+    table = NetworkTableInstance.getDefault().getTable(cammeraName);
     this.KDELTA_Y = cameraOffset.getY();
     this.KLIMELIGHT_ANGLE = cameraOffset.getRotation().getY();
-    // this.PIAddress = PIAddress;
     this.cameraOffset = cameraOffset;
 
     threeDimension = table.getEntry("camtran");
@@ -159,34 +158,6 @@ public class Limelight {
     return this.distanceFromTargetLimelightY;
   }
 
-  // public boolean isConnected()
-  // {
-  //     boolean isConnected = false;
-  //     try
-  //     {
-  //         InetAddress limeliInetAddress = InetAddress.getByName(PIAddress);
-  //         //System.out.println("Sending Ping Request to " + limeliInetAddress);
-
-  //         if (limeliInetAddress.isReachable(500))
-  //         {
-  //             isConnected = true;
-  //         }
-  //         System.out.println("isConnected:" + isConnected);
-  //         return isConnected;
-  //     }
-  //     catch (UnknownHostException e)
-  //     {
-  //         System.out.println("I can't reach this IPAddres: " + e.getMessage());
-  //         e.printStackTrace();
-  //     }
-  //     catch (IOException e)
-  //     {
-  //         System.out.println("IO Exception" + e.getMessage());
-  //     }
-
-  //     return false;
-  // }
-
   public Pose2d getEstPose() {
     return estPose;
   }
@@ -211,13 +182,7 @@ public class Limelight {
     distanceFromTargetLimelightX = threeDimension.getDoubleArray(new double[] { 0, 0, 0, 0, 0, 0 })[0];
     distanceFromTargetLimelightY = threeDimension.getDoubleArray(new double[] { 0, 0, 0, 0, 0, 0 })[2];
 
-    // isConnected();
     NetworkTableEntry botposeEntry;
-    // if (DriverStation.getAlliance() == Alliance.Red) {
-    //   botposeEntry = botPoseRed;
-    // } else {
-    //   botposeEntry = botPoseBlue;
-    // }
     botposeEntry = botPose;
 
     double[] data = botposeEntry.getDoubleArray(new double[7]);

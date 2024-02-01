@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.swerve.AngleAdjust;
 import frc.robot.subsystems.elevator.ElevatorConstants;
 import frc.robot.subsystems.shooter.LowerShooter;
-import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.shooter.UpperShooter;
 import frc.robot.subsystems.swerve.SwerveConstants;
 import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
@@ -22,21 +21,16 @@ import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class Shoot extends SequentialCommandGroup {
-  private static boolean isPoduim;
   private static SwerveDrivetrainSubsystem swerve =
     SwerveDrivetrainSubsystem.getInstance();
   public static double yDis;
   public static double xDis;
 
   private static double getAngle() {
-    if (isPoduim) {
-      return DriverStation.getAlliance().get() == Alliance.Red ?
-        SwerveConstants.poduimAngleRed : SwerveConstants.poduimAngleBlue; 
-    }
     double xTrget = DriverStation.getAlliance().get() == Alliance.Red ? 
-      SwerveConstants.speakerTargetXRed : SwerveConstants.speakerTargetXBlue;
+      SwerveConstants.SPEAKER_TAGET_X_RED : SwerveConstants.SPEAKER_TARGET_X_BLUE;
     double yTrget = DriverStation.getAlliance().get() == Alliance.Red ? 
-      SwerveConstants.speakerTargetYRed : SwerveConstants.speakerTargetYBlue;
+      SwerveConstants.SPEAKER_TARGET_Y_RED : SwerveConstants.SPEAKER_TARGET_Y_BLUE;
     xDis = Math.abs(swerve.getPose().getX() - xTrget);
     yDis = Math.abs(swerve.getPose().getY() - yTrget);
     double angle = Math.atan(yDis / xDis);
@@ -45,19 +39,18 @@ public class Shoot extends SequentialCommandGroup {
     if (swerve.getPose().getY() > yTrget) {
       angle = -angle;
     }
-    return angle;
+    return -(angle);
   }
 
-  public Shoot(boolean isPoduim) {
-    Shoot.isPoduim = isPoduim;
-    Supplier<Double> upperV = isPoduim ?
-      () -> ShooterConstants.podiumUpperV : UpperShooter.getInstance()::getVelocityForShooting;
-    Supplier<Double> lowerV = isPoduim ?
-      () -> ShooterConstants.podiumLowerV : LowerShooter.getInstance()::getVelocityForShooting;
+  public Shoot() {
+    Supplier<Double> elevatorPose = ()  -> ElevatorConstants.DEFAULT_POSE;
     addCommands(
       new ParallelCommandGroup(
-        new AngleAdjust(Shoot::getAngle),
-        new GettingReadyToScore(upperV, lowerV, ElevatorConstants.shootingPose)
+        new AngleAdjust(Shoot::getAngle, () -> 0d, () -> 0d),
+        new GettingReadyToScore(
+          UpperShooter.getInstance()::getPoduim,
+          LowerShooter.getInstance()::getPoduim,
+          elevatorPose)
       ),
       new ScoreAutomation()
     );

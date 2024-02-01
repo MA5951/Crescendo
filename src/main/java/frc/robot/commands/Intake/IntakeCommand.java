@@ -31,6 +31,6 @@ public class IntakeCommand extends Command {
 
   @Override
   public boolean isFinished() {
-    return intake.isGamePieceInIntake();
+    return intake.isGamePieceInIntake() ;
   }
 }

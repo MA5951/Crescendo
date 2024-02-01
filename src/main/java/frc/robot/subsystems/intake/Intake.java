@@ -11,25 +11,27 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.PortMap;
 import frc.robot.subsystems.shooter.LowerShooter;
+import frc.robot.subsystems.shooter.UpperShooter;
 
 import com.revrobotics.CANSparkMax;
 
 public class Intake extends SubsystemBase implements MotorSubsystem{
   private static Intake intake;
   
-  private DigitalInput upSensor;
-  private DigitalInput downSensor;
+  private final DigitalInput upSensor;
+  private final DigitalInput downSensor;
 
-  private CANSparkMax master;
-  private CANSparkMax slave;
+  private final CANSparkMax master;
+  private final CANSparkMax slave;
 
-  private double power = 0;
-
-  private MAShuffleboard board;
+  private final MAShuffleboard board;
 
   private Intake() {
     master = new CANSparkMax(PortMap.Intake.masterID, MotorType.kBrushless);
     slave = new CANSparkMax(PortMap.Intake.slaveID, MotorType.kBrushless);
+
+    master.restoreFactoryDefaults();
+    slave.restoreFactoryDefaults();
 
     upSensor = new DigitalInput(PortMap.Intake.sensor1ID);
     downSensor = new DigitalInput(PortMap.Intake.sensor2ID);
@@ -38,8 +40,7 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
     master.setIdleMode(IdleMode.kBrake);
     master.setInverted(false);
     slave.setIdleMode(IdleMode.kBrake);
-    slave.follow(master, true);
-  
+    slave.follow(master, false);
   }
 
   public boolean isGamePieceInIntake(){
@@ -48,14 +49,19 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
 
   @Override
   public boolean canMove() {
-      return !isGamePieceInIntake() 
-        || LowerShooter.getInstance().atPoint() || power < 0;
+    return (!isGamePieceInIntake() && getPower() < 0)
+      || (LowerShooter.getInstance().atPoint() && 
+      UpperShooter.getInstance().atPoint()) || 
+        (-getPower() < 0 && isGamePieceInIntake());
   }
 
   @Override
   public void setVoltage(double voltage) {
     master.set(voltage / 12);
-    power = voltage / 12;
+  }
+
+  public double getPower() {
+    return master.get();
   }
 
   public static Intake getInstance() {
@@ -69,5 +75,9 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
   public void periodic() {
     board.addBoolean("Sensor down", !downSensor.get());
     board.addBoolean("Sensor up", !upSensor.get());
+
+    board.addBoolean("is ring", isGamePieceInIntake());
+
+    board.addNum("current", master.getOutputCurrent());
   }
 }

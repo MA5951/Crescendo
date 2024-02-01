@@ -7,7 +7,6 @@ package frc.robot.subsystems.shooter;
 import java.util.function.Supplier;
 
 import com.ma5951.utils.MAShuffleboard;
-import com.ma5951.utils.MAShuffleboard.pidControllerGainSupplier;
 import com.ma5951.utils.subsystem.DefaultInternallyControlledSubsystem;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -18,54 +17,73 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkPIDController.ArbFFUnits;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.PortMap;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.swerve.SwerveConstants;
+import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
 
 public class UpperShooter extends SubsystemBase implements DefaultInternallyControlledSubsystem {
   private static UpperShooter instance;
 
-  private CANSparkMax motor;
+  private final CANSparkMax motor;
 
-  private RelativeEncoder encoder;
-  private SparkPIDController pidController;
-  private SimpleMotorFeedforward feedforward;
+  private final RelativeEncoder encoder;
+  private final SparkPIDController pidController;
+  private final SimpleMotorFeedforward feedforward;
 
-  private double setPoint;
+  private final DigitalInput sensor;
 
-  private MAShuffleboard board;
-  private pidControllerGainSupplier pidGainSupplier;
+  private double setPoint = ShooterConstants.defaultV;
+
+  public boolean changeToDefaultV = false;
+
+  private final MAShuffleboard board;
 
   private UpperShooter() {
     motor = new CANSparkMax(PortMap.Shooter.upperID, MotorType.kBrushless);
 
-    motor.setIdleMode(IdleMode.kCoast);
+    motor.restoreFactoryDefaults();
+
+    motor.setIdleMode(IdleMode.kBrake);
 
     motor.setInverted(false);
 
     encoder = motor.getEncoder();
-    encoder.setVelocityConversionFactor(ShooterConstants.VelocityConversionFactor);
+    encoder.setVelocityConversionFactor(ShooterConstants.CONVERTION_FACTOR_UPPER);
+    encoder.setPositionConversionFactor(ShooterConstants.CONVERTION_FACTOR_UPPER);
 
     pidController = motor.getPIDController();
     pidController.setFeedbackDevice(encoder);
 
-    pidController.setP(ShooterConstants.kp);
-    pidController.setP(ShooterConstants.ki);
-    pidController.setP(ShooterConstants.kd);
+    pidController.setP(ShooterConstants.KP_UP);
+    pidController.setI(ShooterConstants.KI_UP);
+    pidController.setD(ShooterConstants.KD_UP);
 
-    feedforward = new SimpleMotorFeedforward(0, ShooterConstants.kv);
+    sensor = new DigitalInput(PortMap.Shooter.sensorID);
+
+    feedforward = new SimpleMotorFeedforward(0, ShooterConstants.KV_UP);
 
 
     board = new MAShuffleboard("Upper shotter");
-    pidGainSupplier = board.getPidControllerGainSupplier(
-      "velocity",
-      ShooterConstants.kp,
-      ShooterConstants.ki,
-      ShooterConstants.kd);
+
+    board.addNum("setPonit poduim", ShooterConstants.PODIUM_UPPER_V);
+  }
+
+  public void chengeIDLmode(IdleMode mode) {
+    motor.setIdleMode(mode);
   }
 
   @Override
   public void setVoltage(double voltage) {
     motor.set(voltage / 12);
+  }
+
+  public boolean isGamePiceInShooter() {
+    return !sensor.get();
   }
 
   @Override
@@ -81,7 +99,11 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
 
   @Override
   public boolean atPoint() {
-    return Math.abs(setPoint - encoder.getVelocity()) < ShooterConstants.tolorance; 
+    return Math.abs(getSetPoint() - getVelocity()) < ShooterConstants.TOLORANCE; 
+  }
+
+  public double getVelocity(){
+    return encoder.getVelocity();
   }
 
   @Override
@@ -97,9 +119,22 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
   public double getSetPoint() {
     return setPoint;
   }
+  
+  public double getDistance() {
+    return encoder.getPosition();
+  }
+
+  public void resetEncoder(double pose) {
+    encoder.setPosition(pose);
+  }
 
   public double getVelocityForShooting() {
-    return 0; // TODO need to craete a graph
+    return ShooterConstants.sample(
+      SwerveDrivetrainSubsystem.getInstance().disFormSpeaker)[0];
+  }
+
+  public double getPoduim() {
+    return board.getNum("setPonit poduim");
   }
 
   public static UpperShooter getInstance() {
@@ -111,10 +146,30 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
 
   @Override
   public void periodic() {
-    pidController.setP(pidGainSupplier.getKP());
-    pidController.setI(pidGainSupplier.getKI());
-    pidController.setD(pidGainSupplier.getKD());
+    board.addNum("v", getVelocity());
 
-    board.addNum("v", encoder.getVelocity());
+    board.addBoolean("sensor", isGamePiceInShooter());
+
+    double poduimLine = DriverStation.getAlliance().get() == Alliance.Red ?
+      SwerveConstants.PODUIM_LINE_RED : SwerveConstants.PODUIM_LINE_BLUE;
+    double factor = DriverStation.getAlliance().get() == Alliance.Red ?
+      -1 : 1;
+
+    if (Intake.getInstance().isGamePieceInIntake() && 
+      SwerveDrivetrainSubsystem.getInstance().getPose().getX() * factor
+       < poduimLine * factor) {
+        ShooterConstants.defaultV = 3000;
+    } else {
+      ShooterConstants.defaultV = 0;
+    }
+
+    if (changeToDefaultV) {
+      LowerShooter.getInstance().setSetPoint(ShooterConstants.defaultV);
+      setSetPoint(ShooterConstants.defaultV);
+    }
+
+    board.addBoolean("atpoint", atPoint());
+
+    board.addNum("set", setPoint);
   }
 }
