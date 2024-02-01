@@ -67,7 +67,7 @@ public class RobotContainer {
 
   public static boolean isIntakeRunning = false;
 
-  public static boolean IsFlorr() {
+  public static boolean IsFloor() {
     return intakepose == IntakePose.FLOOR;
   }
 
@@ -157,7 +157,7 @@ public class RobotContainer {
     driverController.R1().onTrue( 
       new ConditionalCommand(new IntakeAutomation(IntakeConstants.INTAKE_POWER),
         new SourceIntake(),
-        RobotContainer::IsFlorr
+        RobotContainer::IsFloor
       ).alongWith(new InstantCommand(() -> isIntakeRunning = true)).andThen(
         new ResetAll(ElevatorConstants.DEFAULT_POSE)
       ).alongWith(new InstantCommand(() -> isIntakeRunning = false))
