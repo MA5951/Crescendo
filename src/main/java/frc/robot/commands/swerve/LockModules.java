@@ -17,19 +17,19 @@ public class LockModules extends Command {
     addRequirements(swerveDrivetrainSubsystem);
     states = new SwerveModuleState[] {
       new SwerveModuleState(
-        0.00000000000000000000000000000000000000001,
+        1e-41,
         Rotation2d.fromDegrees(-45)
       ),
       new SwerveModuleState(
-        0.00000000000000000000000000000000000000001,
+        1e-41,
         Rotation2d.fromDegrees(45)
       ),
       new SwerveModuleState(
-        0.00000000000000000000000000000000000000001,
+        1e-41,
         Rotation2d.fromDegrees(45)
       ),
       new SwerveModuleState(
-        0.00000000000000000000000000000000000000001,
+        1e-41,
         Rotation2d.fromDegrees(-45)
       ),
     };

@@ -12,13 +12,26 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Initial Shoot"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shoot linked to speaker"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ResetElevator"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "deadline",
+          "type": "parallel",
           "data": {
             "commands": [
               {
@@ -37,15 +50,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Note 2 score Middle"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Note 2 score Middle"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": "Shoot linked to speaker"
           }
         }
       ]

@@ -7,7 +7,6 @@ package frc.robot.subsystems.shooter;
 import java.util.function.Supplier;
 
 import com.ma5951.utils.MAShuffleboard;
-import com.ma5951.utils.MAShuffleboard.pidControllerGainSupplier;
 import com.ma5951.utils.subsystem.DefaultInternallyControlledSubsystem;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -19,48 +18,52 @@ import com.revrobotics.SparkPIDController.ArbFFUnits;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.PortMap;;
+import frc.robot.PortMap;
+import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
 
 public class LowerShooter extends SubsystemBase implements DefaultInternallyControlledSubsystem {
   private static LowerShooter instance;
 
-  private CANSparkMax motor;
+  private final CANSparkMax motor;
 
-  private RelativeEncoder encoder;
-  private SparkPIDController pidController;
-  private SimpleMotorFeedforward feedforward;
+  private final RelativeEncoder encoder;
+  private final SparkPIDController pidController;
+  private final SimpleMotorFeedforward feedforward;
 
-  private double setPoint;
+  private double setPoint = ShooterConstants.defaultV;
 
-  private MAShuffleboard board;
-  private pidControllerGainSupplier pidGainSupplier;
+  private final MAShuffleboard board;
 
   private LowerShooter() {
     motor = new CANSparkMax(PortMap.Shooter.lowerID, MotorType.kBrushless);
 
-    motor.setIdleMode(IdleMode.kCoast);
+    motor.restoreFactoryDefaults();
+
+    motor.setIdleMode(IdleMode.kBrake);
 
     motor.setInverted(true);
 
     encoder = motor.getEncoder();
-    encoder.setVelocityConversionFactor(ShooterConstants.VelocityConversionFactor);
+    encoder.setVelocityConversionFactor(ShooterConstants.CONVERTION_FACTOR_LOWER);
+    encoder.setPositionConversionFactor(ShooterConstants.CONVERTION_FACTOR_LOWER);
 
     pidController = motor.getPIDController();
     pidController.setFeedbackDevice(encoder);
 
-    pidController.setP(ShooterConstants.kp);
-    pidController.setP(ShooterConstants.ki);
-    pidController.setP(ShooterConstants.kd);
+    pidController.setP(ShooterConstants.KP_LOW);
+    pidController.setI(ShooterConstants.KI_LOW);
+    pidController.setD(ShooterConstants.KD_LOW);
 
-    feedforward = new SimpleMotorFeedforward(0, ShooterConstants.kv);
+    feedforward = new SimpleMotorFeedforward(0, ShooterConstants.KV_LOW);
 
 
-    board = new MAShuffleboard("shotter");
-    pidGainSupplier = board.getPidControllerGainSupplier(
-      "velocity",
-      ShooterConstants.kp,
-      ShooterConstants.ki,
-      ShooterConstants.kd);
+    board = new MAShuffleboard("Lower shotter");
+
+    board.addNum("setPonit poduim", ShooterConstants.PODUIM_LOWER_V);
+  }
+
+  public void chengeIDLmode(IdleMode mode) {
+    motor.setIdleMode(mode);
   }
 
   @Override
@@ -81,7 +84,11 @@ public class LowerShooter extends SubsystemBase implements DefaultInternallyCont
 
   @Override
   public boolean atPoint() {
-    return Math.abs(setPoint - encoder.getVelocity()) < ShooterConstants.tolorance; 
+    return Math.abs(getSetPoint() - getVelocity()) < ShooterConstants.TOLORANCE; 
+  }
+
+  public double getVelocity(){
+    return encoder.getVelocity();
   }
 
   @Override
@@ -98,8 +105,22 @@ public class LowerShooter extends SubsystemBase implements DefaultInternallyCont
     return setPoint;
   }
 
+  public double getDistance() {
+    return encoder.getPosition();
+  }
+
+  public void resetEncoder(double pose) {
+    encoder.setPosition(pose);
+  }
+
   public double getVelocityForShooting() {
-    return 0; // TODO need to craete a graph
+    return ShooterConstants.sample(
+      SwerveDrivetrainSubsystem.getInstance().disFormSpeaker)[1] * 
+        ShooterConstants.V_FACTOR;
+  }
+
+  public double getPoduim() {
+    return board.getNum("setPonit poduim");
   }
 
   public static LowerShooter getInstance() {
@@ -111,10 +132,10 @@ public class LowerShooter extends SubsystemBase implements DefaultInternallyCont
 
   @Override
   public void periodic() {
-    pidController.setP(pidGainSupplier.getKP());
-    pidController.setI(pidGainSupplier.getKI());
-    pidController.setD(pidGainSupplier.getKD());
+    board.addNum("v", getVelocity());
 
-    board.addNum("v", encoder.getVelocity());
+    board.addBoolean("atpoint", atPoint());
+
+    board.addNum("set", setPoint);
   }
 }

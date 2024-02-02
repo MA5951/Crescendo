@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorConstants;
 import frc.robot.subsystems.shooter.ShooterConstants;
+import frc.robot.subsystems.shooter.UpperShooter;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -19,8 +20,9 @@ public class SetForAmp extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new InstantCommand(() -> Elevator.getInstance().setSetPoint(ElevatorConstants.AMPPose)),
-      new InstantCommand(() -> Elevator.getInstance().setSetPoint(ShooterConstants.AMPV))
+      new InstantCommand(() -> Elevator.getInstance().setSetPoint(ElevatorConstants.AMP_POSE)),
+      new InstantCommand(() -> UpperShooter.getInstance().setSetPoint(ShooterConstants.AMP_V_UPPER)),
+      new InstantCommand(() -> UpperShooter.getInstance().setSetPoint(ShooterConstants.AMP_V_LOWER))
     );
   }
 }

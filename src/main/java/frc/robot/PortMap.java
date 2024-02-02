@@ -33,24 +33,29 @@ public class PortMap {
   }
 
   public static class Shooter {
-    public static final int upperID = 0; //TODO
-    public static final int lowerID = 0; //TODO
+    public static final int upperID = 14;
+    public static final int lowerID = 18;
+
+    public static final int sensorID = 9;
   }
 
   public static class Intake {
-    public static final int masterID = 13; //TODO
-    public static final int slaveID = 14; //TODO
+    public static final int masterID = 17;
+    public static final int slaveID = 13;
 
-    public static final int sensor1ID = 0; //TODO
-    public static final int sensor2ID = 0; //TODO
+    public static final int sensor1ID = 7; // up
+    public static final int sensor2ID = 8; // down
   }
 
   public static class Elevator {
-    public static final int masterID = 0; //TODO
-    public static final int slaveID = 0; //TODO
+    public static final int masterID = 28;
+    public static final int slave1ID = 30;
+    public static final int slave2ID = 31;
+
+    public static final int absEncoderID = 0;
   }
 
   public static class LED {
-    public static final int ledPort = 0; //TODO
+    public static final int ledPort = 9; // TODO
   }
 }

@@ -28,17 +28,16 @@ public class DefaultRunInternallyControlledSubsystem extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (subsystem.canMove()) {
-      subsystem.calculate(subsystem.getSetPoint());
-    } else {
+    if (!subsystem.canMove()) {
       subsystem.setSetPoint(setPointWhenCantMove);
-      subsystem.calculate(setPointWhenCantMove);
-    }
+    } 
+    subsystem.calculate(subsystem.getSetPoint());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    subsystem.setPower(0);
   }
 
   // Returns true when the command should end.

@@ -32,6 +32,7 @@ public class Limelight {
   private double distanceFromTargetLimelightX;
   private double distanceFromTargetLimelightY;
   private double pipe;
+  private double tagid;
 
   private final NetworkTable table;
   private final NetworkTableEntry threeDimension;
@@ -46,6 +47,7 @@ public class Limelight {
   private final NetworkTableEntry thor ;//Horizontal sidelength of the rough bounding box (0 - 320 pixels)
   private final NetworkTableEntry tvert ;//Vertical sidelength of the rough bounding box (0 - 320 pixels)
   private final NetworkTableEntry getpipe;//True active pipeline index of the camera (0 .. 9)
+  private final NetworkTableEntry tid; // April tag id
 
   private final NetworkTableEntry botPose;
 
@@ -60,10 +62,9 @@ public class Limelight {
   public Limelight(
     String cammeraName,Transform3d cameraOffset){
 
-    table = NetworkTableInstance.getDefault().getTable("limelight");//Check the name of the limelight
+    table = NetworkTableInstance.getDefault().getTable(cammeraName);
     this.KDELTA_Y = cameraOffset.getY();
     this.KLIMELIGHT_ANGLE = cameraOffset.getRotation().getY();
-    // this.PIAddress = PIAddress;
     this.cameraOffset = cameraOffset;
 
     threeDimension = table.getEntry("camtran");
@@ -80,6 +81,8 @@ public class Limelight {
     getpipe = table.getEntry("getpipe");//True active pipeline index of the camera (0 .. 9)
 
     botPose = table.getEntry("botpose_wpiblue");
+
+    tid = table.getEntry("tid");
   }
 
   public double distance() {
@@ -159,40 +162,16 @@ public class Limelight {
     return this.distanceFromTargetLimelightY;
   }
 
-  // public boolean isConnected()
-  // {
-  //     boolean isConnected = false;
-  //     try
-  //     {
-  //         InetAddress limeliInetAddress = InetAddress.getByName(PIAddress);
-  //         //System.out.println("Sending Ping Request to " + limeliInetAddress);
-
-  //         if (limeliInetAddress.isReachable(500))
-  //         {
-  //             isConnected = true;
-  //         }
-  //         System.out.println("isConnected:" + isConnected);
-  //         return isConnected;
-  //     }
-  //     catch (UnknownHostException e)
-  //     {
-  //         System.out.println("I can't reach this IPAddres: " + e.getMessage());
-  //         e.printStackTrace();
-  //     }
-  //     catch (IOException e)
-  //     {
-  //         System.out.println("IO Exception" + e.getMessage());
-  //     }
-
-  //     return false;
-  // }
-
   public Pose2d getEstPose() {
     return estPose;
   }
 
   public double getPoseUpdate() {
     return updateTime / 1000;
+  }
+
+  public double getTagId() {
+    return tagid;
   }
 
   public void periodic() {
@@ -207,17 +186,12 @@ public class Limelight {
     Thor = thor.getDouble(0.0);
     Tvert = tvert.getDouble(0.0);
     Tshort = tshort.getDouble(0.0);
+    tagid = tid.getDouble(-1);
     yaw = threeDimension.getDoubleArray(new double[] { 0, 0, 0, 0, 0, 0, 0 })[4];
     distanceFromTargetLimelightX = threeDimension.getDoubleArray(new double[] { 0, 0, 0, 0, 0, 0 })[0];
     distanceFromTargetLimelightY = threeDimension.getDoubleArray(new double[] { 0, 0, 0, 0, 0, 0 })[2];
 
-    // isConnected();
     NetworkTableEntry botposeEntry;
-    // if (DriverStation.getAlliance() == Alliance.Red) {
-    //   botposeEntry = botPoseRed;
-    // } else {
-    //   botposeEntry = botPoseBlue;
-    // }
     botposeEntry = botPose;
 
     double[] data = botposeEntry.getDoubleArray(new double[7]);
