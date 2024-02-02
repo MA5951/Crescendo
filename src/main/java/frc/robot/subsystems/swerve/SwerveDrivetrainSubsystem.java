@@ -352,9 +352,11 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
     disFormSpeaker = new Translation2d(xSpeaker, ySpeaker).getDistance(
       getPose().getTranslation()
     );
+
     if (DriverStation.isEnabled() && 
       RobotContainer.APRILTAGS_LIMELIGHT.hasTarget()
-      && RobotContainer.APRILTAGS_LIMELIGHT.getTagId() != -1) {
+      && RobotContainer.APRILTAGS_LIMELIGHT.getTagId() != -1
+      && DriverStation.isTeleop()) {
       Pose2d estPose = RobotContainer.APRILTAGS_LIMELIGHT.getEstPose();
       resetOdometry(estPose);
     }

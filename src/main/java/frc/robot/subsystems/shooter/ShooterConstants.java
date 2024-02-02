@@ -4,7 +4,7 @@ public class ShooterConstants {
 
     public static final double CONVERTION_FACTOR_UPPER = 1.36;
     public static final double CONVERTION_FACTOR_LOWER = 1.33;
-    public static final double TOLORANCE = 100;
+    public static final double TOLORANCE = 120;
 
     public static final double KP_UP = 0.0005;
     public static final double KI_UP = 0;

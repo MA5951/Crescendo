@@ -14,15 +14,15 @@ public class RunInternallyControlledSubsystem extends Command {
   /** Creates a new ControlCommand. */
   private InternallyControlledSubsystem subsystem;
   private Supplier<Double> setPoint;
-  private boolean needToStopGivingPowerAtTheEnd;
+  private boolean StopAtEnd;
 
   public RunInternallyControlledSubsystem(
     InternallyControlledSubsystem subsystem,
     Supplier<Double> setPoint,
-    boolean needToStopGivingPowerAtTheEnd) {
+    boolean StopAtEnd) {
     this.subsystem = subsystem;
     this.setPoint = setPoint;
-    this.needToStopGivingPowerAtTheEnd = needToStopGivingPowerAtTheEnd;
+    this.StopAtEnd = StopAtEnd;
     addRequirements(subsystem);
   }
 
@@ -47,7 +47,7 @@ public class RunInternallyControlledSubsystem extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    if (!needToStopGivingPowerAtTheEnd) {
+    if (StopAtEnd) {
       subsystem.setPower(0);
     }
   }

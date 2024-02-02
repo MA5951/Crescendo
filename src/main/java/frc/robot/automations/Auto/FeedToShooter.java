@@ -9,8 +9,10 @@ import com.ma5951.utils.commands.MotorCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeConstants;
+import frc.robot.subsystems.shooter.UpperShooter;
 
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -23,8 +25,12 @@ public class FeedToShooter extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new ParallelDeadlineGroup(
-        new WaitCommand(0.3), 
-        new MotorCommand(Intake.getInstance(), IntakeConstants.INTAKE_POWER, 0))
+        new SequentialCommandGroup(
+            new WaitUntilCommand(
+              UpperShooter.getInstance()::isGamePiceInShooter),
+              new WaitCommand(0.2)
+          ),
+        new MotorCommand(Intake.getInstance(), IntakeConstants.INTAKE_POWER, 0).repeatedly())
     );
   }
 }

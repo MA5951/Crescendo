@@ -24,21 +24,9 @@ public class IntakeAndRingCenter extends SequentialCommandGroup {
   public IntakeAndRingCenter(double power) {
 
     addCommands(
-      new SequentialCommandGroup(
-        new ParallelDeadlineGroup(
-        new SequentialCommandGroup(
-          new IntakeCommand(power)
-            .alongWith(new InstantCommand(
-              () -> LowerShooter.getInstance().chengeIDLmode(IdleMode.kCoast)))
-              .alongWith(
-                new InstantCommand(
-              () -> UpperShooter.getInstance().chengeIDLmode(IdleMode.kCoast))
-              ),
-          new SetElevator(ElevatorConstants.DEFAULT_POSE),
-          new CenterRing()
-      ),
-      new MotorCommand(UpperShooter.getInstance(), 0, 0)
-      ))
+      new IntakeCommand(power),
+      new SetElevator(ElevatorConstants.DEFAULT_POSE),
+      new CenterRing()
     );
   }
 }

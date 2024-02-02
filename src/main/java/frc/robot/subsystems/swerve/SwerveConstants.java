@@ -77,7 +77,7 @@ public class SwerveConstants {
         // swerve controllers
 
         // swerve CONTROLLER
-        public final static double KP_TRANSLATION = 5; // 3.3;
+        public final static double KP_TRANSLATION = 9; // 3.3;
         public final static double KI_TRANSLATION = 0; //0.0009;
 
         // swerve theta PID_CONTROLLER radians

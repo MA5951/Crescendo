@@ -164,7 +164,7 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
       ShooterConstants.defaultV = 0;
     }
 
-    if (changeToDefaultV) {
+    if (changeToDefaultV && DriverStation.isTeleop()) {
       LowerShooter.getInstance().setSetPoint(ShooterConstants.defaultV);
       setSetPoint(ShooterConstants.defaultV);
     }

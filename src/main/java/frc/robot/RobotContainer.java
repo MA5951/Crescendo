@@ -6,6 +6,8 @@ package frc.robot;
 
 import com.ma5951.utils.Limelight;
 import com.ma5951.utils.commands.MotorCommand;
+import com.ma5951.utils.commands.RunInternallyControlledSubsystem;
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Transform3d;
@@ -73,16 +75,24 @@ public class RobotContainer {
 
   private void registerCommands() {
     NamedCommands.registerCommand("Intake", new IntakeCommand(IntakeConstants.INTAKE_POWER));
-    // NamedCommands.registerCommand("Initial Shoot", new 
 
     //   .andThen(new FeedToShooter()));
-    NamedCommands.registerCommand("Initial Shoot", new InstantCommand(
-      () -> UpperShooter.getInstance().setSetPoint(ShooterConstants.SPEAKER_UPPER_V))
-      .alongWith(new InstantCommand(
-        () -> LowerShooter.getInstance().setSetPoint(ShooterConstants.SPEAKER_LOWER_V)))
-      .andThen(new ResetElevator())
-      .andThen(new SetShooter(() -> ShooterConstants.SPEAKER_UPPER_V, () -> ShooterConstants.SPEAKER_LOWER_V))
-      .andThen(new FeedToShooter()));
+    NamedCommands.registerCommand("Shoot linked to speaker",
+      new RunInternallyControlledSubsystem(UpperShooter.getInstance(),
+      () -> ShooterConstants.SPEAKER_UPPER_V, false)
+      .alongWith(
+        new RunInternallyControlledSubsystem(LowerShooter.getInstance(),
+      () -> ShooterConstants.SPEAKER_LOWER_V, false))
+        .andThen(new FeedToShooter())
+    );
+
+    NamedCommands.registerCommand(
+      "stop shooter", new InstantCommand(() -> UpperShooter.getInstance().setPower(0))
+      .alongWith(new InstantCommand(() -> LowerShooter.getInstance().setPower(0))));
+
+    NamedCommands.registerCommand("ResetElevator",
+      new ResetElevator()
+    );
 
     NamedCommands.registerCommand("Feed To Shooter", new FeedToShooter());
     NamedCommands.registerCommand("Set Shooter Speed", new 
@@ -202,6 +212,6 @@ public class RobotContainer {
     // );
   }
   public Command getAutonomousCommand() {
-    return null;
+    return AutoBuilder.buildAuto("Two pice Middle");
   }
 }

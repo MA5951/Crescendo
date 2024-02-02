@@ -23,17 +23,24 @@ public class CenterRing extends SequentialCommandGroup {
   public CenterRing() {
     addCommands(
       new ParallelDeadlineGroup(
-          new SequentialCommandGroup(
-            new WaitUntilCommand(
-              UpperShooter.getInstance()::isGamePiceInShooter),
-              new WaitCommand(0.2)
-          ),
-          new InstantCommand(() -> Intake.getInstance().setPower(-0.8)),
-          new MotorCommand(LowerShooter.getInstance(), 0.1, 0)
+        new SequentialCommandGroup(
+        new ParallelDeadlineGroup(
+            new SequentialCommandGroup(
+              new WaitUntilCommand(
+                UpperShooter.getInstance()::isGamePiceInShooter),
+                new WaitCommand(0.07)
+            ),
+            new InstantCommand(() -> Intake.getInstance().setPower(-0.8)),
+            new MotorCommand(LowerShooter.getInstance(), 0.1, 0)
         ),
-    new ParallelDeadlineGroup(
-      new AdjustRing(),
-        new MotorCommand(LowerShooter.getInstance(), -0.4, 0)
+        new AdjustRing()
+      ),
+      new MotorCommand(UpperShooter.getInstance(), 0, 0).alongWith(
+        new InstantCommand(() -> UpperShooter.getInstance().setSetPoint(0))
+          .alongWith(
+        new InstantCommand(() -> LowerShooter.getInstance().setSetPoint(0))
+        )
+      )
       )
     );
   }
