@@ -75,8 +75,7 @@ public class RobotContainer {
 
   private void registerCommands() {
     NamedCommands.registerCommand("Intake", new IntakeCommand(IntakeConstants.INTAKE_POWER));
-
-    //   .andThen(new FeedToShooter()));
+    
     NamedCommands.registerCommand("Shoot linked to speaker",
       new RunInternallyControlledSubsystem(UpperShooter.getInstance(),
       () -> ShooterConstants.SPEAKER_UPPER_V, false)
@@ -95,6 +94,7 @@ public class RobotContainer {
     );
 
     NamedCommands.registerCommand("Feed To Shooter", new FeedToShooter());
+    
     NamedCommands.registerCommand("Set Shooter Speed", new 
       SetShooter(
         UpperShooter.getInstance()::getVelocityForShooting,
@@ -108,6 +108,7 @@ public class RobotContainer {
       ).andThen(new FeedToShooter()));
 
     NamedCommands.registerCommand("SetForAmp", new SetForAmp());
+    
     NamedCommands.registerCommand("Elvator Intake", new IntakeAutomation(IntakeConstants.INTAKE_POWER));
     
   }
