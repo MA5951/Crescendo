@@ -6,8 +6,13 @@ package frc.robot;
 
 import com.ma5951.utils.Limelight;
 import com.ma5951.utils.commands.MotorCommand;
+import com.ma5951.utils.commands.RunInternallyControlledSubsystem;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.PS5Controller;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -23,6 +28,7 @@ import frc.robot.subsystems.swerve.SwerveConstants;
 import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
 import frc.robot.automations.AMPScore;
 import frc.robot.automations.CenterRing;
+import frc.robot.automations.GettingReadyToScore;
 import frc.robot.automations.IntakeAndRingCenter;
 import frc.robot.automations.IntakeAutomation;
 import frc.robot.automations.ResetAll;
@@ -31,16 +37,23 @@ import frc.robot.automations.RunShoot;
 import frc.robot.automations.ScoreWithoutAdjust;
 import frc.robot.automations.Shoot;
 import frc.robot.automations.SourceIntake;
+import frc.robot.automations.Auto.FeedToShooter;
+import frc.robot.automations.Auto.FourGamePieces;
+import frc.robot.automations.Auto.MIddle3Piece;
+import frc.robot.automations.Auto.SetForAmp;
 import frc.robot.automations.AutoAutomations.ShootInMotion;
 import frc.robot.commands.Intake.IntakeCommand;
 import frc.robot.commands.elevator.ResetElevator;
 import frc.robot.commands.elevator.SetElevator;
+import frc.robot.commands.shooter.SetShooter;
 import frc.robot.subsystems.LED.LED;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorConstants;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeConstants;
+import frc.robot.subsystems.shooter.LowerShooter;
 import frc.robot.subsystems.shooter.ShooterConstants;
+import frc.robot.subsystems.shooter.UpperShooter;
 
 public class RobotContainer {
   public enum IntakePose {
@@ -65,6 +78,43 @@ public class RobotContainer {
   }
 
   private void registerCommands() {
+    NamedCommands.registerCommand("Intake", new IntakeCommand(IntakeConstants.INTAKE_POWER));
+    
+    NamedCommands.registerCommand("Shoot linked to speaker",
+      new RunInternallyControlledSubsystem(UpperShooter.getInstance(),
+      () -> ShooterConstants.SPEAKER_UPPER_V_AUTO, false)
+      .alongWith(
+        new RunInternallyControlledSubsystem(LowerShooter.getInstance(),
+      () -> ShooterConstants.SPEAKER_LOWER_V_AUTO, false))
+        .andThen(new FeedToShooter())
+    );
+
+    NamedCommands.registerCommand(
+      "stop shooter", new InstantCommand(() -> UpperShooter.getInstance().setPower(0))
+      .alongWith(new InstantCommand(() -> LowerShooter.getInstance().setPower(0))));
+
+    NamedCommands.registerCommand("ResetElevator",
+      new ResetElevator()
+    );
+
+    NamedCommands.registerCommand("Feed To Shooter", new FeedToShooter());
+    
+    NamedCommands.registerCommand("Set Shooter Speed", new 
+      SetShooter(
+        UpperShooter.getInstance()::getVelocityForShooting,
+        LowerShooter.getInstance()::getVelocityForShooting
+      ));
+
+    NamedCommands.registerCommand("Shoot", new 
+      SetShooter(
+        UpperShooter.getInstance()::getVelocityForShooting,
+        LowerShooter.getInstance()::getVelocityForShooting
+      ).andThen(new FeedToShooter()));
+
+    NamedCommands.registerCommand("SetForAmp", new SetForAmp());
+    
+    NamedCommands.registerCommand("Elvator Intake", new IntakeAutomation(IntakeConstants.INTAKE_POWER));
+    
   }
 
   public RobotContainer() {
@@ -178,6 +228,8 @@ public class RobotContainer {
     // );
   }
   public Command getAutonomousCommand() {
-    return null;
+    // return new FourGamePieces(); // 4 gmae piece
+    // return AutoBuilder.buildAuto("Two pice Stage"); // two pieces from stange side
+    return new MIddle3Piece();
   }
 }

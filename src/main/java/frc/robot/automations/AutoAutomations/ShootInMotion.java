@@ -69,6 +69,7 @@ public class ShootInMotion extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    swerve.FactorVelocityTo(SwerveConstants.SHOOTING_SPEED);
     swerveCommand.initialize();
     intaionalPose = swerve.getPose().getY();
     setShooter();
@@ -80,7 +81,7 @@ public class ShootInMotion extends Command {
   @Override
   public void execute() {
     swerveCommand.execute();
-    
+
     if (canShoot() && UpperShooter.getInstance().atPoint()
         && LowerShooter.getInstance().atPoint()) {
       Intake.getInstance().setPower(IntakeConstants.INTAKE_POWER);

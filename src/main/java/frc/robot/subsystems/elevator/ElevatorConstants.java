@@ -31,6 +31,6 @@ public class ElevatorConstants {
 
     public static final double CLOSING_POWER = -0.3;
     
-    public static final double CURRENT_THRESHOLD = 30;
+    public static final double CURRENT_THRESHOLD = 20;
     public static final double TIME_WITH_CURRENT_JUMP = 0.1;
 }

@@ -1,0 +1,93 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.4,
+      "y": 7.8
+    },
+    "rotation": 90.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "SetForAmp"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Amp score"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Feed To Shooter"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Elevator Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Note 2Amp intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SetForAmp"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Note 2Amp acore"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Feed To Shooter"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Amp to middle"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
