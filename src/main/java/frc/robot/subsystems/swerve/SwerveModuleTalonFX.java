@@ -76,13 +76,13 @@ public class SwerveModuleTalonFX extends SwerveModule {
             isTurningMotorReversed ? InvertedValue.Clockwise_Positive : 
             InvertedValue.CounterClockwise_Positive;
 
-        turningConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        turningConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
-        turningConfiguration.Slot0.kP = SwerveConstants.turningPIDKP;
-        turningConfiguration.Slot0.kI = SwerveConstants.turningPIDKI;
-        turningConfiguration.Slot0.kD = SwerveConstants.turningPIDKD;
-        turningConfiguration.TorqueCurrent.PeakForwardTorqueCurrent = SwerveConstants.turningPeakCurrentLimit;
-        turningConfiguration.TorqueCurrent.PeakReverseTorqueCurrent = -SwerveConstants.turningPeakCurrentLimit;
+        turningConfiguration.Slot0.kP = SwerveConstants.TURNING_PID_KP;
+        turningConfiguration.Slot0.kI = SwerveConstants.TURNING_PID_KI;
+        turningConfiguration.Slot0.kD = SwerveConstants.TURNING_PID_KD;
+        turningConfiguration.TorqueCurrent.PeakForwardTorqueCurrent = SwerveConstants.TURNING_PEAK_CURRENT_LIMIT;
+        turningConfiguration.TorqueCurrent.PeakReverseTorqueCurrent = -SwerveConstants.TURNING_PEAK_CURRENT_LIMIT;
         
         turningMotor.getConfigurator().apply(turningConfiguration);
     }

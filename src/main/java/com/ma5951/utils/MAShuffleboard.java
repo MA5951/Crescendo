@@ -66,24 +66,27 @@ public class MAShuffleboard {
     }
 
     public pidControllerGainSupplier getPidControllerGainSupplier(
-        double KP, double KI, double KD) {
-            return new pidControllerGainSupplier(this, KP, KI, KD);
+        String PIDname, double KP, double KI, double KD) {
+            return new pidControllerGainSupplier(this, PIDname, KP, KI, KD);
     }
 
-    public pidControllerGainSupplier getPidControllerGainSupplier() {
-        return this.getPidControllerGainSupplier(0, 0, 0);
+    public pidControllerGainSupplier getPidControllerGainSupplier(String PIDname) {
+        return this.getPidControllerGainSupplier(PIDname,0, 0, 0);
     }
 
     public class pidControllerGainSupplier {
         
-        private static final String KP_STRING = "KP";
-        private static final String KI_STRING = "KI";
-        private static final String KD_STRING = "KD";
+        private String KP_STRING;
+        private String KI_STRING;
+        private String KD_STRING;
         private MAShuffleboard shuffleboard;
 
-        private pidControllerGainSupplier(MAShuffleboard shuffleboard,
+        private pidControllerGainSupplier(MAShuffleboard shuffleboard, String PIDname,
          double KP, double KI, double KD) {
             this.shuffleboard = shuffleboard;
+            KP_STRING = PIDname + " KP";
+            KI_STRING = PIDname + " KI";
+            KD_STRING = PIDname + " KD";
             shuffleboard.addNum(KP_STRING, KP);
             shuffleboard.addNum(KI_STRING, KI);
             shuffleboard.addNum(KD_STRING, KD);

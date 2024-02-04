@@ -3,25 +3,25 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.automations;
-import com.ma5951.utils.commands.MotorCommand;
+
+import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.swerve.RunLockModules;
-import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.intake.IntakeConstants;
+import frc.robot.commands.elevator.SetElevator;
+import frc.robot.commands.shooter.SetShooter;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ScoreAutomation extends SequentialCommandGroup {
+public class GettingReadyToScore extends SequentialCommandGroup {
 
-  public ScoreAutomation() {
+  public GettingReadyToScore(Supplier<Double> upperVel, 
+    Supplier<Double> lowerVel, Supplier<Double> elevatorPose) {
     addCommands(
       new ParallelCommandGroup(
-        new MotorCommand(Intake.getInstance(),
-          IntakeConstants.INTAKE_POWER, 0).repeatedly(),
-        new RunLockModules()
+        new SetElevator(elevatorPose.get()),
+        new SetShooter(upperVel, lowerVel)
       )
     );
   }

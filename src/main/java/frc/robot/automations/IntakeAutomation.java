@@ -13,10 +13,10 @@ import frc.robot.subsystems.elevator.ElevatorConstants;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class IntakeAutomation extends SequentialCommandGroup {
 
-  public IntakeAutomation() {
+  public IntakeAutomation(double power) {
     addCommands(
-      new SetElevator(ElevatorConstants.intakePose),
-      new IntakeAutomation()
+      new SetElevator(ElevatorConstants.INTAKE_POSE),
+      new IntakeAndRingCenter(power)
     );
   }
 }
