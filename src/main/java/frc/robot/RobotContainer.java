@@ -115,18 +115,29 @@ public class RobotContainer {
 
     new CreateButton(
       new Trigger(
-        () -> {return driverController.getL2Axis() > 0.5;}
+        () -> {return driverController.getL2Axis() > 0.5
+          && (SwerveDrivetrainSubsystem.getInstance().disFromSpeakerX
+           < SwerveConstants.MAX_SHOOT_DISTANCE && !isIntakeRunning);}
       ), new ShootInMotion());
 
     // floor or source
     driverController.R1().onTrue( 
-      new ConditionalCommand(new IntakeAutomation(IntakeConstants.INTAKE_POWER),
+      new ConditionalCommand(new RunIntake(IntakeConstants.INTAKE_POWER),
         new SourceIntake(),
         RobotContainer::IsFloor
       ).alongWith(new InstantCommand(() -> isIntakeRunning = true)).andThen(
         new ResetAll(ElevatorConstants.DEFAULT_POSE)
       ).alongWith(new InstantCommand(() -> isIntakeRunning = false))
     );
+
+    driverController.L2().whileTrue(new InstantCommand(
+      () -> SwerveDrivetrainSubsystem.getInstance().FactorVelocityTo(
+        SwerveConstants.lowerSpeedFactor)
+    )).whileFalse(
+      new InstantCommand(
+      () -> SwerveDrivetrainSubsystem.getInstance().FactorVelocityTo(
+        SwerveConstants.lowerSpeedFactor / SwerveConstants.LOWER_SPEED)
+    ));
 
     // // climb
     // new CreateButton(operatorController.povUp(), 

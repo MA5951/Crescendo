@@ -14,7 +14,7 @@ public class RunIntake extends Command {
   private boolean finished;
 
   public RunIntake(double power) {
-    intakeCommand = new IntakeAndRingCenter(power);
+    intakeCommand = new IntakeAutomation(power);
   }
 
   // Called when the command is initially scheduled.

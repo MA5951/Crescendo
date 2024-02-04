@@ -6,7 +6,9 @@ package frc.robot.automations;
 
 import com.ma5951.utils.commands.MotorCommand;
 
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.commands.Intake.IntakeCommand;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeConstants;
@@ -18,7 +20,12 @@ public class AdjustRing extends SequentialCommandGroup {
 
   public AdjustRing() {
     addCommands(
-      new MotorCommand(Intake.getInstance(), 0.8, 0),
+      new ParallelDeadlineGroup(
+        new WaitUntilCommand(() -> {
+          return !Intake.getInstance().isGamePieceInIntake();
+        }),
+        new MotorCommand(Intake.getInstance(), 0.8, 0)
+      ),
       new IntakeCommand(IntakeConstants.INTAKE_POWER)
     );
   }

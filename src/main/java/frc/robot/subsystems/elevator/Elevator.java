@@ -24,6 +24,7 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
     private final CANSparkMax master;
     private final CANSparkMax slave1;
     private final CANSparkMax slave2;
+    private final CANSparkMax slave3;
     private final RelativeEncoder encoder;
 
     private final SparkPIDController pidController;
@@ -35,17 +36,21 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
       master = new CANSparkMax(PortMap.Elevator.masterID, MotorType.kBrushless);
       slave1 = new CANSparkMax(PortMap.Elevator.slave1ID, MotorType.kBrushless);
       slave2 = new CANSparkMax(PortMap.Elevator.slave2ID, MotorType.kBrushless);
+      slave3 = new CANSparkMax(PortMap.Elevator.slave3ID, MotorType.kBrushless);
 
       master.restoreFactoryDefaults();
       slave1.restoreFactoryDefaults();
       slave2.restoreFactoryDefaults();
+      slave3.restoreFactoryDefaults();
 
       master.setInverted(false);
       slave1.setInverted(true);
       slave2.setInverted(true);
+      slave3.setInverted(false);
 
       slave1.follow(master, true);
       slave2.follow(master, true);
+      slave3.follow(master, false);
 
       absEncoder = new AnalogEncoder(PortMap.Elevator.absEncoderID);
 

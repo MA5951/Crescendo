@@ -87,22 +87,22 @@ public class SwerveConstants {
 
         // ------------2024--------------------
         public final static double SPEAKER_TARGET_X_BLUE = 0;
-        public final static double SPEAKER_TARGET_Y_BLUE = 5.546;
-
         public final static double SPEAKER_TAGET_X_RED = 16.54;
-        public final static double SPEAKER_TARGET_Y_RED = 5.55;
+        public final static double SPEAKER_TARGET_Y = 5.55;
+
+        public final static double START_OF_SPEAKER = 4.94 + 0.1;
+        public final static double END_OF_SPEAKER = 6.13 - 0.1;
 
         public final static double ANGLE_PID_TOLORANCE = Math.toRadians(10);
 
-        public final static double MAX_SHOOT_DISTANCE = 2.15;
+        public final static double MAX_SHOOT_DISTANCE = 2.1;
+
+        public final static double SHOOTING_IN_MOTION_TOLORANCE = 0.35;
 
         public final static double VISION_KP = 0; // TODO
         public final static double VISION_KI = 0; // TODO
         public final static double VISION_KD = 0; // TODO
         public final static double VISION_TOLORANCE = 0; // TODO
-
-        public final static double SHOOTING_POSE_MOTION = SPEAKER_TARGET_Y_BLUE;
-        public final static double SHOOTING_POSE_MOTION_TOLORANCE = 0.57; //1.5;
 
         public final static double SHOOTING_SPEED = 0.12;
         public final static double LOWER_SPEED = 0.4;

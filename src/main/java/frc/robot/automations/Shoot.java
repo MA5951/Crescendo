@@ -29,8 +29,7 @@ public class Shoot extends SequentialCommandGroup {
   private static double getAngle() {
     double xTrget = DriverStation.getAlliance().get() == Alliance.Red ? 
       SwerveConstants.SPEAKER_TAGET_X_RED : SwerveConstants.SPEAKER_TARGET_X_BLUE;
-    double yTrget = DriverStation.getAlliance().get() == Alliance.Red ? 
-      SwerveConstants.SPEAKER_TARGET_Y_RED : SwerveConstants.SPEAKER_TARGET_Y_BLUE;
+    double yTrget = SwerveConstants.SPEAKER_TARGET_Y;
     xDis = Math.abs(swerve.getPose().getX() - xTrget);
     yDis = Math.abs(swerve.getPose().getY() - yTrget);
     double angle = Math.atan(yDis / xDis);
@@ -48,8 +47,8 @@ public class Shoot extends SequentialCommandGroup {
       new ParallelCommandGroup(
         new AngleAdjust(Shoot::getAngle, () -> 0d, () -> 0d),
         new GettingReadyToScore(
-          UpperShooter.getInstance()::getVelocity,
-          LowerShooter.getInstance()::getVelocity,
+          UpperShooter.getInstance()::getVelocityForShooting,
+          LowerShooter.getInstance()::getVelocityForShooting,
           elevatorPose)
       ),
       new ScoreAutomation()

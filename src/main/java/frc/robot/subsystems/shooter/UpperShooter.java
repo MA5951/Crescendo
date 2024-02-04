@@ -159,7 +159,7 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
     if (Intake.getInstance().isGamePieceInIntake() && 
       SwerveDrivetrainSubsystem.getInstance().getPose().getX() * factor
        < poduimLine * factor) {
-        ShooterConstants.defaultV = 3000;
+        ShooterConstants.defaultV = 2500;
     } else {
       ShooterConstants.defaultV = 0;
     }

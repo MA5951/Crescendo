@@ -50,6 +50,7 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
   public double maxAngularVelocity = SwerveConstants.MAX_ANGULAR_VELOCITY;
 
   public double disFormSpeaker = 0;
+  public double disFromSpeakerX = 0;
 
   public final MAShuffleboard board;
 
@@ -319,27 +320,13 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
 
     board.addNum("yaw pose", getPose().getRotation().getDegrees());
 
-    board.addNum("afl", frontLeftModule.getAbsoluteEncoderPosition());
-    board.addNum("afr", frontRightModule.getAbsoluteEncoderPosition());
-    board.addNum("arl", rearLeftModule.getAbsoluteEncoderPosition());
-    board.addNum("arr", rearRightModule.getAbsoluteEncoderPosition());
-
-    board.addNum("fl angle", frontLeftModule.getTurningPosition());
-    board.addNum("fr angle", frontRightModule.getTurningPosition());
-    board.addNum("rl angle", rearLeftModule.getTurningPosition());
-    board.addNum("rr angle", rearRightModule.getTurningPosition());
-
-    board.addNum("vfl angle", frontLeftModule.getDriveVelocity());
-    board.addNum("vfr angle", frontRightModule.getDriveVelocity());
-    board.addNum("vrl angle", rearLeftModule.getDriveVelocity());
-    board.addNum("vrr angle", rearRightModule.getDriveVelocity());
-
     board.addNum("flV", frontLeftModule.getDriveVelocity());
 
     board.addNum("dis from speaker", disFormSpeaker);
 
-    double ySpeaker = DriverStation.getAlliance().get() == Alliance.Blue ? 
-      SwerveConstants.SPEAKER_TARGET_Y_BLUE : SwerveConstants.SPEAKER_TARGET_Y_RED;
+    board.addNum("yv", getRobotRelativeSpeeds().vyMetersPerSecond);
+
+    double ySpeaker = SwerveConstants.SPEAKER_TARGET_Y;
     double xSpeaker =  DriverStation.getAlliance().get() == Alliance.Blue ? 
       SwerveConstants.SPEAKER_TARGET_X_BLUE : SwerveConstants.SPEAKER_TAGET_X_RED;
 
@@ -348,6 +335,13 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
         SwerveConstants.MAX_SHOOT_DISTANCE;
 
     board.addBoolean("can shoot", canShoot);
+
+    disFromSpeakerX = new Translation2d(
+      SwerveDrivetrainSubsystem.getInstance().getPose().getX(),
+        0).getDistance(new Translation2d(
+        DriverStation.getAlliance().get() == Alliance.Blue ?
+        SwerveConstants.SPEAKER_TARGET_X_BLUE : 
+        SwerveConstants.SPEAKER_TAGET_X_RED, 0));
 
     disFormSpeaker = new Translation2d(xSpeaker, ySpeaker).getDistance(
       getPose().getTranslation()

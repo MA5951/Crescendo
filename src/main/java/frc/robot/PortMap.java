@@ -51,6 +51,7 @@ public class PortMap {
     public static final int masterID = 28;
     public static final int slave1ID = 30;
     public static final int slave2ID = 31;
+    public static final int slave3ID = 35;
 
     public static final int absEncoderID = 0;
   }

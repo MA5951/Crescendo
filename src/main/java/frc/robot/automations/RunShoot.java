@@ -5,6 +5,7 @@
 package frc.robot.automations;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
 
 public class RunShoot extends Command {
@@ -30,6 +31,6 @@ public class RunShoot extends Command {
 
   @Override
   public boolean isFinished() {
-    return !SwerveDrivetrainSubsystem.getInstance().canShoot();
+    return !SwerveDrivetrainSubsystem.getInstance().canShoot() || RobotContainer.isIntakeRunning;
   }
 }
