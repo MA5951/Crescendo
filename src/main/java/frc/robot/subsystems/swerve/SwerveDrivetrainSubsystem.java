@@ -344,7 +344,6 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
       disFormSpeaker = new Translation2d(xSpeaker, ySpeaker).getDistance(
         getPose().getTranslation()
       );
-    }
 
     if (RobotContainer.APRILTAGS_LIMELIGHT.hasTarget()
       && RobotContainer.APRILTAGS_LIMELIGHT.getTagId() != -1
