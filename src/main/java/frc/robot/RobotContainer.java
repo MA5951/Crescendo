@@ -10,7 +10,9 @@ import com.ma5951.utils.commands.RunInternallyControlledSubsystem;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.PS5Controller;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -36,6 +38,8 @@ import frc.robot.automations.ScoreWithoutAdjust;
 import frc.robot.automations.Shoot;
 import frc.robot.automations.SourceIntake;
 import frc.robot.automations.Auto.FeedToShooter;
+import frc.robot.automations.Auto.FourGamePieces;
+import frc.robot.automations.Auto.MIddle3Piece;
 import frc.robot.automations.Auto.SetForAmp;
 import frc.robot.automations.AutoAutomations.ShootInMotion;
 import frc.robot.commands.Intake.IntakeCommand;
@@ -78,10 +82,10 @@ public class RobotContainer {
     
     NamedCommands.registerCommand("Shoot linked to speaker",
       new RunInternallyControlledSubsystem(UpperShooter.getInstance(),
-      () -> ShooterConstants.SPEAKER_UPPER_V, false)
+      () -> ShooterConstants.SPEAKER_UPPER_V_AUTO, false)
       .alongWith(
         new RunInternallyControlledSubsystem(LowerShooter.getInstance(),
-      () -> ShooterConstants.SPEAKER_LOWER_V, false))
+      () -> ShooterConstants.SPEAKER_LOWER_V_AUTO, false))
         .andThen(new FeedToShooter())
     );
 
@@ -213,6 +217,8 @@ public class RobotContainer {
     // );
   }
   public Command getAutonomousCommand() {
-    return AutoBuilder.buildAuto("Two pice Middle");
+    // return new FourGamePieces(); // 4 gmae piece
+    // return AutoBuilder.buildAuto("Two pice Stage"); // two pieces from stange side
+    return new MIddle3Piece();
   }
 }

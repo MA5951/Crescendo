@@ -1,6 +1,6 @@
 {
-  "robotWidth": 0.7,
-  "robotLength": 0.7,
+  "robotWidth": 0.74,
+  "robotLength": 0.74,
   "holonomicMode": true,
   "pathFolders": [
     "Amp",
@@ -13,9 +13,9 @@
     "Theree pice",
     "Two pice"
   ],
-  "defaultMaxVel": 5.0,
-  "defaultMaxAccel": 22.0,
-  "defaultMaxAngVel": 700.0,
-  "defaultMaxAngAccel": 1000.0,
+  "defaultMaxVel": 3.0,
+  "defaultMaxAccel": 3.0,
+  "defaultMaxAngVel": 600.0,
+  "defaultMaxAngAccel": 700.0,
   "maxModuleSpeed": 5.5
 }

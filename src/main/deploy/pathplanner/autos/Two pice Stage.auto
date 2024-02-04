@@ -2,23 +2,36 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7836094545428531,
-      "y": 4.596049755479793
+      "x": 0.6738069031693622,
+      "y": 4.475206728191234
     },
-    "rotation": 122.0
+    "rotation": 120.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Initial Shoot"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shoot linked to speaker"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ResetElevator"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "deadline",
+          "type": "parallel",
           "data": {
             "commands": [
               {
@@ -45,7 +58,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": "Shoot linked to speaker"
           }
         }
       ]

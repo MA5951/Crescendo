@@ -33,6 +33,10 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
     master.restoreFactoryDefaults();
     slave.restoreFactoryDefaults();
 
+    master.setSmartCurrentLimit(20);
+    slave.setSmartCurrentLimit(20);
+
+
     upSensor = new DigitalInput(PortMap.Intake.sensor1ID);
     downSensor = new DigitalInput(PortMap.Intake.sensor2ID);
     board = new MAShuffleboard("Intake");
@@ -78,7 +82,7 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
 
     board.addBoolean("is ring", isGamePieceInIntake());
 
-    board.addNum("current", master.getOutputCurrent());
+    //board.addNum("current", master.getOutputCurrent());
 
     board.addBoolean("can move", canMove());
   }

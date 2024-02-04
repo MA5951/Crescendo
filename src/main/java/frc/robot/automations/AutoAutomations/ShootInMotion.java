@@ -29,7 +29,7 @@ public class ShootInMotion extends Command {
     swerve = SwerveDrivetrainSubsystem.getInstance();
     swerveCommand = new AngleAdjust(() -> 
       {return DriverStation.getAlliance().get() == Alliance.Blue ? Math.PI : 0;},
-      RobotContainer.driverController::getLeftX, () -> 0d);
+      () -> 0d, RobotContainer.driverController::getLeftY);
     addRequirements(SwerveDrivetrainSubsystem.getInstance(),
       Intake.getInstance());
   }
@@ -56,7 +56,7 @@ public class ShootInMotion extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    swerve.FactorVelocityTo(0.3);
+    swerve.FactorVelocityTo(SwerveConstants.SHOOTING_SPEED);
     swerveCommand.initialize();
     setShooter();
     isRunning = true;
@@ -68,8 +68,7 @@ public class ShootInMotion extends Command {
     swerveCommand.execute();
 
     if (Math.abs(swerve.getPose().getY() - SwerveConstants.SHOOTING_POSE_MOTION)
-     < (SwerveConstants.SHOOTING_POSE_MOTION_TOLORANCE * 
-     Math.max(1, swerve.getVelocity() * 0.6))
+     < (SwerveConstants.SHOOTING_POSE_MOTION_TOLORANCE)
         && UpperShooter.getInstance().atPoint()
         && LowerShooter.getInstance().atPoint()) {
       Intake.getInstance().setPower(IntakeConstants.INTAKE_POWER);

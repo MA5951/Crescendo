@@ -51,8 +51,6 @@ public class Limelight {
 
   private final NetworkTableEntry botPose;
 
-  private final Transform3d cameraOffset;
-
   private Pose2d estPose;
   private double updateTime;
 
@@ -65,8 +63,6 @@ public class Limelight {
     table = NetworkTableInstance.getDefault().getTable(cammeraName);
     this.KDELTA_Y = cameraOffset.getY();
     this.KLIMELIGHT_ANGLE = cameraOffset.getRotation().getY();
-    this.cameraOffset = cameraOffset;
-
     threeDimension = table.getEntry("camtran");
     tx = table.getEntry("tx");//Horizontal Offset From Crosshair To Target (LL1: -27 degrees to 27 degrees | LL2: -29.8 to 29.8 degrees)
     ty = table.getEntry("ty");//Vertical Offset From Crosshair To Target (LL1: -20.5 degrees to 20.5 degrees | LL2: -24.85 to 24.85 degrees)
@@ -203,7 +199,7 @@ public class Limelight {
       new Rotation3d(
               Math.toRadians(data[3]),
               Math.toRadians(data[4]),
-              Math.toRadians(data[5]))).transformBy(cameraOffset);
+              Math.toRadians(data[5])));
 
     estPose = pose.toPose2d();
   }

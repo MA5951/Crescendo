@@ -7,7 +7,6 @@ import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.AnalogEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.ma5951.utils.MAShuffleboard;
@@ -18,8 +17,6 @@ import frc.robot.PortMap;
 public class Elevator extends SubsystemBase implements DefaultInternallyControlledSubsystem{
 
     private static Elevator elevator;
-
-    private final AnalogEncoder absEncoder;
 
     private final CANSparkMax master;
     private final CANSparkMax slave1;
@@ -46,8 +43,6 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
 
       slave1.follow(master, true);
       slave2.follow(master, true);
-
-      absEncoder = new AnalogEncoder(PortMap.Elevator.absEncoderID);
 
       master.setIdleMode(IdleMode.kBrake);
       slave1.setIdleMode(IdleMode.kBrake);
@@ -129,16 +124,6 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
 
     @Override
     public void periodic() {
-
-        board.addNum("abs encoder", absEncoder.getAbsolutePosition());
-        board.addNum("current", getCurrent());
-
-        board.addNum("pose", getPosition());
-
         board.addBoolean("at point", atPoint());
-
-        setSetPoint(board.getNum("setPoint"));
-
-        board.addNum("v", encoder.getVelocity());
     }
 }

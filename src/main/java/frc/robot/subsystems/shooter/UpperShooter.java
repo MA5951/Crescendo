@@ -130,8 +130,7 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
 
   public double getVelocityForShooting() {
     return ShooterConstants.sample(
-      SwerveDrivetrainSubsystem.getInstance().disFormSpeaker)[0] * 
-        ShooterConstants.V_FACTOR;
+      SwerveDrivetrainSubsystem.getInstance().disFormSpeaker)[0];
   }
 
   public double getPoduim() {
@@ -143,6 +142,10 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
       instance = new UpperShooter();
     }
     return instance;
+  }
+
+  public double getCurrent() {
+    return motor.getOutputCurrent();
   }
 
   @Override
@@ -172,5 +175,7 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
     board.addBoolean("atpoint", atPoint());
 
     board.addNum("set", setPoint);
+
+    board.addNum("current", getCurrent());
   }
 }
