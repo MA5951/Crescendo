@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 8.3,
+        "x": 8.17,
         "y": 5.77
       },
       "prevControl": {
-        "x": 6.188613520084184,
-        "y": 5.599912914111543
+        "x": 6.305889183206938,
+        "y": 5.761166950905331
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,7 +45,7 @@
   "reversed": false,
   "folder": "Speaker- 3 Node",
   "previewStartingState": {
-    "rotation": -178.21008939175383,
+    "rotation": -179.39569456133037,
     "velocity": 0
   },
   "useDefaultConstraints": true

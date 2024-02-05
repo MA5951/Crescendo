@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.75,
-      "y": 6.47
+      "x": 0.6167979002624675,
+      "y": 4.432449976011063
     },
-    "rotation": -122.0
+    "rotation": 121.75948008481282
   },
   "command": {
     "type": "sequential",
@@ -31,19 +31,19 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "parallel",
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "Intake"
+                  "pathName": "one game piece"
                 }
               },
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "Note 2 intake Ampside"
+                  "name": "stop shooter"
                 }
               }
             ]
@@ -52,43 +52,12 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Note 2 score Ampside"
-          }
-        },
-        {
-          "type": "deadline",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Note 3 intake Ampside"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Note 3 score Ampside"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot linked to speaker"
+            "pathName": "one game piece"
           }
         }
       ]
     }
   },
-  "folder": "Theree pice",
+  "folder": null,
   "choreoAuto": false
 }

@@ -5,6 +5,7 @@
 package frc.robot;
 
 import com.ma5951.utils.commands.DefaultRunInternallyControlledSubsystem;
+import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -74,11 +75,13 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    SwerveDrivetrainSubsystem.getInstance().resetEncoders();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
+    
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
+
   }
 
   @Override
@@ -93,8 +96,6 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
 
-    SwerveDrivetrainSubsystem.getInstance().resetEncoders();
-    
     CommandScheduler.getInstance().setDefaultCommand(
       SwerveDrivetrainSubsystem.getInstance(), 
       new DriveSwerveCommand(
@@ -102,12 +103,11 @@ public class Robot extends TimedRobot {
         RobotContainer.driverController::getLeftY,
         RobotContainer.driverController::getRightX));
 
-    // time = Timer.getFPGATimestamp();
-
   }
 
   @Override
   public void teleopPeriodic() {
+    SmartDashboard.putBoolean("intake running", RobotContainer.isIntakeRunning);
     // double timePassed = Timer.getFPGATimestamp() - time;
     // start of endgame (20 seconds left)
     

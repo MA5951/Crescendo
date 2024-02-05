@@ -2,21 +2,15 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.19,
+      "x": 1.29,
       "y": 5.52
     },
-    "rotation": -178.7017343145146
+    "rotation": -179.41197514052948
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
-        {
-          "type": "named",
-          "data": {
-            "name": "stop shooter"
-          }
-        },
         {
           "type": "parallel",
           "data": {

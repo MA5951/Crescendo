@@ -320,6 +320,8 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
 
     board.addNum("yaw pose", getPose().getRotation().getDegrees());
 
+    board.addString("pose", "(" + getPose().getX() + ", " + getPose().getY() + " )");
+
     board.addNum("flV", frontLeftModule.getDriveVelocity());
 
     board.addBoolean("can shoot", canShoot);
@@ -334,6 +336,8 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
 
     board.addBoolean("can shoot", canShoot);
 
+    board.addNum("dis from speaker", disFormSpeaker);
+
     disFromSpeakerX = new Translation2d(
       SwerveDrivetrainSubsystem.getInstance().getPose().getX(),
         0).getDistance(new Translation2d(
@@ -346,11 +350,12 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
       );
 
     if (RobotContainer.APRILTAGS_LIMELIGHT.hasTarget()
-      && RobotContainer.APRILTAGS_LIMELIGHT.getTagId() != -1
-      && !DriverStation.isAutonomous()) {
+      && RobotContainer.APRILTAGS_LIMELIGHT.getTagId() != -1) {
      // && RobotContainer.APRILTAGS_LIMELIGHT.getA() > SwerveConstants.MAX_LIMELIGHT_DIS) {
       Pose2d estPose = RobotContainer.APRILTAGS_LIMELIGHT.getEstPose();
-      resetOdometry(estPose);
+      if (estPose.getTranslation().getDistance(new Translation2d(xSpeaker, ySpeaker)) < 
+        SwerveConstants.MAX_LIMELIGHT_DIS && swerve.getVelocity() < 3.8)
+        resetOdometry(estPose);
     }
 
     if (ShootInMotion.isRunning) {
@@ -359,6 +364,5 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
     } else {
       SwerveConstants.lowerSpeedFactor = SwerveConstants.LOWER_SPEED;
     }
-
   }
 }

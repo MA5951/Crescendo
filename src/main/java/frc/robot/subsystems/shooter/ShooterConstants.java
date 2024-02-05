@@ -23,19 +23,20 @@ public class ShooterConstants {
     public static final double SPEAKER_UPPER_V = 1800;
     public static final double SPEAKER_LOWER_V = 3300;
 
-    public static final double SPEAKER_UPPER_V_AUTO = 1800;
-    public static final double SPEAKER_LOWER_V_AUTO= 3300;
+    public static final double SPEAKER_UPPER_V_AUTO = 2000;
+    public static final double SPEAKER_LOWER_V_AUTO= 3500;
 
     public static final double AMP_V_UPPER = 0;
     public static final double AMP_V_LOWER = 0.25;
     public static final double INTAKE_SOURCE_V = -0.4;
 
-    public static final double V_FACTOR = 1.1;
+    public static final double V_FACTOR = 1;
 
     public static double defaultV = 0;
 
     // dis, up, down
     public static final double[][] shootingPoses = {
+        {1.34, SPEAKER_UPPER_V, SPEAKER_LOWER_V},
         {1.64, 1880, 1970},
         {1.78, 1780, 1810},
         {1.83, 1780, 1810},

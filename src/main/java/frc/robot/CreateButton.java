@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.automations.ResetAll;
 import frc.robot.subsystems.elevator.ElevatorConstants;
 import frc.robot.subsystems.shooter.UpperShooter;
+import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -21,7 +22,8 @@ public class CreateButton {
     button.whileTrue(automation.alongWith(
       new InstantCommand(() -> UpperShooter.getInstance().changeToDefaultV = false)
     )).whileFalse(
-      new ResetAll(elevatorEndPose)
+      new ResetAll(elevatorEndPose).alongWith(
+        new InstantCommand(() -> SwerveDrivetrainSubsystem.getInstance().FactorVelocityTo(1)))
     );
   }
 

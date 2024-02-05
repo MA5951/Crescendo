@@ -39,7 +39,6 @@ import frc.robot.automations.Shoot;
 import frc.robot.automations.SourceIntake;
 import frc.robot.automations.Auto.FeedToShooter;
 import frc.robot.automations.Auto.FourGamePieces;
-import frc.robot.automations.Auto.MIddle3Piece;
 import frc.robot.automations.Auto.SetForAmp;
 import frc.robot.automations.AutoAutomations.ShootInMotion;
 import frc.robot.commands.Intake.IntakeCommand;
@@ -90,8 +89,8 @@ public class RobotContainer {
     );
 
     NamedCommands.registerCommand(
-      "stop shooter", new InstantCommand(() -> UpperShooter.getInstance().setPower(0))
-      .alongWith(new InstantCommand(() -> LowerShooter.getInstance().setPower(0))));
+      "stop shooter", new InstantCommand(() -> UpperShooter.getInstance().setSetPoint(0))
+      .alongWith(new InstantCommand(() -> LowerShooter.getInstance().setSetPoint(0))));
 
     NamedCommands.registerCommand("ResetElevator",
       new ResetElevator()
@@ -165,7 +164,7 @@ public class RobotContainer {
 
     new CreateButton(
       new Trigger(
-        () -> {return driverController.getL2Axis() > 0.5
+        () -> {return driverController.getL2Axis() > 0.1
           && (SwerveDrivetrainSubsystem.getInstance().disFromSpeakerX
            < SwerveConstants.MAX_SHOOT_DISTANCE && !isIntakeRunning);}
       ), new ShootInMotion());
@@ -177,17 +176,17 @@ public class RobotContainer {
         RobotContainer::IsFloor
       ).alongWith(new InstantCommand(() -> isIntakeRunning = true)).andThen(
         new ResetAll(ElevatorConstants.DEFAULT_POSE)
-      ).alongWith(new InstantCommand(() -> isIntakeRunning = false))
+      .alongWith(new InstantCommand(() -> isIntakeRunning = false)))
     );
 
-    driverController.L2().whileTrue(new InstantCommand(
-      () -> SwerveDrivetrainSubsystem.getInstance().FactorVelocityTo(
-        SwerveConstants.lowerSpeedFactor)
-    )).whileFalse(
-      new InstantCommand(
-      () -> SwerveDrivetrainSubsystem.getInstance().FactorVelocityTo(
-        SwerveConstants.lowerSpeedFactor / SwerveConstants.LOWER_SPEED)
-    ));
+    // driverController.L2().whileTrue(new InstantCommand(
+    //   () -> SwerveDrivetrainSubsystem.getInstance().FactorVelocityTo(
+    //     SwerveConstants.lowerSpeedFactor)
+    // )).whileFalse(
+    //   new InstantCommand(
+    //   () -> SwerveDrivetrainSubsystem.getInstance().FactorVelocityTo(
+    //     SwerveConstants.lowerSpeedFactor / SwerveConstants.LOWER_SPEED)
+    // ));
 
     // // climb
     // new CreateButton(operatorController.povUp(), 
@@ -230,6 +229,12 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // return new FourGamePieces(); // 4 gmae piece
     // return AutoBuilder.buildAuto("Two pice Stage"); // two pieces from stange side
-    return new MIddle3Piece();
+    return AutoBuilder.buildAuto("Two pice Middle")
+      .andThen(AutoBuilder.buildAuto("Theree pice Spaker middle"));
+    // return AutoBuilder.buildAuto("one game piece"); // one game piece
+    // return AutoBuilder.buildAuto("Two pice Stage");
+    // return AutoBuilder.buildAuto("Two pice Amp");
+    // return AutoBuilder.buildAuto("Theree pice Amp");
+    // return null;
   }
 }
