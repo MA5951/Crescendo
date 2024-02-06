@@ -5,19 +5,13 @@
 package frc.robot;
 
 import com.ma5951.utils.Limelight;
+import com.ma5951.utils.MAShuffleboard;
 import com.ma5951.utils.commands.MotorCommand;
 import com.ma5951.utils.commands.RunInternallyControlledSubsystem;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
-import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.wpilibj.PS4Controller;
-import edu.wpi.first.wpilibj.PS5Controller;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-
-// import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
@@ -27,15 +21,11 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.swerve.SwerveConstants;
 import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
 import frc.robot.automations.AMPScore;
-import frc.robot.automations.CenterRing;
-import frc.robot.automations.GettingReadyToScore;
-import frc.robot.automations.IntakeAndRingCenter;
 import frc.robot.automations.IntakeAutomation;
 import frc.robot.automations.ResetAll;
 import frc.robot.automations.RunIntake;
 import frc.robot.automations.RunShoot;
 import frc.robot.automations.ScoreWithoutAdjust;
-import frc.robot.automations.Shoot;
 import frc.robot.automations.SourceIntake;
 import frc.robot.automations.Auto.FeedToShooter;
 import frc.robot.automations.Auto.FourGamePieces;
@@ -44,9 +34,7 @@ import frc.robot.automations.Auto.SetForAmp;
 import frc.robot.automations.AutoAutomations.ShootInMotion;
 import frc.robot.commands.Intake.IntakeCommand;
 import frc.robot.commands.elevator.ResetElevator;
-import frc.robot.commands.elevator.SetElevator;
 import frc.robot.commands.shooter.SetShooter;
-import frc.robot.subsystems.LED.LED;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorConstants;
 import frc.robot.subsystems.intake.Intake;
@@ -56,6 +44,8 @@ import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.shooter.UpperShooter;
 
 public class RobotContainer {
+  private final MAShuffleboard board = new MAShuffleboard("Intake");
+
   public enum IntakePose {
     FLOOR,
     SOURCE,
@@ -118,6 +108,12 @@ public class RobotContainer {
   }
 
   public RobotContainer() {
+    board.initSendableChooser("Autonomous Paths");
+    board.addOptionToChooser("Four Game Pieces", new FourGamePieces());
+    board.addOptionToChooser("Middle Three Piece", new MIddle3Piece());
+    new AutoBuilder();
+    board.addOptionToChooser("Two Piece Stage", AutoBuilder.buildAuto("Two pice Stage"));
+      
     registerCommands();
     configureBindings();
   }
@@ -228,8 +224,6 @@ public class RobotContainer {
     // );
   }
   public Command getAutonomousCommand() {
-    // return new FourGamePieces(); // 4 gmae piece
-    // return AutoBuilder.buildAuto("Two pice Stage"); // two pieces from stange side
-    return new MIddle3Piece();
+    return board.getSelectedCommand();
   }
 }
