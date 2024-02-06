@@ -15,8 +15,8 @@ public class MIddle3Piece extends SequentialCommandGroup {
 
   public MIddle3Piece() {
     addCommands(
-      AutoBuilder.buildAuto("Two pice Middle"),
-      AutoBuilder.buildAuto("Theree pice Spaker")
+      AutoBuilder.buildAuto("Two piece Middle"),
+      AutoBuilder.buildAuto("Theree piece Spaker")
     );
   }
 }

@@ -2,36 +2,23 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.19,
-      "y": 5.5210409012367325
+      "x": 0.75,
+      "y": 6.47
     },
-    "rotation": 180.0
+    "rotation": -122.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Shoot linked to speaker"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "ResetElevator"
-                }
-              }
-            ]
+            "name": "Initial Shoot"
           }
         },
         {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
               {
@@ -43,34 +30,58 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Note 2 intake Middle"
+                  "pathName": "Note 2 intake Ampside"
                 }
               }
             ]
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Note 2 score Middle"
-                }
-              }
-            ]
+            "pathName": "Note 2 score Ampside"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot linked to speaker"
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Note 3 intake Ampside"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Note 3 score Ampside"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
           }
         }
       ]
     }
   },
-  "folder": "Two pice",
+  "folder": "Theree piece",
   "choreoAuto": false
 }

@@ -2,23 +2,36 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7836094545428531,
-      "y": 4.596049755479793
+      "x": 1.19,
+      "y": 5.5210409012367325
     },
-    "rotation": 122.0
+    "rotation": 180.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Initial Shoot"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shoot linked to speaker"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ResetElevator"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "deadline",
+          "type": "parallel",
           "data": {
             "commands": [
               {
@@ -30,58 +43,34 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Node 2 intake Stageside"
+                  "pathName": "Note 2 intake Middle"
                 }
               }
             ]
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": " Node 2 score Stageside"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "deadline",
+          "type": "parallel",
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              },
-              {
                 "type": "path",
                 "data": {
-                  "pathName": "Note 3 intake Stageside"
+                  "pathName": "Note 2 score Middle"
                 }
               }
             ]
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "Note 3 score Stageside"
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": "Shoot linked to speaker"
           }
         }
       ]
     }
   },
-  "folder": "Theree pice",
+  "folder": "Two piecee",
   "choreoAuto": false
 }

@@ -112,7 +112,7 @@ public class RobotContainer {
     board.addOptionToChooser("Four Game Pieces", new FourGamePieces());
     board.addOptionToChooser("Middle Three Piece", new MIddle3Piece());
     new AutoBuilder();
-    board.addOptionToChooser("Two Piece Stage", AutoBuilder.buildAuto("Two pice Stage"));
+    board.addOptionToChooser("Two Piece Stage", AutoBuilder.buildAuto("Two piece Stage"));
       
     registerCommands();
     configureBindings();

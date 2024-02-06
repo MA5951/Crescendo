@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.75,
-      "y": 6.47
+      "x": 0.7836094545428531,
+      "y": 4.596049755479793
     },
-    "rotation": -122.0
+    "rotation": 122.0
   },
   "command": {
     "type": "sequential",
@@ -30,7 +30,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Note 2 intake Ampside"
+                  "pathName": "Node 2 intake Stageside"
                 }
               }
             ]
@@ -39,7 +39,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Note 2 score Ampside"
+            "pathName": " Node 2 score Stageside"
           }
         },
         {
@@ -61,7 +61,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Note 3 intake Ampside"
+                  "pathName": "Note 3 intake Stageside"
                 }
               }
             ]
@@ -70,7 +70,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Note 3 score Ampside"
+            "pathName": "Note 3 score Stageside"
           }
         },
         {
@@ -82,6 +82,6 @@
       ]
     }
   },
-  "folder": "Theree pice",
+  "folder": "Theree piece",
   "choreoAuto": false
 }

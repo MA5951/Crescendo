@@ -24,7 +24,7 @@ public class CenterRing extends SequentialCommandGroup {
     addCommands(
       new ParallelDeadlineGroup(
           new SequentialCommandGroup(
-            new WaitUntilCommand(UpperShooter.getInstance()::isGamePiceInShooter),
+            new WaitUntilCommand(UpperShooter.getInstance()::isGamepieceInShooter),
               new WaitCommand(0.1)
           ),
           new InstantCommand(() -> Intake.getInstance().setPower(-0.8)),

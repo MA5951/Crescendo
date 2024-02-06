@@ -17,7 +17,7 @@ public class FourGamePieces extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      AutoBuilder.buildAuto("Two pice Middle"),
+      AutoBuilder.buildAuto("Two piece Middle"),
       AutoBuilder.buildAuto("4 Piece Part two")
     );
   }

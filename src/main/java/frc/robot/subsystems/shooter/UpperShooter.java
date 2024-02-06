@@ -82,7 +82,7 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
     motor.set(voltage / 12);
   }
 
-  public boolean isGamePiceInShooter() {
+  public boolean isGamepieceInShooter() {
     return !sensor.get();
   }
 
@@ -152,7 +152,7 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
   public void periodic() {
     board.addNum("v", getVelocity());
 
-    board.addBoolean("sensor", isGamePiceInShooter());
+    board.addBoolean("sensor", isGamepieceInShooter());
 
     double poduimLine = DriverStation.getAlliance().get() == Alliance.Red ?
       SwerveConstants.PODUIM_LINE_RED : SwerveConstants.PODUIM_LINE_BLUE;
