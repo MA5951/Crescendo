@@ -8,6 +8,7 @@ import com.ma5951.utils.Limelight;
 import com.ma5951.utils.MAShuffleboard;
 import com.ma5951.utils.commands.MotorCommand;
 import com.ma5951.utils.commands.RunInternallyControlledSubsystem;
+import com.pathplanner.lib.auto.AutoBuilder;
 // import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -68,7 +69,7 @@ public class RobotContainer {
   }
 
   private void registerCommands() {
-    NamedCommands.registerCommand("Intake", new IntakeCommand(IntakeConstants.INTAKE_POWER));
+    NamedCommands.registerCommand("Auto", new IntakeCommand(IntakeConstants.INTAKE_POWER));
     
     NamedCommands.registerCommand("Shoot linked to speaker",
       new RunInternallyControlledSubsystem(UpperShooter.getInstance(),
@@ -108,13 +109,14 @@ public class RobotContainer {
   }
 
   public RobotContainer() {
+    registerCommands();
+    
+    SwerveDrivetrainSubsystem.getInstance();
     board.initSendableChooser("Autonomous Paths");
     board.addOptionToChooser("Four Game Pieces", new FourGamePieces());
     board.addOptionToChooser("Middle Three Piece", new MIddle3Piece());
-    // new AutoBuilder();
-    // board.addOptionToChooser("Two Piece Stage", AutoBuilder.buildAuto("Two piece Stage"));
-      
-    registerCommands();
+    board.addOptionToChooser("Two Piece Stage", AutoBuilder.buildAuto("Two piece Stage"));
+    
     configureBindings();
   }
 
