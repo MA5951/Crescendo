@@ -32,7 +32,8 @@ public class CenterRing extends SequentialCommandGroup {
         ),
         new ParallelDeadlineGroup(
           new AdjustRing(),
-          new MotorCommand(LowerShooter.getInstance(), -0.1, 0)
+          new MotorCommand(LowerShooter.getInstance(), -0.4, 0),
+          new MotorCommand(UpperShooter.getInstance(), -0.4, 0)
         ),
         new InstantCommand(() -> UpperShooter.getInstance().setSetPoint(0))
           .alongWith(

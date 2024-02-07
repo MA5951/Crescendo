@@ -13,11 +13,11 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.PS5Controller;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-
-// import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.swerve.SwerveConstants;
 import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
 import frc.robot.automations.AMPScore;
+import frc.robot.automations.AdjustRing;
 import frc.robot.automations.CenterRing;
 import frc.robot.automations.GettingReadyToScore;
 import frc.robot.automations.IntakeAndRingCenter;
@@ -36,15 +37,16 @@ import frc.robot.automations.RunIntake;
 import frc.robot.automations.RunShoot;
 import frc.robot.automations.ScoreWithoutAdjust;
 import frc.robot.automations.Shoot;
+import frc.robot.automations.ShootInMotion;
 import frc.robot.automations.SourceIntake;
 import frc.robot.automations.Auto.FeedToShooter;
 import frc.robot.automations.Auto.FourGamePieces;
 import frc.robot.automations.Auto.SetForAmp;
-import frc.robot.automations.AutoAutomations.ShootInMotion;
 import frc.robot.commands.Intake.IntakeCommand;
 import frc.robot.commands.elevator.ResetElevator;
 import frc.robot.commands.elevator.SetElevator;
 import frc.robot.commands.shooter.SetShooter;
+import frc.robot.commands.swerve.AngleAdjust;
 import frc.robot.subsystems.LED.LED;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorConstants;
@@ -61,6 +63,8 @@ public class RobotContainer {
   }
 
   public static IntakePose intakepose = IntakePose.FLOOR;
+  public static boolean isAmp = false;
+  public static boolean ShootingLinkedToSpeaker = false;
 
   public static final CommandPS5Controller
     driverController = new CommandPS5Controller(PortMap.Controllers.driveID);
@@ -135,6 +139,12 @@ public class RobotContainer {
       new InstantCommand(SwerveDrivetrainSubsystem.getInstance()::updateOffset)
     );
 
+    driverController.touchpad().whileTrue(
+      new AngleAdjust(() -> Math.toRadians(270),
+      RobotContainer.driverController::getLeftX,
+      RobotContainer.driverController::getLeftY)
+    );
+
     // // ---------------------------------------------------------------
 
     new CreateButton(driverController.povLeft(), new ResetElevator());
@@ -152,16 +162,21 @@ public class RobotContainer {
     );
 
     // shooting linked to the speaker 
-    new CreateButton(driverController.L1(), new ScoreWithoutAdjust(
+    new CreateButton(driverController.L1(), 
+      new InstantCommand(() -> isIntakeRunning = false).andThen(new ScoreWithoutAdjust(
       () -> ShooterConstants.SPEAKER_UPPER_V, 
       () -> ShooterConstants.SPEAKER_LOWER_V,
-        ElevatorConstants.DEFAULT_POSE));
+        ElevatorConstants.DEFAULT_POSE)));
     
-    // shooting or amp
-    new CreateButton(driverController.circle(), new AMPScore());
+    // amp
+    new CreateButton(driverController.circle(), new AMPScore().alongWith(
+        new InstantCommand(() -> isAmp = false)
+      ));
 
+    // shooting normal
     new CreateButton(driverController.square(), new RunShoot());
 
+    // shooting in motion
     new CreateButton(
       new Trigger(
         () -> {return driverController.getL2Axis() > 0.1
@@ -169,7 +184,7 @@ public class RobotContainer {
            < SwerveConstants.MAX_SHOOT_DISTANCE && !isIntakeRunning);}
       ), new ShootInMotion());
 
-    // floor or source
+    // floor or source intake
     driverController.R1().onTrue( 
       new ConditionalCommand(new RunIntake(IntakeConstants.INTAKE_POWER),
         new SourceIntake(),
@@ -179,62 +194,67 @@ public class RobotContainer {
       .alongWith(new InstantCommand(() -> isIntakeRunning = false)))
     );
 
-    // driverController.L2().whileTrue(new InstantCommand(
-    //   () -> SwerveDrivetrainSubsystem.getInstance().FactorVelocityTo(
-    //     SwerveConstants.lowerSpeedFactor)
-    // )).whileFalse(
-    //   new InstantCommand(
-    //   () -> SwerveDrivetrainSubsystem.getInstance().FactorVelocityTo(
-    //     SwerveConstants.lowerSpeedFactor / SwerveConstants.LOWER_SPEED)
-    // ));
-
-    // // climb
-    // new CreateButton(operatorController.povUp(), 
-    //   new SetElevator(ElevatorConstants.CLIMB_POSE),
-    //   ElevatorConstants.CLIMB_POSE);
-  
-    // new CreateButton(driverController.povDown(), 
-    //   new SetElevator(ElevatorConstants.CLOSE_CLIMB_POSE),
-    //   ElevatorConstants.CLOSE_CLIMB_POSE);
-
-    // // source intake
-    // new CreateButton(operatorController.square(), new SourceIntake());
-
-    // ring Center
-    // new CreateButton(operatorController.povRight(), new CenterRing());
-    
     // eject
     new CreateButton(driverController.cross(), new MotorCommand(
       Intake.getInstance(), -IntakeConstants.INTAKE_POWER, 0));
 
-    // // choosing btween floor intake and sou
-    // operatorController.povDown().whileTrue(
-    //   new InstantCommand(() -> intakepose = IntakePose.FLOOR)
-    // );
+    // climb
+    new CreateButton(operatorController.triangle(), 
+      new SetElevator(ElevatorConstants.CLIMB_POSE),
+      ElevatorConstants.CLIMB_POSE);
+  
+    new CreateButton(operatorController.cross(), 
+      new SetElevator(ElevatorConstants.CLOSE_CLIMB_POSE),
+      ElevatorConstants.CLOSE_CLIMB_POSE);
 
-    // operatorController.povUp().whileTrue(
-    //   new InstantCommand(() -> intakepose = IntakePose.SOURCE)
-    // );
+    // elevator change + amp or shoot chooser
+    new CreateButton(operatorController.povUp(), 
+      new SetElevator(ElevatorConstants.MAX_POSE).alongWith(
+        new InstantCommand(() -> isAmp = true)
+      ),
+      ElevatorConstants.MAX_POSE);
+
+    new CreateButton(operatorController.povDown(), 
+      new SetElevator(ElevatorConstants.DEFAULT_POSE),
+      ElevatorConstants.DEFAULT_POSE);
+
+    // choosing btween floor intake and source
+    operatorController.povLeft().whileTrue(
+      new InstantCommand(() -> intakepose = IntakePose.FLOOR)
+    );
+
+    operatorController.povRight().whileTrue(
+      new InstantCommand(() -> intakepose = IntakePose.SOURCE)
+    );
+
+    // choosing btween linked shoot or normal one
+    operatorController.R2().whileTrue(
+      new InstantCommand(() -> ShootingLinkedToSpeaker = true)
+    );
+
+    operatorController.L2().whileTrue(
+      new InstantCommand(() -> ShootingLinkedToSpeaker = false)
+    );
 
     // //--------------------LEDS-----------------------
 
-    // operatorController.touchpad().whileTrue(
+    // operatorController.R1().whileTrue(
     //   new InstantCommand(() -> LED.getInstance().activateAmp())
     // );
 
-    // operatorController.options().whileTrue(
+    // operatorController.L1().whileTrue(
     //   new InstantCommand(() -> LED.getInstance().activateCoalition())
     // );
   }
   public Command getAutonomousCommand() {
     // return new FourGamePieces(); // 4 gmae piece
     // return AutoBuilder.buildAuto("Two pice Stage"); // two pieces from stange side
-    return AutoBuilder.buildAuto("Two pice Middle")
-      .andThen(AutoBuilder.buildAuto("Theree pice Spaker middle"));
+    // return AutoBuilder.buildAuto("Two pice Middle")
+    //   .andThen(AutoBuilder.buildAuto("Theree pice Spaker middle"));
     // return AutoBuilder.buildAuto("one game piece"); // one game piece
     // return AutoBuilder.buildAuto("Two pice Stage");
     // return AutoBuilder.buildAuto("Two pice Amp");
     // return AutoBuilder.buildAuto("Theree pice Amp");
-    // return null;
+    return null;
   }
 }

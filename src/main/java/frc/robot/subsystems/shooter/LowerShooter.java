@@ -30,7 +30,7 @@ public class LowerShooter extends SubsystemBase implements DefaultInternallyCont
   private final SparkPIDController pidController;
   private final SimpleMotorFeedforward feedforward;
 
-  private double setPoint = ShooterConstants.defaultV;
+  private double setPoint = ShooterConstants.defaultVDown;
 
   private final MAShuffleboard board;
 
@@ -58,8 +58,6 @@ public class LowerShooter extends SubsystemBase implements DefaultInternallyCont
 
 
     board = new MAShuffleboard("Lower shotter");
-
-    board.addNum("setPonit poduim", ShooterConstants.PODUIM_LOWER_V);
   }
 
   public void chengeIDLmode(IdleMode mode) {
@@ -116,10 +114,6 @@ public class LowerShooter extends SubsystemBase implements DefaultInternallyCont
   public double getVelocityForShooting() {
     return ShooterConstants.sample(
       SwerveDrivetrainSubsystem.getInstance().disFormSpeaker)[1];
-  }
-
-  public double getPoduim() {
-    return board.getNum("setPonit poduim");
   }
 
   public static LowerShooter getInstance() {

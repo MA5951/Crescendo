@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.PortMap;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.swerve.SwerveConstants;
 import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
@@ -37,7 +38,7 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
 
   private final DigitalInput sensor;
 
-  private double setPoint = ShooterConstants.defaultV;
+  private double setPoint = ShooterConstants.defaultVUp;
 
   public boolean changeToDefaultV = false;
 
@@ -70,7 +71,6 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
 
     board = new MAShuffleboard("Upper shotter");
 
-    board.addNum("setPonit poduim", ShooterConstants.PODIUM_UPPER_V);
   }
 
   public void chengeIDLmode(IdleMode mode) {
@@ -133,10 +133,6 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
       SwerveDrivetrainSubsystem.getInstance().disFormSpeaker)[0];
   }
 
-  public double getPoduim() {
-    return board.getNum("setPonit poduim");
-  }
-
   public static UpperShooter getInstance() {
     if (instance == null) {
       instance = new UpperShooter();
@@ -159,17 +155,26 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
     double factor = DriverStation.getAlliance().get() == Alliance.Red ?
       -1 : 1;
 
-    if (Intake.getInstance().isGamePieceInIntake() && 
-      SwerveDrivetrainSubsystem.getInstance().getPose().getX() * factor
+    if (Intake.getInstance().isGamePieceInIntake() && !RobotContainer.isAmp
+      && SwerveDrivetrainSubsystem.getInstance().getPose().getX() * factor
        < poduimLine * factor) {
-        ShooterConstants.defaultV = 1735;
+        if (RobotContainer.ShootingLinkedToSpeaker) {
+          ShooterConstants.defaultVUp = ShooterConstants.SPEAKER_UPPER_V;
+          ShooterConstants.defaultVDown = ShooterConstants.SPEAKER_LOWER_V;
+        } else {
+          ShooterConstants.defaultVUp = ShooterConstants.shootingPoses
+            [ShooterConstants.shootingPoses.length][1];
+          ShooterConstants.defaultVDown =ShooterConstants.shootingPoses
+            [ShooterConstants.shootingPoses.length][2];
+        }
     } else {
-      ShooterConstants.defaultV = 0;
+      ShooterConstants.defaultVUp = 0;
+      ShooterConstants.defaultVDown = 0;
     }
 
     if (changeToDefaultV && DriverStation.isTeleop()) {
-      LowerShooter.getInstance().setSetPoint(ShooterConstants.defaultV);
-      setSetPoint(ShooterConstants.defaultV);
+      LowerShooter.getInstance().setSetPoint(ShooterConstants.defaultVUp);
+      setSetPoint(ShooterConstants.defaultVDown);
     }
 
     board.addBoolean("atpoint", atPoint());

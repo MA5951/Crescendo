@@ -52,6 +52,7 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
       master.setIdleMode(IdleMode.kBrake);
       slave1.setIdleMode(IdleMode.kBrake);
       slave2.setIdleMode(IdleMode.kBrake);
+      slave3.setIdleMode(IdleMode.kBrake);
 
       encoder = master.getEncoder();
 
@@ -66,9 +67,6 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
       pidController.setD(ElevatorConstants.KD);
 
       board = new MAShuffleboard("Elevator");
-
-      board.addNum("setPoint", getSetPoint());
-
     }
 
     public double getCurrent() {
@@ -87,12 +85,6 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
 
     @Override
     public void setSetPoint(double setPoint) {
-        if (setPoint > ElevatorConstants.MAX_POSE) {
-            setPoint = ElevatorConstants.MAX_POSE;
-        } else if (setPoint < ElevatorConstants.MIN_POSE) {
-            setPoint = ElevatorConstants.MIN_POSE;
-        }
-        board.addNum("setPoint", setPoint);
         this.setPoint = setPoint;
     }
 

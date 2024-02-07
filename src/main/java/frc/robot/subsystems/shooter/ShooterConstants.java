@@ -17,9 +17,6 @@ public class ShooterConstants {
     public static final double KV_UP = 1.46e-4;
     public static final double KV_LOW = 1.7e-4;
 
-    public static final double PODIUM_UPPER_V = 3675;
-    public static final double PODUIM_LOWER_V = 1175;
-
     public static final double SPEAKER_UPPER_V = 1800;
     public static final double SPEAKER_LOWER_V = 3300;
 
@@ -32,7 +29,8 @@ public class ShooterConstants {
 
     public static final double V_FACTOR = 1;
 
-    public static double defaultV = 0;
+    public static double defaultVUp = 0;
+    public static double defaultVDown = 0;
 
     // dis, up, down
     public static final double[][] shootingPoses = {

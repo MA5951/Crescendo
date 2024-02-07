@@ -4,8 +4,11 @@
 
 package frc.robot.subsystems.LED;
 
+import javax.sound.sampled.Port;
+
 import com.ma5951.utils.MAShuffleboard;
 import com.ma5951.utils.led.AddressableLEDController;
+import com.ma5951.utils.led.AddressableLEDPattern;
 import com.ma5951.utils.led.BlinkingColorPattern;
 import com.ma5951.utils.led.BreathingColorPattern;
 import com.ma5951.utils.led.BreathingTripleColorPattern;
@@ -18,16 +21,23 @@ import com.ma5951.utils.led.SmoothColorTransitionPattern;
 import com.ma5951.utils.led.SmoothWaveColorPattern;
 import com.ma5951.utils.led.WavePattern;
 import frc.robot.subsystems.intake.Intake;
+import edu.wpi.first.wpilibj.AddressableLED;
+import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.PortMap;
+import frc.robot.RobotContainer;
 
 public class LED extends SubsystemBase {
   /** Creates a new LEDSubsystem. */
   private static LED led;
+
+  private AddressableLED addressableLED;
+  private AddressableLEDBuffer addressableLEDBuffer;
+  private AddressableLEDPattern addressableLEDPattern;
 
   AddressableLEDController ledController;
   SolidColorPattern solidColorPattern;
@@ -47,22 +57,18 @@ public class LED extends SubsystemBase {
   private boolean activateCoOp = false;
   private double startCoOpTime = 0;
 
+  
+
   private MAShuffleboard board;
 
   public LED() {
-    ledController = new AddressableLEDController(PortMap.LED.ledPort, LedConstants.ledLength);
-    
-    solidColorPattern = new SolidColorPattern(Color.kRed);
-    rainbowColorPattern = new RainbowColorPattern();
-    blinkingColorPattern = new BlinkingColorPattern(Color.kRed, Color.kRed,0);
-    breathingColorPattern = new BreathingColorPattern(Color.kRed, 0);
-    breathingTripleColorPattern = new BreathingTripleColorPattern(Color.kRed, Color.kBlue, 0);
-    rainbowColorPatterSimultaneously = new RainbowColorPatterSimultaneously();
-    smoothColorTransitionPattern = new SmoothColorTransitionPattern(Color.kRed, Color.kBlue, 0);
-    wavePattern = new WavePattern(2, 5, 1, new Color [] {Color.kRed, Color.kBlue});
-    smoothWaveColorPattern = new SmoothWaveColorPattern(2, 5, 1, new Color [] {Color.kRed, Color.kBlue});
-    waveBlinkColorPattern = new WaveBlinkColorPattern(Color.kRed, Color.kBlue, 0);
-    evenOddColorPattern = new EvenOddColorPattern(Color.kRed, Color.kBlue, 0);
+
+    addressableLED = new AddressableLED(PortMap.LED.ledPort);
+    addressableLEDBuffer = new AddressableLEDBuffer(LedConstants.ledLength);
+    addressableLED.setLength(addressableLEDBuffer.getLength());
+    addressableLED.setData(addressableLEDBuffer);
+    addressableLED.start();
+    //ledController = new AddressableLEDController(PortMap.LED.ledPort, LedConstants.ledLength);
 
     board = new MAShuffleboard("LED");
   }
@@ -70,6 +76,14 @@ public class LED extends SubsystemBase {
   public void setSolidColor(Color color) {
     solidColorPattern.setColor(color);
     ledController.setAddressableLEDPattern(solidColorPattern);
+  }
+
+  public void setColor(Color color) {
+    for (var i = 0; i < addressableLEDBuffer.getLength(); i++) {
+      addressableLEDBuffer.setLED(i, color);
+    }
+
+    addressableLED.setData(addressableLEDBuffer);
   }
 
   public void setSmoothWave(int numColors, double period, double speed, Color[] colors) {
@@ -194,7 +208,13 @@ public class LED extends SubsystemBase {
     //   }
     // }
 
-    setSolidColor(LedConstants.MAcolor); 
+    if (Intake.getInstance().isGamePieceInIntake()) {
+      setColor(LedConstants.GREEN);
+    } else if (RobotContainer.IsFloor()){
+      setColor(LedConstants.BLUE);
+    } else {
+      setColor(LedConstants.MAcolor);
+    }
     board.addBoolean("activateAmp", activateAmp);
     board.addBoolean("activateCoOp", activateCoOp);
   }

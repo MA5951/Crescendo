@@ -31,7 +31,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.PortMap;
 import frc.robot.RobotContainer;
-import frc.robot.automations.AutoAutomations.ShootInMotion;
+import frc.robot.automations.ShootInMotion;
 
 public class SwerveDrivetrainSubsystem extends SubsystemBase {
 
@@ -338,6 +338,12 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
 
     board.addNum("dis from speaker", disFormSpeaker);
 
+    board.addNum("afl", frontLeftModule.getAbsoluteEncoderPosition());
+    board.addNum("afr", frontRightModule.getAbsoluteEncoderPosition());
+    board.addNum("arl", rearLeftModule.getAbsoluteEncoderPosition());
+    board.addNum("arr", rearRightModule.getAbsoluteEncoderPosition());
+
+
     disFromSpeakerX = new Translation2d(
       SwerveDrivetrainSubsystem.getInstance().getPose().getX(),
         0).getDistance(new Translation2d(
@@ -350,8 +356,8 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
       );
 
     if (RobotContainer.APRILTAGS_LIMELIGHT.hasTarget()
-      && RobotContainer.APRILTAGS_LIMELIGHT.getTagId() != -1) {
-     // && RobotContainer.APRILTAGS_LIMELIGHT.getA() > SwerveConstants.MAX_LIMELIGHT_DIS) {
+      && RobotContainer.APRILTAGS_LIMELIGHT.getTagId() != -1
+      && !DriverStation.isAutonomous()) {
       Pose2d estPose = RobotContainer.APRILTAGS_LIMELIGHT.getEstPose();
       if (estPose.getTranslation().getDistance(new Translation2d(xSpeaker, ySpeaker)) < 
         SwerveConstants.MAX_LIMELIGHT_DIS && swerve.getVelocity() < 3.8)
@@ -360,9 +366,10 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
 
     if (ShootInMotion.isRunning) {
       SwerveConstants.lowerSpeedFactor = SwerveConstants.LOWER_SPEED * 
-        SwerveConstants.SHOOTING_SPEED;
+        SwerveConstants.shootingSpeed;
     } else {
       SwerveConstants.lowerSpeedFactor = SwerveConstants.LOWER_SPEED;
     }
+    SwerveConstants.shootingSpeed = ShootInMotion.getVelocityFactor();
   }
 }

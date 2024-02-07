@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.automations.AutoAutomations;
+package frc.robot.automations;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -20,19 +20,19 @@ import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
 public class ShootInMotion extends Command {
   /** Creates a new ShootInMotion. */
   private AngleAdjust swerveCommand;
-  private SwerveDrivetrainSubsystem swerve;
+  private static SwerveDrivetrainSubsystem swerve;
 
-  private final double delay = 0.8;
-  private final double tair = 0.22;
+  private static final double delay = 0.8;
+  private static final double tair = 0.22;
 
-  private double intaionalPose = 0;
-  private double deltaY = 0;
+  private static double intaionalPose = 0;
+  private static double deltaY = 0;
 
   public static boolean isRunning = false;
 
   public ShootInMotion() {
     swerve = SwerveDrivetrainSubsystem.getInstance();
-    swerveCommand = new AngleAdjust(() -> 
+    swerveCommand = new AngleAdjust(() ->
       {return DriverStation.getAlliance().get() == Alliance.Blue ? Math.PI : 0;},
       RobotContainer.driverController::getLeftX, () -> 0d);
     addRequirements(swerve,
@@ -49,11 +49,11 @@ public class ShootInMotion extends Command {
 
   }
 
-  private void calculateDeltaY() {
+  private static void calculateDeltaY() {
     deltaY = SwerveConstants.SPEAKER_TARGET_Y - swerve.getPose().getY();
   }
 
-  private double getVelocityFactor() {
+  public static double getVelocityFactor() {
     calculateDeltaY();
     double v = (deltaY / (tair + delay));
     SwerveConstants.lowerSpeedFactor = Math.abs(v / SwerveConstants.MAX_VELOCITY);

@@ -14,7 +14,7 @@ public class LedConstants {
   public static final Color MAcolor = new Color(127, 0, 0);
   public static final Color Ring = new Color(244, 136, 7) ; //TODO
 
-  public static final int ledLength = 300;// TODO
+  public static final int ledLength = 81;// TODO
 
   public static final int activateTime = 2;// TODO
 }

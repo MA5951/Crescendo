@@ -26,9 +26,9 @@ public class ResetAll extends SequentialCommandGroup {
       .alongWith(
       new InstantCommand(() -> Intake.getInstance().setPower(0)).alongWith(
       new InstantCommand(
-        () -> UpperShooter.getInstance().setSetPoint(ShooterConstants.defaultV))
+        () -> UpperShooter.getInstance().setSetPoint(ShooterConstants.defaultVUp))
         .alongWith(new InstantCommand(
-        () -> LowerShooter.getInstance().setSetPoint(ShooterConstants.defaultV))))
+        () -> LowerShooter.getInstance().setSetPoint(ShooterConstants.defaultVDown))))
       ).alongWith(new InstantCommand(
         () -> LowerShooter.getInstance().chengeIDLmode(IdleMode.kBrake)))
         .alongWith(

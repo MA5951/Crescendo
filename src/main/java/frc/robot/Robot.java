@@ -5,19 +5,16 @@
 package frc.robot;
 
 import com.ma5951.utils.commands.DefaultRunInternallyControlledSubsystem;
-import com.pathplanner.lib.auto.AutoBuilder;
 
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.swerve.DriveSwerveCommand;
 import frc.robot.subsystems.LED.LED;
 import frc.robot.subsystems.elevator.Elevator;
-import frc.robot.subsystems.elevator.ElevatorConstants;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.LowerShooter;
 import frc.robot.subsystems.shooter.ShooterConstants;
@@ -29,8 +26,6 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
-  // private double time = -5;
-
   @Override
   public void robotInit() {
     m_robotContainer = new RobotContainer();
@@ -39,18 +34,18 @@ public class Robot extends TimedRobot {
     Intake.getInstance();
     Elevator.getInstance();
     LED.getInstance();
-    
-  CommandScheduler.getInstance().setDefaultCommand(
-    LowerShooter.getInstance(), new DefaultRunInternallyControlledSubsystem(
-      LowerShooter.getInstance(), ShooterConstants.defaultV));
 
   CommandScheduler.getInstance().setDefaultCommand(
     UpperShooter.getInstance(), new DefaultRunInternallyControlledSubsystem(
-      UpperShooter.getInstance(), ShooterConstants.defaultV));
+      UpperShooter.getInstance(), ShooterConstants.defaultVUp));
+    
+  CommandScheduler.getInstance().setDefaultCommand(
+    LowerShooter.getInstance(), new DefaultRunInternallyControlledSubsystem(
+      LowerShooter.getInstance(), ShooterConstants.defaultVDown));
 
-    CommandScheduler.getInstance().setDefaultCommand(
-      Elevator.getInstance(), new DefaultRunInternallyControlledSubsystem(
-        Elevator.getInstance(), ElevatorConstants.DEFAULT_POSE));
+  CameraServer.startAutomaticCapture();
+
+
   }
 
   @Override
@@ -62,6 +57,9 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putBoolean("isFloor",
       RobotContainer.intakepose == RobotContainer.IntakePose.FLOOR);
+    
+    SmartDashboard.putBoolean("shooting linked to speaker",
+      RobotContainer.ShootingLinkedToSpeaker);
   }
 
   @Override
@@ -96,6 +94,12 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
 
+    Elevator.getInstance().setSetPoint(Elevator.getInstance().getSetPoint());
+    
+    CommandScheduler.getInstance().setDefaultCommand(
+      Elevator.getInstance(), new DefaultRunInternallyControlledSubsystem(
+        Elevator.getInstance(), 0));
+
     CommandScheduler.getInstance().setDefaultCommand(
       SwerveDrivetrainSubsystem.getInstance(), 
       new DriveSwerveCommand(
@@ -107,27 +111,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    SmartDashboard.putBoolean("intake running", RobotContainer.isIntakeRunning);
-    // double timePassed = Timer.getFPGATimestamp() - time;
-    // start of endgame (20 seconds left)
-    
-
-    // if ((timePassed > 115 && timePassed < 115.2) || (timePassed > 115.4 && timePassed < 115.6) || (timePassed > 115.8 && timePassed < 116)) {
-    //   RobotContainer.operatorController.getHID().setRumble(RumbleType.kBothRumble, 1);
-    //   RobotContainer.driverController.getHID().setRumble(RumbleType.kBothRumble, 1);
-    // } else {
-    //   RobotContainer.operatorController.getHID().setRumble(RumbleType.kBothRumble, 0);
-    //   RobotContainer.driverController.getHID().setRumble(RumbleType.kBothRumble, 0);  
-    // }
-
-    // // last 3 seconds of match
-    // if ((timePassed > 132 && timePassed < 132.3) || (timePassed > 133 && timePassed < 133.3) || (timePassed > 134 && timePassed < 134.3)) {
-    //   RobotContainer.operatorController.getHID().setRumble(RumbleType.kLeftRumble, 1);
-    //   RobotContainer.driverController.getHID().setRumble(RumbleType.kLeftRumble, 1);
-    // } else {
-    //   RobotContainer.operatorController.getHID().setRumble(RumbleType.kLeftRumble, 0);
-    //   RobotContainer.driverController.getHID().setRumble(RumbleType.kLeftRumble, 0);  
-    // }
+    SmartDashboard.putBoolean("intake running", 
+      RobotContainer.isIntakeRunning);
   }
 
   @Override

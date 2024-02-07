@@ -15,29 +15,29 @@ public class SwerveConstants {
         public final static double VELOCITY_TIME_UNIT_IN_SECONDS = 1;
 
         public final static double DISTANCE_PER_PULSE = ((2 * WHEEL_RADIUS * Math.PI)
-                        / DRIVE_GEAR_RATIO) * 0.97765363;
+                        / DRIVE_GEAR_RATIO); //* 0.97765363;
         public final static double ANGLE_PER_PULSE = 360d / TURNING_GEAR_RATIO;
 
         // front left module
-        public final static double FRONT_LEFT_MODULE_OFFSET_ENCODER = 90;
+        public final static double FRONT_LEFT_MODULE_OFFSET_ENCODER = 90.2;
         public final static boolean FRONT_LEFT_MOUDLE_IS_DRIVE_MOTOR_REVERSED = true;
         public final static boolean FRONT_LEFT_MODULES_IS_TURNING_MOTOR_REVERSED = true;
         public final static boolean FRONT_LEFT_MODULE_IS_ABSOLUTE_ENCODER_REVERSED = false;
 
         // front right module
-        public final static double FRONT_RIGHT_MODULE_OFFSET_ENCODER = 335.4;
+        public final static double FRONT_RIGHT_MODULE_OFFSET_ENCODER = 313.6;
         public final static boolean FRONT_RIGHT_MOUDLE_IS_DRIVE_MOTOR_REVERSED = false;
         public final static boolean FRONT_RIGHT_MODULES_IS_TURNING_MOTOR_REVERSED = true;
         public final static boolean FRONT_RIGHT_MODULE_IS_ABSOLUTE_ENCODER_REVERSED = false;
 
         // rear left module
-        public final static double REAR_LEFT_MODULE_OFFSET_ENCODER = 102.21;
+        public final static double REAR_LEFT_MODULE_OFFSET_ENCODER = 103;
         public final static boolean REAR_LEFT_MOUDLE_IS_DRIVE_MOTOR_REVERSED = true;
         public final static boolean REAR_LEFT_MODULES_IS_TURNING_MOTOR_REVERSED = true;
         public final static boolean REAR_LEFT_MODULE_IS_ABSOLUTE_ENCODER_REVERSED = false;
 
         // rear right module
-        public final static double REAR_RIGHT_MODULE_OFFSET_ENCODER = 101.77;
+        public final static double REAR_RIGHT_MODULE_OFFSET_ENCODER = 102;
         public final static boolean REAR_RIGHT_MOUDLE_IS_DRIVE_MOTOR_REVERSED = false;
         public final static boolean REAR_RIGHT_MODULES_IS_TURNING_MOTOR_REVERSED = true;
         public final static boolean REAR_RIGHT_MODULE_IS_ABSOLUTE_ENCODER_REVERSED = false;
@@ -104,14 +104,13 @@ public class SwerveConstants {
         public final static double VISION_KD = 0; // TODO
         public final static double VISION_TOLORANCE = 0; // TODO
 
-        public final static double SHOOTING_SPEED = 0.12;
-
         public final static double LOWER_SPEED = 0.4;
 
         public final static double PODUIM_LINE_RED = 13.390;
         public final static double PODUIM_LINE_BLUE = 3.282;
 
-        public final static double MAX_LIMELIGHT_DIS = 2.5;
+        public final static double MAX_LIMELIGHT_DIS = 2;
         
         public static double lowerSpeedFactor = LOWER_SPEED;
+        public static double shootingSpeed = 0.12;
 }
