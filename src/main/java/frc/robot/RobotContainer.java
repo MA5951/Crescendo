@@ -47,6 +47,7 @@ import frc.robot.commands.elevator.ResetElevator;
 import frc.robot.commands.elevator.SetElevator;
 import frc.robot.commands.shooter.SetShooter;
 import frc.robot.commands.swerve.AngleAdjust;
+import frc.robot.commands.swerve.DriveSwerveCommand;
 import frc.robot.subsystems.LED.LED;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorConstants;
@@ -161,12 +162,16 @@ public class RobotContainer {
       new InstantCommand(() -> Elevator.getInstance().setSetPoint(Elevator.getInstance().getPosition()))
     );
 
+    // stop intake
+    new CreateButton(driverController.povRight(),
+      new InstantCommand(() -> isIntakeRunning = false));
+
     // shooting linked to the speaker 
     new CreateButton(driverController.L1(), 
-      new InstantCommand(() -> isIntakeRunning = false).andThen(new ScoreWithoutAdjust(
-      () -> ShooterConstants.SPEAKER_UPPER_V, 
-      () -> ShooterConstants.SPEAKER_LOWER_V,
-        ElevatorConstants.DEFAULT_POSE)));
+      new DriveSwerveCommand(
+        driverController::getLeftX, 
+        driverController::getLeftY,
+        driverController::getRightX, false));
     
     // amp
     new CreateButton(driverController.circle(), new AMPScore().alongWith(
@@ -182,7 +187,11 @@ public class RobotContainer {
         () -> {return driverController.getL2Axis() > 0.1
           && (SwerveDrivetrainSubsystem.getInstance().disFromSpeakerX
            < SwerveConstants.MAX_SHOOT_DISTANCE && !isIntakeRunning);}
-      ), new ShootInMotion());
+      ), new ConditionalCommand(new ScoreWithoutAdjust(
+        () -> ShooterConstants.SPEAKER_UPPER_V, 
+        () -> ShooterConstants.SPEAKER_LOWER_V,
+          ElevatorConstants.DEFAULT_POSE),
+          new ShootInMotion(), () -> ShootingLinkedToSpeaker));
 
     // floor or source intake
     driverController.R1().onTrue( 
