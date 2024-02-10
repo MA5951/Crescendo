@@ -4,9 +4,7 @@
 
 package frc.robot;
 
-import com.ma5951.utils.commands.DefaultRunInternallyControlledSubsystem;
 import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -16,13 +14,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.swerve.DriveSwerveCommand;
 import frc.robot.subsystems.elevator.Elevator;
-import frc.robot.subsystems.elevator.ElevatorConstants;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.LowerShooter;
-import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.shooter.UpperShooter;
 import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
-import com.revrobotics.CANSparkBase.IdleMode;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
@@ -63,7 +58,7 @@ public class Robot extends TimedRobot {
     // RobotContainer.APRILTAGS_LIMELIGHT.periodic();
   }
 
-  public static IdleMode getIsBreak() {
+  public static IdleMode getBreakeMode() {
     return isBreak ? IdleMode.kBrake : IdleMode.kCoast;
   }
 

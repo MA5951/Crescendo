@@ -146,9 +146,9 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
         pidController.setD(pidGainSupplier.getKD());
 
         if (!DriverStation.isEnabled()){
-            master.setIdleMode(Robot.getIsBreak());
-            slave1.setIdleMode(Robot.getIsBreak());
-            slave2.setIdleMode(Robot.getIsBreak());
+            master.setIdleMode(Robot.getBreakeMode());
+            slave1.setIdleMode(Robot.getBreakeMode());
+            slave2.setIdleMode(Robot.getBreakeMode());
         }
     }
 }
