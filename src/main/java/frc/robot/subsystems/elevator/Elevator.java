@@ -33,12 +33,11 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
 
     private final MAShuffleboard board;
 
-    private final pidControllerGainSupplier pControllerGainSupplier;
 
     private Elevator() {
       master = new TalonFX(PortMap.Elevator.masterID);
       slave = new TalonFX(PortMap.Elevator.slaveID);
-
+ 
       configMotors();
 
       PoseSetter = new PositionVoltage(0);
@@ -46,9 +45,7 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
       pose = master.getPosition();
 
       board = new MAShuffleboard("Elevator");
-      pControllerGainSupplier = board.getPidControllerGainSupplier("pose",
-        ElevatorConstants.KP, ElevatorConstants.KD, ElevatorConstants.KI
-      );
+
     }
 
     private void configMotors() {
@@ -58,7 +55,7 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
 
       configuration.ClosedLoopGeneral.ContinuousWrap = false;
 
-      configuration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+      configuration.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
       configuration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
@@ -67,6 +64,8 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
       configuration.Slot0.kD = ElevatorConstants.KD;
 
       master.getConfigurator().apply(configuration);
+
+      slave.getConfigurator().apply(configuration);
 
       slave.setControl(new Follower(PortMap.Elevator.masterID, true));
     }
@@ -99,13 +98,13 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
     
     public double getPosition() {
         pose.refresh();
-        return pose.getValue() * ElevatorConstants.ABS_POSITION_CONVERTION_FACTOR - poseOffset;
+        return (pose.getValue() * ElevatorConstants.POSITION_CONVERSION_FACTOR - poseOffset);
     }
 
     public void resetPose(double pose) {
       this.pose.refresh();
       poseOffset = 
-        this.pose.getValueAsDouble() * ElevatorConstants.ABS_POSITION_CONVERTION_FACTOR + pose;
+        this.pose.getValueAsDouble() * ElevatorConstants.POSITION_CONVERSION_FACTOR + pose;
     }
 
     @Override
@@ -130,19 +129,15 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
     public void periodic() {
         board.addBoolean("at point", atPoint());
 
+        board.addNum("setPoint", getSetPoint());
         board.addNum("pose", getPosition());
 
-        TalonFXConfiguration configuration = new TalonFXConfiguration();
+        board.addNum("current", getCurrent());
 
-        configuration.Slot0.kP = pControllerGainSupplier.getKP();
-        configuration.Slot0.kI = pControllerGainSupplier.getKI();
-        configuration.Slot0.kD = pControllerGainSupplier.getKD();
+        // if (RobotContainer.driverController.L2().getAsBoolean()) {
+        //     setPoint = ElevatorConstants.SHOOTING_POSE;
+        // }
 
-        master.getConfigurator().apply(configuration);
-        
 
-        if (RobotContainer.driverController.L2().getAsBoolean()) {
-            setPoint = ElevatorConstants.SHOOTING_POSE;
-        }
     }
 }

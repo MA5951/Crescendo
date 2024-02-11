@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.swerve.DriveSwerveCommand;
 import frc.robot.subsystems.LED.LED;
 import frc.robot.subsystems.elevator.Elevator;
+import frc.robot.subsystems.elevator.ElevatorConstants;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.LowerShooter;
 import frc.robot.subsystems.shooter.ShooterConstants;
@@ -44,7 +45,7 @@ public class Robot extends TimedRobot {
     LowerShooter.getInstance(), new DefaultRunInternallyControlledSubsystem(
       LowerShooter.getInstance(), ShooterConstants.defaultVDown));
 
-  CameraServer.startAutomaticCapture();
+  // CameraServer.startAutomaticCapture();
 
   }
 
@@ -73,7 +74,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    SwerveDrivetrainSubsystem.getInstance().resetEncoders();
+    // SwerveDrivetrainSubsystem.getInstance().resetEncoders();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     
     if (m_autonomousCommand != null) {
@@ -96,13 +97,13 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
 
-    Elevator.getInstance().setSetPoint(Elevator.getInstance().getSetPoint());
+    //Elevator.getInstance().setSetPoint(Elevator.getInstance().getSetPoint());
 
     SwerveDrivetrainSubsystem.getInstance().resetEncoders();
     
     CommandScheduler.getInstance().setDefaultCommand(
       Elevator.getInstance(), new DefaultRunInternallyControlledSubsystem(
-        Elevator.getInstance(), 0));
+        Elevator.getInstance(), ElevatorConstants.MIN_POSE));
 
     CommandScheduler.getInstance().setDefaultCommand(
       SwerveDrivetrainSubsystem.getInstance(), 
