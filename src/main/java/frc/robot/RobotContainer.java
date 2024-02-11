@@ -129,33 +129,33 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    // driverController.R2().whileTrue(new InstantCommand(
-    //   () -> SwerveDrivetrainSubsystem.getInstance().FactorVelocityTo(
-    //     0.4)
-    // )).whileFalse(
-    //   new InstantCommand(
-    //   () -> SwerveDrivetrainSubsystem.getInstance().FactorVelocityTo(
-    //     1)
-    // ));
+    driverController.R2().whileTrue(new InstantCommand(
+      () -> SwerveDrivetrainSubsystem.getInstance().FactorVelocityTo(
+        0.4)
+    )).whileFalse(
+      new InstantCommand(
+      () -> SwerveDrivetrainSubsystem.getInstance().FactorVelocityTo(
+        1)
+    ));
 
-    // driverController.triangle().whileTrue(
-    //   new InstantCommand(SwerveDrivetrainSubsystem.getInstance()::updateOffset)
-    // );
+    driverController.triangle().whileTrue(
+      new InstantCommand(SwerveDrivetrainSubsystem.getInstance()::updateOffset)
+    );
 
-    // driverController.button(9).whileTrue(
-    //   new AngleAdjust(
-    //     () -> Math.toRadians(90),
-    //     RobotContainer.driverController::getLeftX,
-    //     RobotContainer.driverController::getLeftY)
-    // );
+    driverController.button(9).whileTrue(
+      new AngleAdjust(
+        () -> Math.toRadians(90),
+        RobotContainer.driverController::getLeftX,
+        RobotContainer.driverController::getLeftY)
+    );
 
-    // driverController.touchpad().whileTrue(
-    //   new DriveSwerveCommand(
-    //     () -> -RobotContainer.driverController.getLeftX(),
-    //     () -> -RobotContainer.driverController.getLeftY(),
-    //     RobotContainer.driverController::getRightX,
-    //     false)
-    // );
+    driverController.touchpad().whileTrue(
+      new DriveSwerveCommand(
+        () -> -RobotContainer.driverController.getLeftX(),
+        () -> -RobotContainer.driverController.getLeftY(),
+        RobotContainer.driverController::getRightX,
+        false)
+    );
 
     // // // ---------------------------------------------------------------
 
@@ -200,20 +200,20 @@ public class RobotContainer {
     //   ),new ShootInMotion());
 
     //auto align
-    // new CreateButton(
-    //   new Trigger(
-    //     () -> driverController.L2().getAsBoolean()
-    //     && !SwerveDrivetrainSubsystem.getInstance().canShoot()),
-    //     new AngleAdjust(Shoot::getAngle, RobotContainer.driverController::getLeftX,
-    //     RobotContainer.driverController::getLeftY)
-    //   );
+    new CreateButton(
+      new Trigger(
+        () -> driverController.L2().getAsBoolean()
+        && !SwerveDrivetrainSubsystem.getInstance().canShoot()),
+        new AngleAdjust(Shoot::getAngle, RobotContainer.driverController::getLeftX,
+        RobotContainer.driverController::getLeftY).repeatedly()
+      );
 
-    // new CreateButton(
-    //   new Trigger(
-    //     () -> driverController.L2().getAsBoolean() &&
-    //     SwerveDrivetrainSubsystem.getInstance().canShoot()
-    //   ), new RunShoot()
-    // );
+    new CreateButton(
+      new Trigger(
+        () -> driverController.L2().getAsBoolean() &&
+        SwerveDrivetrainSubsystem.getInstance().canShoot()
+      ), new RunShoot()
+    );
 
     // floor or source intake
     driverController.R1().onTrue( 
@@ -225,50 +225,50 @@ public class RobotContainer {
       .alongWith(new InstantCommand(() -> isIntakeRunning = false)))
     );
 
-    // // eject
-    // new CreateButton(driverController.cross(), new MotorCommand(
-    //   Intake.getInstance(), -IntakeConstants.INTAKE_POWER, 0).alongWith(
-    //     new InstantCommand(() -> isIntakeRunning = false).alongWith(
-    //       new SetElevator(ElevatorConstants.SHOOTING_POSE)
-    //     )));
+    // eject
+    new CreateButton(driverController.cross(), new MotorCommand(
+      Intake.getInstance(), -IntakeConstants.INTAKE_POWER, 0).alongWith(
+        new InstantCommand(() -> isIntakeRunning = false).alongWith(
+          new SetElevator(ElevatorConstants.SHOOTING_POSE)
+        )));
 
-    // // climb
-    // new CreateButton(operatorController.triangle(), 
-    //   new SetElevator(ElevatorConstants.CLIMB_POSE),
-    //   ElevatorConstants.CLIMB_POSE);
+    // climb
+    new CreateButton(operatorController.triangle(), 
+      new SetElevator(ElevatorConstants.CLIMB_POSE),
+      ElevatorConstants.CLIMB_POSE);
   
-    // new CreateButton(operatorController.cross(), 
-    //   new SetElevator(ElevatorConstants.CLOSE_CLIMB_POSE),
-    //   ElevatorConstants.CLOSE_CLIMB_POSE);
+    new CreateButton(operatorController.cross(), 
+      new SetElevator(ElevatorConstants.CLOSE_CLIMB_POSE),
+      ElevatorConstants.CLOSE_CLIMB_POSE);
 
-    // // elevator change + amp or shoot chooser
-    // new CreateButton(operatorController.L1(), 
-    //   new SetElevator(ElevatorConstants.AMP_POSE).alongWith(
-    //     new InstantCommand(() -> isAmp = true)
-    //   ),
-    //   ElevatorConstants.AMP_POSE);
+    // elevator change + amp or shoot chooser
+    new CreateButton(operatorController.L1(), 
+      new SetElevator(ElevatorConstants.AMP_POSE).alongWith(
+        new InstantCommand(() -> isAmp = true)
+      ),
+      ElevatorConstants.AMP_POSE);
 
-    // new CreateButton(operatorController.povDown(), 
-    //   new SetElevator(ElevatorConstants.DEFAULT_POSE),
-    //   ElevatorConstants.DEFAULT_POSE);
+    new CreateButton(operatorController.povDown(), 
+      new SetElevator(ElevatorConstants.DEFAULT_POSE),
+      ElevatorConstants.DEFAULT_POSE);
 
     // // choosing btween floor intake and source
-    // operatorController.povLeft().whileTrue(
-    //   new InstantCommand(() -> intakepose = IntakePose.FLOOR)
-    // );
+    operatorController.povLeft().whileTrue(
+      new InstantCommand(() -> intakepose = IntakePose.FLOOR)
+    );
 
-    // operatorController.povRight().whileTrue(
-    //   new InstantCommand(() -> intakepose = IntakePose.SOURCE)
-    // );
+    operatorController.povRight().whileTrue(
+      new InstantCommand(() -> intakepose = IntakePose.SOURCE)
+    );
 
-    // // choosing btween linked shoot or normal one
-    // operatorController.R2().whileTrue(
-    //   new InstantCommand(() -> ShootingLinkedToSpeaker = true)
-    // );
+    // choosing btween linked shoot or normal one
+    operatorController.R2().whileTrue(
+      new InstantCommand(() -> ShootingLinkedToSpeaker = true)
+    );
 
-    // operatorController.L2().whileTrue(
-    //   new InstantCommand(() -> ShootingLinkedToSpeaker = false)
-    // );
+    operatorController.L2().whileTrue(
+      new InstantCommand(() -> ShootingLinkedToSpeaker = false)
+    );
 
     // // //--------------------LEDS-----------------------
 
