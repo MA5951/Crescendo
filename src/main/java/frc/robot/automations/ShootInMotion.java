@@ -4,11 +4,15 @@
 
 package frc.robot.automations;
 
+import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
 import frc.robot.commands.swerve.AngleAdjust;
+import frc.robot.subsystems.elevator.Elevator;
+import frc.robot.subsystems.elevator.ElevatorConstants;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeConstants;
 import frc.robot.subsystems.shooter.LowerShooter;
@@ -22,10 +26,8 @@ public class ShootInMotion extends Command {
   private AngleAdjust swerveCommand;
   private static SwerveDrivetrainSubsystem swerve;
 
-  private static final double delay = 0.8;
-  private static final double tair = 0.22;
+  private static final double delay = 0.31;
 
-  private static double intaionalPose = 0;
   private static double deltaY = 0;
 
   public static boolean isRunning = false;
@@ -39,8 +41,9 @@ public class ShootInMotion extends Command {
       Intake.getInstance());
   }
 
-    public void setShooter() {
-    double[] shootingValue = ShooterConstants.sample(swerve.disFromSpeakerX);
+  private void setShooter() {
+    double[] shootingValue = ShooterConstants.sample(swerve.disFromSpeakerX + delay * 
+      swerve.getRobotRelativeSpeeds().vxMetersPerSecond);
     LowerShooter.getInstance().setSetPoint(
       shootingValue[1] * ShooterConstants.V_FACTOR);
 
@@ -49,20 +52,23 @@ public class ShootInMotion extends Command {
 
   }
 
+  private static double getTair() {
+    return 0.2225 * swerve.disFromSpeakerX - 0.0544;
+  }
+
   private static void calculateDeltaY() {
-    deltaY = SwerveConstants.SPEAKER_TARGET_Y - swerve.getPose().getY();
+    deltaY = -(swerve.getRobotRelativeSpeeds().vyMetersPerSecond * (getTair() + delay));
   }
 
   public static double getVelocityFactor() {
-    calculateDeltaY();
-    double v = (deltaY / (tair + delay));
-    SwerveConstants.lowerSpeedFactor = Math.abs(v / SwerveConstants.MAX_VELOCITY);
-    return Math.abs(v / SwerveConstants.MAX_VELOCITY);
+    double deltaY1 = SwerveConstants.SPEAKER_TARGET_Y - swerve.getPose().getY();
+    double v = (deltaY1 / (getTair() + delay));
+    return Math.min(Math.abs(v / SwerveConstants.MAX_VELOCITY), 1) * 0.6;
   }
 
   public boolean canShoot() {
     calculateDeltaY();
-    return Math.abs(swerve.getPose().getY() - (intaionalPose + deltaY)) <
+    return Math.abs(swerve.getPose().getY() + deltaY - SwerveConstants.SPEAKER_TARGET_Y) <
       SwerveConstants.SHOOTING_IN_MOTION_TOLORANCE;
   }
 
@@ -70,19 +76,20 @@ public class ShootInMotion extends Command {
   @Override
   public void initialize() {
     swerveCommand.initialize();
-    intaionalPose = swerve.getPose().getY();
     setShooter();
     swerve.FactorVelocityTo(getVelocityFactor());
     isRunning = true;
+    Elevator.getInstance().setSetPoint(ElevatorConstants.SHOOTING_POSE);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    setShooter();
     swerveCommand.execute();
-
+    System.out.println(deltaY);
     if (canShoot() && UpperShooter.getInstance().atPoint()
-        && LowerShooter.getInstance().atPoint()) {
+        && LowerShooter.getInstance().atPoint() && Elevator.getInstance().atPoint()) {
       Intake.getInstance().setPower(IntakeConstants.INTAKE_POWER);
     }
   }
@@ -92,6 +99,7 @@ public class ShootInMotion extends Command {
   public void end(boolean interrupted) {
     swerveCommand.end(interrupted);
     Intake.getInstance().setPower(0);
+    swerve.FactorVelocityTo(1);
     isRunning = false;
   }
 

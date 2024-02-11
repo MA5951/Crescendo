@@ -9,13 +9,15 @@ public class ElevatorConstants {
     public static final double MIN_POSE = 0.01;
     public static final double MAX_POSE = 0.47;
 
-    public static final double DEFAULT_POSE = 0.24;
+    public static final double DEFAULT_POSE = 0.17;
+
+    public static final double SHOOTING_POSE = 0.24;
 
     public static final double AMP_POSE = MAX_POSE;
-    public static final double SHOOTING_POSE_PODUIM = DEFAULT_POSE;
     public static final double INTAKE_POSE = MIN_POSE;
     public static final double EJECT_POSE = MAX_POSE;
     public static final double SOURCE_POSE = MAX_POSE;
+    public static final double CENTER_POSE = INTAKE_POSE + 0.05;
 
     public static final double CLIMB_POSE = 0.35;
     public static final double CLOSE_CLIMB_POSE = 0.02;

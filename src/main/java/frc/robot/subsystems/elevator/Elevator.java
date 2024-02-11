@@ -1,81 +1,85 @@
 package frc.robot.subsystems.elevator;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkBase.ControlType;
-import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ma5951.utils.MAShuffleboard;
+import com.ma5951.utils.MAShuffleboard.pidControllerGainSupplier;
 import com.ma5951.utils.subsystem.DefaultInternallyControlledSubsystem;
 
 import frc.robot.PortMap;
+import frc.robot.RobotContainer;
 
 public class Elevator extends SubsystemBase implements DefaultInternallyControlledSubsystem{
 
     private static Elevator elevator;
 
-    private final CANSparkMax master;
-    private final CANSparkMax slave1;
-    private final CANSparkMax slave2;
-    private final CANSparkMax slave3;
-    private final RelativeEncoder encoder;
+    private final TalonFX master;
+    private final TalonFX slave;
 
-    private final SparkPIDController pidController;
+    private final PositionVoltage PoseSetter;
+
+    private final StatusSignal<Double> pose;
+    private double poseOffset = 0;
+
     private double setPoint = 0;
 
     private final MAShuffleboard board;
 
+    private final pidControllerGainSupplier pControllerGainSupplier;
+
     private Elevator() {
-      master = new CANSparkMax(PortMap.Elevator.masterID, MotorType.kBrushless);
-      slave1 = new CANSparkMax(PortMap.Elevator.slave1ID, MotorType.kBrushless);
-      slave2 = new CANSparkMax(PortMap.Elevator.slave2ID, MotorType.kBrushless);
-      slave3 = new CANSparkMax(PortMap.Elevator.slave3ID, MotorType.kBrushless);
+      master = new TalonFX(PortMap.Elevator.masterID);
+      slave = new TalonFX(PortMap.Elevator.slaveID);
 
-      master.restoreFactoryDefaults();
-      slave1.restoreFactoryDefaults();
-      slave2.restoreFactoryDefaults();
-      slave3.restoreFactoryDefaults();
+      configMotors();
 
-      master.setInverted(false);
-      slave1.setInverted(true);
-      slave2.setInverted(true);
-      slave3.setInverted(false);
+      PoseSetter = new PositionVoltage(0);
 
-      slave1.follow(master, true);
-      slave2.follow(master, true);
-      slave3.follow(master, false);
-
-      master.setIdleMode(IdleMode.kBrake);
-      slave1.setIdleMode(IdleMode.kBrake);
-      slave2.setIdleMode(IdleMode.kBrake);
-      slave3.setIdleMode(IdleMode.kBrake);
-
-      encoder = master.getEncoder();
-
-      encoder.setPositionConversionFactor(ElevatorConstants.POSITION_CONVERSION_FACTOR);
-
-      resetPose(0);
-
-      pidController = master.getPIDController();
-      pidController.setFeedbackDevice(encoder);
-      pidController.setP(ElevatorConstants.KP);
-      pidController.setI(ElevatorConstants.KI);
-      pidController.setD(ElevatorConstants.KD);
+      pose = master.getPosition();
 
       board = new MAShuffleboard("Elevator");
+      pControllerGainSupplier = board.getPidControllerGainSupplier("pose",
+        ElevatorConstants.KP, ElevatorConstants.KD, ElevatorConstants.KI
+      );
+    }
+
+    private void configMotors() {
+      TalonFXConfiguration configuration = new TalonFXConfiguration();
+
+      configuration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
+
+      configuration.ClosedLoopGeneral.ContinuousWrap = false;
+
+      configuration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+
+      configuration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+
+      configuration.Slot0.kP = ElevatorConstants.KP;
+      configuration.Slot0.kI = ElevatorConstants.KI;
+      configuration.Slot0.kD = ElevatorConstants.KD;
+
+      master.getConfigurator().apply(configuration);
+
+      slave.setControl(new Follower(PortMap.Elevator.masterID, true));
     }
 
     public double getCurrent() {
-        return master.getOutputCurrent();
+        return master.getStatorCurrent().refresh().getValueAsDouble();
     }
 
     @Override
     public void calculate(double setPoint) {
-        pidController.setReference(setPoint, ControlType.kPosition);
+        master.setControl(PoseSetter.withPosition(
+          (setPoint + poseOffset) / ElevatorConstants.POSITION_CONVERSION_FACTOR)
+          .withSlot(0));
     }
 
     @Override
@@ -94,11 +98,14 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
     }
     
     public double getPosition() {
-        return encoder.getPosition();
+        pose.refresh();
+        return pose.getValue() * ElevatorConstants.ABS_POSITION_CONVERTION_FACTOR - poseOffset;
     }
 
     public void resetPose(double pose) {
-        encoder.setPosition(pose);
+      this.pose.refresh();
+      poseOffset = 
+        this.pose.getValueAsDouble() * ElevatorConstants.ABS_POSITION_CONVERTION_FACTOR + pose;
     }
 
     @Override
@@ -122,5 +129,20 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
     @Override
     public void periodic() {
         board.addBoolean("at point", atPoint());
+
+        board.addNum("pose", getPosition());
+
+        TalonFXConfiguration configuration = new TalonFXConfiguration();
+
+        configuration.Slot0.kP = pControllerGainSupplier.getKP();
+        configuration.Slot0.kI = pControllerGainSupplier.getKI();
+        configuration.Slot0.kD = pControllerGainSupplier.getKD();
+
+        master.getConfigurator().apply(configuration);
+        
+
+        if (RobotContainer.driverController.L2().getAsBoolean()) {
+            setPoint = ElevatorConstants.SHOOTING_POSE;
+        }
     }
 }

@@ -53,6 +53,10 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
 
     motor.setInverted(false);
 
+    motor.setSmartCurrentLimit(40);
+
+    motor.enableVoltageCompensation(12);
+
     encoder = motor.getEncoder();
     encoder.setVelocityConversionFactor(ShooterConstants.CONVERTION_FACTOR_UPPER);
     encoder.setPositionConversionFactor(ShooterConstants.CONVERTION_FACTOR_UPPER);
@@ -130,7 +134,7 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
 
   public double getVelocityForShooting() {
     return ShooterConstants.sample(
-      SwerveDrivetrainSubsystem.getInstance().disFormSpeaker)[0];
+      SwerveDrivetrainSubsystem.getInstance().disFormSpeaker)[0] * ShooterConstants.V_FACTOR;
   }
 
   public static UpperShooter getInstance() {
@@ -156,16 +160,16 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
       -1 : 1;
 
     if (Intake.getInstance().isGamePieceInIntake() && !RobotContainer.isAmp
-      && SwerveDrivetrainSubsystem.getInstance().getPose().getX() * factor
-       < poduimLine * factor) {
+      && (SwerveDrivetrainSubsystem.getInstance().getPose().getX() * factor
+       < poduimLine * factor || RobotContainer.driverController.L2().getAsBoolean())) {
         if (RobotContainer.ShootingLinkedToSpeaker) {
           ShooterConstants.defaultVUp = ShooterConstants.SPEAKER_UPPER_V;
           ShooterConstants.defaultVDown = ShooterConstants.SPEAKER_LOWER_V;
         } else {
-          ShooterConstants.defaultVUp = ShooterConstants.shootingPoses
-            [ShooterConstants.shootingPoses.length][1];
-          ShooterConstants.defaultVDown =ShooterConstants.shootingPoses
-            [ShooterConstants.shootingPoses.length][2];
+          ShooterConstants.defaultVUp = ShooterConstants.
+          sample(SwerveDrivetrainSubsystem.getInstance().disFormSpeaker)[0] * ShooterConstants.V_FACTOR;
+          ShooterConstants.defaultVDown = ShooterConstants.
+          sample(SwerveDrivetrainSubsystem.getInstance().disFormSpeaker)[1] * ShooterConstants.V_FACTOR;
         }
     } else {
       ShooterConstants.defaultVUp = 0;

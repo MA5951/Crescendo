@@ -6,6 +6,8 @@ package frc.robot.subsystems.swerve;
 
 import java.util.function.BooleanSupplier;
 
+import javax.swing.GroupLayout.Alignment;
+
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ma5951.utils.MAShuffleboard;
@@ -24,6 +26,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -31,7 +34,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.PortMap;
 import frc.robot.RobotContainer;
-import frc.robot.automations.ShootInMotion;
 
 public class SwerveDrivetrainSubsystem extends SubsystemBase {
 
@@ -51,6 +53,8 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
 
   public double disFormSpeaker = 0;
   public double disFromSpeakerX = 0;
+
+  public double timeFromAuto = 0;
 
   public final MAShuffleboard board;
 
@@ -312,6 +316,7 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
 
     lastVelocity = frontLeftModule.getDriveVelocity();
 
+
     field.setRobotPose(getPose());
 
     board.addNum("yaw", getFusedHeading());
@@ -338,6 +343,8 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
 
     board.addNum("dis from speaker", disFormSpeaker);
 
+    board.addNum("dis x", disFromSpeakerX);
+
     board.addNum("afl", frontLeftModule.getAbsoluteEncoderPosition());
     board.addNum("afr", frontRightModule.getAbsoluteEncoderPosition());
     board.addNum("arl", rearLeftModule.getAbsoluteEncoderPosition());
@@ -355,21 +362,20 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
         getPose().getTranslation()
       );
 
+
+    int[] apirlTagId = {DriverStation.getAlliance().get() == Alliance.Blue ?
+      7 : 3, DriverStation.getAlliance().get() == Alliance.Blue ? 8 : 4};
+
     if (RobotContainer.APRILTAGS_LIMELIGHT.hasTarget()
-      && RobotContainer.APRILTAGS_LIMELIGHT.getTagId() != -1
-      && !DriverStation.isAutonomous()) {
+      && (RobotContainer.APRILTAGS_LIMELIGHT.getTagId() == apirlTagId[0]
+      || RobotContainer.APRILTAGS_LIMELIGHT.getTagId() == apirlTagId[1]) 
+      && (SwerveDrivetrainSubsystem.getInstance().getVelocity() < 1)) {
       Pose2d estPose = RobotContainer.APRILTAGS_LIMELIGHT.getEstPose();
       if (estPose.getTranslation().getDistance(new Translation2d(xSpeaker, ySpeaker)) < 
-        SwerveConstants.MAX_LIMELIGHT_DIS && swerve.getVelocity() < 3.8)
+        SwerveConstants.MAX_LIMELIGHT_DIS && swerve.getVelocity() < 3)
         resetOdometry(estPose);
     }
 
-    if (ShootInMotion.isRunning) {
-      SwerveConstants.lowerSpeedFactor = SwerveConstants.LOWER_SPEED * 
-        SwerveConstants.shootingSpeed;
-    } else {
-      SwerveConstants.lowerSpeedFactor = SwerveConstants.LOWER_SPEED;
-    }
-    SwerveConstants.shootingSpeed = ShootInMotion.getVelocityFactor();
+
   }
 }

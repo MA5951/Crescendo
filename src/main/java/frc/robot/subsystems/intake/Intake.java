@@ -36,6 +36,8 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
     master.setSmartCurrentLimit(20);
     slave.setSmartCurrentLimit(20);
 
+    master.enableVoltageCompensation(12);
+    slave.enableVoltageCompensation(12);
 
     upSensor = new DigitalInput(PortMap.Intake.sensor1ID);
     downSensor = new DigitalInput(PortMap.Intake.sensor2ID);

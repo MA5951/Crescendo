@@ -18,7 +18,7 @@ public class IntakeAndRingCenter extends SequentialCommandGroup {
 
     addCommands(
       new IntakeCommand(power),
-      new SetElevator(ElevatorConstants.DEFAULT_POSE),
+      new SetElevator(ElevatorConstants.CENTER_POSE ),
       new CenterRing()
     );
   }

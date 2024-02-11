@@ -8,6 +8,7 @@ import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.elevator.SetElevator;
 import frc.robot.commands.shooter.SetShooter;
 
@@ -21,6 +22,7 @@ public class GettingReadyToScore extends SequentialCommandGroup {
     addCommands(
       new ParallelCommandGroup(
         new SetElevator(elevatorPose.get()),
+        new WaitCommand(0.2),
         new SetShooter(upperVel, lowerVel)
       )
     );

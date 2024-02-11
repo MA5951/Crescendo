@@ -21,6 +21,7 @@ import com.ma5951.utils.led.SmoothColorTransitionPattern;
 import com.ma5951.utils.led.SmoothWaveColorPattern;
 import com.ma5951.utils.led.WavePattern;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -30,6 +31,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.PortMap;
 import frc.robot.RobotContainer;
+import frc.robot.PortMap.Swerve;
 
 public class LED extends SubsystemBase {
   /** Creates a new LEDSubsystem. */
@@ -207,8 +209,9 @@ public class LED extends SubsystemBase {
     //     }
     //   }
     // }
-
-    if (Intake.getInstance().isGamePieceInIntake()) {
+    if (SwerveDrivetrainSubsystem.getInstance().canShoot()) {
+      setColor(LedConstants.Ring);
+    } else if (Intake.getInstance().isGamePieceInIntake()) {
       setColor(LedConstants.GREEN);
     } else if (RobotContainer.IsFloor()){
       setColor(LedConstants.BLUE);

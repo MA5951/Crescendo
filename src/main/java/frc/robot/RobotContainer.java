@@ -101,6 +101,8 @@ public class RobotContainer {
       new ResetElevator()
     );
 
+    NamedCommands.registerCommand("Center Ring", new CenterRing());
+
     NamedCommands.registerCommand("Feed To Shooter", new FeedToShooter());
     
     NamedCommands.registerCommand("Set Shooter Speed", new 
@@ -129,21 +131,30 @@ public class RobotContainer {
   private void configureBindings() {
     driverController.R2().whileTrue(new InstantCommand(
       () -> SwerveDrivetrainSubsystem.getInstance().FactorVelocityTo(
-        SwerveConstants.lowerSpeedFactor)
+        0.4)
     )).whileFalse(
       new InstantCommand(
       () -> SwerveDrivetrainSubsystem.getInstance().FactorVelocityTo(
-        SwerveConstants.lowerSpeedFactor / SwerveConstants.LOWER_SPEED)
+        1)
     ));
 
     driverController.triangle().whileTrue(
       new InstantCommand(SwerveDrivetrainSubsystem.getInstance()::updateOffset)
     );
 
+    driverController.button(9).whileTrue(
+      new AngleAdjust(
+        () -> Math.toRadians(90),
+        RobotContainer.driverController::getLeftX,
+        RobotContainer.driverController::getLeftY)
+    );
+
     driverController.touchpad().whileTrue(
-      new AngleAdjust(() -> Math.toRadians(270),
-      RobotContainer.driverController::getLeftX,
-      RobotContainer.driverController::getLeftY)
+      new DriveSwerveCommand(
+        () -> -RobotContainer.driverController.getLeftX(),
+        () -> -RobotContainer.driverController.getLeftY(),
+        RobotContainer.driverController::getRightX,
+        false)
     );
 
     // // ---------------------------------------------------------------
@@ -162,16 +173,14 @@ public class RobotContainer {
       new InstantCommand(() -> Elevator.getInstance().setSetPoint(Elevator.getInstance().getPosition()))
     );
 
-    // stop intake
-    new CreateButton(driverController.povRight(),
-      new InstantCommand(() -> isIntakeRunning = false));
-
     // shooting linked to the speaker 
     new CreateButton(driverController.L1(), 
-      new DriveSwerveCommand(
-        driverController::getLeftX, 
-        driverController::getLeftY,
-        driverController::getRightX, false));
+    new ScoreWithoutAdjust(
+        () -> ShooterConstants.SPEAKER_UPPER_V, 
+        () -> ShooterConstants.SPEAKER_LOWER_V,
+          ElevatorConstants.SHOOTING_POSE)
+          .alongWith(new InstantCommand(() -> isIntakeRunning = false))
+    );
     
     // amp
     new CreateButton(driverController.circle(), new AMPScore().alongWith(
@@ -181,17 +190,29 @@ public class RobotContainer {
     // shooting normal
     new CreateButton(driverController.square(), new RunShoot());
 
-    // shooting in motion
+    // // shooting in motion
+    // new CreateButton(
+    //   new Trigger(
+    //     () -> {return driverController.getL2Axis() > 0.1
+    //       && (SwerveDrivetrainSubsystem.getInstance().disFromSpeakerX
+    //        < SwerveConstants.MAX_SHOOT_DISTANCE && !isIntakeRunning);}
+    //   ),new ShootInMotion());
+
+    // auto align
     new CreateButton(
       new Trigger(
-        () -> {return driverController.getL2Axis() > 0.1
-          && (SwerveDrivetrainSubsystem.getInstance().disFromSpeakerX
-           < SwerveConstants.MAX_SHOOT_DISTANCE && !isIntakeRunning);}
-      ), new ConditionalCommand(new ScoreWithoutAdjust(
-        () -> ShooterConstants.SPEAKER_UPPER_V, 
-        () -> ShooterConstants.SPEAKER_LOWER_V,
-          ElevatorConstants.DEFAULT_POSE),
-          new ShootInMotion(), () -> ShootingLinkedToSpeaker));
+        () -> driverController.L2().getAsBoolean()
+        && !SwerveDrivetrainSubsystem.getInstance().canShoot()),
+        new AngleAdjust(Shoot::getAngle, RobotContainer.driverController::getLeftX,
+        RobotContainer.driverController::getLeftY)
+      );
+
+    new CreateButton(
+      new Trigger(
+        () -> driverController.L2().getAsBoolean() &&
+        SwerveDrivetrainSubsystem.getInstance().canShoot()
+      ), new RunShoot()
+    );
 
     // floor or source intake
     driverController.R1().onTrue( 
@@ -205,7 +226,10 @@ public class RobotContainer {
 
     // eject
     new CreateButton(driverController.cross(), new MotorCommand(
-      Intake.getInstance(), -IntakeConstants.INTAKE_POWER, 0));
+      Intake.getInstance(), -IntakeConstants.INTAKE_POWER, 0).alongWith(
+        new InstantCommand(() -> isIntakeRunning = false).alongWith(
+          new SetElevator(ElevatorConstants.SHOOTING_POSE)
+        )));
 
     // climb
     new CreateButton(operatorController.triangle(), 
@@ -217,11 +241,11 @@ public class RobotContainer {
       ElevatorConstants.CLOSE_CLIMB_POSE);
 
     // elevator change + amp or shoot chooser
-    new CreateButton(operatorController.povUp(), 
-      new SetElevator(ElevatorConstants.MAX_POSE).alongWith(
+    new CreateButton(operatorController.L1(), 
+      new SetElevator(ElevatorConstants.AMP_POSE).alongWith(
         new InstantCommand(() -> isAmp = true)
       ),
-      ElevatorConstants.MAX_POSE);
+      ElevatorConstants.AMP_POSE);
 
     new CreateButton(operatorController.povDown(), 
       new SetElevator(ElevatorConstants.DEFAULT_POSE),
@@ -264,6 +288,6 @@ public class RobotContainer {
     // return AutoBuilder.buildAuto("Two pice Stage");
     // return AutoBuilder.buildAuto("Two pice Amp");
     // return AutoBuilder.buildAuto("Theree pice Amp");
-    return null;
+    return AutoBuilder.buildAuto("Theree pice Stage");
   }
 }

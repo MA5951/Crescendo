@@ -43,6 +43,10 @@ public class LowerShooter extends SubsystemBase implements DefaultInternallyCont
 
     motor.setInverted(true);
 
+    motor.setSmartCurrentLimit(40);
+
+    motor.enableVoltageCompensation(12);
+
     encoder = motor.getEncoder();
     encoder.setVelocityConversionFactor(ShooterConstants.CONVERTION_FACTOR_LOWER);
     encoder.setPositionConversionFactor(ShooterConstants.CONVERTION_FACTOR_LOWER);
@@ -113,7 +117,7 @@ public class LowerShooter extends SubsystemBase implements DefaultInternallyCont
 
   public double getVelocityForShooting() {
     return ShooterConstants.sample(
-      SwerveDrivetrainSubsystem.getInstance().disFormSpeaker)[1];
+      SwerveDrivetrainSubsystem.getInstance().disFormSpeaker)[1] * ShooterConstants.V_FACTOR;
   }
 
   public static LowerShooter getInstance() {

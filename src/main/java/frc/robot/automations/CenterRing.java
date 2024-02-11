@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import frc.robot.commands.shooter.SetShooter;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.LowerShooter;
 import frc.robot.subsystems.shooter.UpperShooter;
@@ -28,7 +29,8 @@ public class CenterRing extends SequentialCommandGroup {
             new WaitCommand(0.1)
           ),
           new InstantCommand(() -> Intake.getInstance().setPower(-0.8)),
-          new MotorCommand(LowerShooter.getInstance(), 0.1, 0)
+          new MotorCommand(LowerShooter.getInstance(), 0.1, 0),
+          new MotorCommand(UpperShooter.getInstance(), 0, 0)
         ),
         new ParallelDeadlineGroup(
           new AdjustRing(),
