@@ -59,7 +59,6 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
 
     encoder = motor.getEncoder();
     encoder.setVelocityConversionFactor(ShooterConstants.CONVERTION_FACTOR_UPPER);
-    encoder.setPositionConversionFactor(ShooterConstants.CONVERTION_FACTOR_UPPER);
 
     pidController = motor.getPIDController();
     pidController.setFeedbackDevice(encoder);

@@ -39,13 +39,11 @@ public class Robot extends TimedRobot {
 
   CommandScheduler.getInstance().setDefaultCommand(
     UpperShooter.getInstance(), new DefaultRunInternallyControlledSubsystem(
-      UpperShooter.getInstance(), ShooterConstants.defaultVUp));
+      UpperShooter.getInstance(), 0));
     
   CommandScheduler.getInstance().setDefaultCommand(
     LowerShooter.getInstance(), new DefaultRunInternallyControlledSubsystem(
-      LowerShooter.getInstance(), ShooterConstants.defaultVDown));
-
-  // CameraServer.startAutomaticCapture();
+      LowerShooter.getInstance(), 0));
 
   }
 
@@ -61,6 +59,8 @@ public class Robot extends TimedRobot {
     
     SmartDashboard.putBoolean("shooting linked to speaker",
       RobotContainer.ShootingLinkedToSpeaker);
+
+    // CameraServer.startAutomaticCapture();
   }
 
   @Override
@@ -74,15 +74,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    // SwerveDrivetrainSubsystem.getInstance().resetEncoders();
+    SwerveDrivetrainSubsystem.getInstance().resetEncoders();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
-
-    SwerveDrivetrainSubsystem.getInstance().timeFromAuto = Timer.getFPGATimestamp();
-
   }
 
   @Override
@@ -97,13 +94,13 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
 
-    //Elevator.getInstance().setSetPoint(Elevator.getInstance().getSetPoint());
+    Elevator.getInstance().setSetPoint(Elevator.getInstance().getPosition());
 
     SwerveDrivetrainSubsystem.getInstance().resetEncoders();
     
     CommandScheduler.getInstance().setDefaultCommand(
       Elevator.getInstance(), new DefaultRunInternallyControlledSubsystem(
-        Elevator.getInstance(), ElevatorConstants.MIN_POSE));
+        Elevator.getInstance(), 0));
 
     CommandScheduler.getInstance().setDefaultCommand(
       SwerveDrivetrainSubsystem.getInstance(), 

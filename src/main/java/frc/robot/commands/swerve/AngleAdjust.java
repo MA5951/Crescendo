@@ -12,11 +12,17 @@ import frc.robot.subsystems.swerve.SwerveConstants;
 import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
 
 public class AngleAdjust extends Command {
+  private static PIDController pid;
+
   private SwerveDrivetrainSubsystem swerve;
-  private PIDController pid;
   private Supplier<Double> angle;
   private Supplier<Double> xSupplier;
   private Supplier<Double> ySupplier;
+  public static boolean align = false;
+
+  public static boolean atPoint() {
+    return pid.atSetpoint();
+  }
 
   public AngleAdjust(Supplier<Double> angle,
     Supplier<Double> xSupplier, Supplier<Double> ySupplier) {
@@ -73,6 +79,6 @@ public class AngleAdjust extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return pid.atSetpoint();
+    return pid.atSetpoint() && !align;
   }
 }

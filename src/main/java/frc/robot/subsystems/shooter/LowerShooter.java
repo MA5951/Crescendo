@@ -135,6 +135,6 @@ public class LowerShooter extends SubsystemBase implements DefaultInternallyCont
 
     board.addNum("set", setPoint);
 
-    board.addNum("current", setPoint);
+    board.addNum("current", motor.getOutputCurrent());
   }
 }

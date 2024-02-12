@@ -27,7 +27,7 @@ public class ShooterConstants {
     public static final double AMP_V_LOWER = 0.35;
     public static final double INTAKE_SOURCE_V = -0.4;
 
-    public static final double V_FACTOR = 1.01;
+    public static final double V_FACTOR = 1;
 
     public static double defaultVUp = 0;
     public static double defaultVDown = 0;
@@ -35,14 +35,14 @@ public class ShooterConstants {
     // dis, up, down
     public static final double[][] shootingPoses = {
         {1.4, SPEAKER_UPPER_V * 0.8, SPEAKER_LOWER_V * 0.8},
-        {1.64, 1880, 1970},
-        {1.78, 1780, 1810},
-        {1.83, 1780, 1810},
-        {1.9, 1780, 1810},
+        {1.64, 1900, 1980},
+        {1.78, 1760, 1790},
+        {1.83, 1750, 1780},
+        {1.9, 1750, 1880},
         {1.95, 1800, 1810},
-        {1.983, 1800, 1810},
-        {1.986, 1720, 1750},
-        {2.04, 1720, 1750},
+        {1.983, 1740, 1760},
+        {1.986, 1720, 1720},
+        {2.04, 1720, 1720},
     };
 
     // up, down

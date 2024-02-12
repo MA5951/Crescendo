@@ -27,7 +27,8 @@ public class AdjustRing extends SequentialCommandGroup {
               !UpperShooter.getInstance().isGamePiceInShooter();
           }),
           new MotorCommand(Intake.getInstance(), 0.8, 0)
-        ).andThen(new IntakeCommand(IntakeConstants.INTAKE_POWER))
+        ),
+        new IntakeCommand(IntakeConstants.INTAKE_POWER)
     );
   }
 }

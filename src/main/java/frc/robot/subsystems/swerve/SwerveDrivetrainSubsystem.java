@@ -4,9 +4,8 @@
 
 package frc.robot.subsystems.swerve;
 
+import java.util.ArrayList;
 import java.util.function.BooleanSupplier;
-
-import javax.swing.GroupLayout.Alignment;
 
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.Pigeon2;
@@ -17,6 +16,8 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -25,13 +26,18 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.PortMap;
 import frc.robot.RobotContainer;
 
@@ -54,11 +60,7 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
   public double disFormSpeaker = 0;
   public double disFromSpeakerX = 0;
 
-  public double timeFromAuto = 0;
-
-  public final MAShuffleboard board;
-
-  private boolean canShoot;
+  private final MAShuffleboard board;
 
   private final Translation2d frontLeftLocation = new Translation2d(
       SwerveConstants.WIDTH / 2,
@@ -299,7 +301,34 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
   }
 
   public boolean canShoot() {
-    return canShoot;
+    return disFormSpeaker < SwerveConstants.MAX_SHOOT_DISTANCE;
+  }
+
+  public Command goToAmp() {
+    TrajectoryConfig config = 
+      new TrajectoryConfig(3.5, 1.5);
+    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(getPose(), 
+      new ArrayList<Translation2d>(), new Pose2d(
+        new Translation2d(
+          DriverStation.getAlliance().get() == Alliance.Red ? SwerveConstants.AMP_X_RED 
+          : SwerveConstants.AMP_X_BLUE, SwerveConstants.AMP_Y),
+        Rotation2d.fromDegrees(90)), config);
+    return new SwerveControllerCommand(
+        trajectory, 
+        this::getPose,
+        getKinematics(),
+        new PIDController(
+          SwerveConstants.KP_TRANSLATION,
+          0, 0),
+        new PIDController(
+          SwerveConstants.KP_TRANSLATION,
+          0, 0),
+        new ProfiledPIDController(
+          SwerveConstants.THATA_KP, 0, 0, 
+          new Constraints(3 * SwerveConstants.RADIUS, 3 * SwerveConstants.RADIUS)),
+          this::setModules,
+          this
+    ).andThen(new InstantCommand(this::stop));
   }
 
   public static SwerveDrivetrainSubsystem getInstance() {
@@ -329,53 +358,54 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
 
     board.addNum("flV", frontLeftModule.getDriveVelocity());
 
-    board.addBoolean("can shoot", canShoot);
+    board.addBoolean("can shoot", canShoot());
 
     double ySpeaker = SwerveConstants.SPEAKER_TARGET_Y;
     double xSpeaker =  DriverStation.getAlliance().get() == Alliance.Blue ? 
       SwerveConstants.SPEAKER_TARGET_X_BLUE : SwerveConstants.SPEAKER_TAGET_X_RED;
 
-    canShoot = getPose().getTranslation()
-      .getDistance(new Translation2d(xSpeaker, ySpeaker)) < 
-        SwerveConstants.MAX_SHOOT_DISTANCE;
-
-    board.addBoolean("can shoot", canShoot);
+    board.addBoolean("can shoot", canShoot());
 
     board.addNum("dis from speaker", disFormSpeaker);
 
     board.addNum("dis x", disFromSpeakerX);
 
-    board.addNum("afl", frontLeftModule.getAbsoluteEncoderPosition());
-    board.addNum("afr", frontRightModule.getAbsoluteEncoderPosition());
-    board.addNum("arl", rearLeftModule.getAbsoluteEncoderPosition());
-    board.addNum("arr", rearRightModule.getAbsoluteEncoderPosition());
-
-
     disFromSpeakerX = new Translation2d(
       SwerveDrivetrainSubsystem.getInstance().getPose().getX(),
-        0).getDistance(new Translation2d(
-        DriverStation.getAlliance().get() == Alliance.Blue ?
-        SwerveConstants.SPEAKER_TARGET_X_BLUE : 
-        SwerveConstants.SPEAKER_TAGET_X_RED, 0));
+        0).getDistance(new Translation2d(xSpeaker, 0));
 
-      disFormSpeaker = new Translation2d(xSpeaker, ySpeaker).getDistance(
+    disFormSpeaker = new Translation2d(xSpeaker, ySpeaker).getDistance(
         getPose().getTranslation()
-      );
+    );
+
+    board.addNum("distnace from target april tag", RobotContainer.APRILTAGS_LIMELIGHT.distance());
 
 
-    int[] apirlTagId = {DriverStation.getAlliance().get() == Alliance.Blue ?
-      7 : 3, DriverStation.getAlliance().get() == Alliance.Blue ? 8 : 4};
+    // int[] apirlTagIdSpeaker = {DriverStation.getAlliance().get() == Alliance.Blue ?
+    //   7 : 3, DriverStation.getAlliance().get() == Alliance.Blue ? 8 : 4};
 
-    if (RobotContainer.APRILTAGS_LIMELIGHT.hasTarget()
-      && (RobotContainer.APRILTAGS_LIMELIGHT.getTagId() == apirlTagId[0]
-      || RobotContainer.APRILTAGS_LIMELIGHT.getTagId() == apirlTagId[1]) 
-      && (SwerveDrivetrainSubsystem.getInstance().getVelocity() < 1)) {
-      Pose2d estPose = RobotContainer.APRILTAGS_LIMELIGHT.getEstPose();
-      if (estPose.getTranslation().getDistance(new Translation2d(xSpeaker, ySpeaker)) < 
-        SwerveConstants.MAX_LIMELIGHT_DIS && swerve.getVelocity() < 3)
+    // int ampAprilTag = DriverStation.getAlliance().get() == Alliance.Red ? 5 : 6;
+
+    // double apirlTagId = RobotContainer.APRILTAGS_LIMELIGHT.getTagId();
+
+    // if (RobotContainer.APRILTAGS_LIMELIGHT.hasTarget()
+    //   && (((apirlTagId == apirlTagIdSpeaker[0]
+    //   || apirlTagId == apirlTagIdSpeaker[1]) && !RobotContainer.isAmp) ||
+    //     (apirlTagId == ampAprilTag && RobotContainer.isAmp))
+    //   && !DriverStation.isAutonomous()) {
+    //   Pose2d estPose = RobotContainer.APRILTAGS_LIMELIGHT.getEstPose();
+    //   if (estPose.getTranslation().getDistance(new Translation2d(xSpeaker, ySpeaker)) < 
+    //     SwerveConstants.MAX_LIMELIGHT_DIS || RobotContainer.isAmp)
+    //     resetOdometry(estPose);
+    // }
+
+    if (RobotContainer.APRILTAGS_LIMELIGHT.hasTarget() && 
+      RobotContainer.APRILTAGS_LIMELIGHT.getTagId() != -1
+      && RobotContainer.APRILTAGS_LIMELIGHT.distance() < SwerveConstants.MAX_LIMELIGHT_DIS 
+      && Math.abs(RobotContainer.APRILTAGS_LIMELIGHT.getX()) < 20 &&
+      !DriverStation.isAutonomous()) {
+        Pose2d estPose = RobotContainer.APRILTAGS_LIMELIGHT.getEstPose();
         resetOdometry(estPose);
-    }
-
-
+      }
   }
 }

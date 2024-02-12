@@ -11,7 +11,6 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ma5951.utils.MAShuffleboard;
-import com.ma5951.utils.MAShuffleboard.pidControllerGainSupplier;
 import com.ma5951.utils.subsystem.DefaultInternallyControlledSubsystem;
 
 import frc.robot.PortMap;
@@ -58,6 +57,9 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
       configuration.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
       configuration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+
+      configuration.CurrentLimits.StatorCurrentLimitEnable = true;
+      configuration.CurrentLimits.StatorCurrentLimit = 25;
 
       configuration.Slot0.kP = ElevatorConstants.KP;
       configuration.Slot0.kI = ElevatorConstants.KI;
@@ -132,12 +134,8 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
         board.addNum("setPoint", getSetPoint());
         board.addNum("pose", getPosition());
 
-        board.addNum("current", getCurrent());
-
-        // if (RobotContainer.driverController.L2().getAsBoolean()) {
-        //     setPoint = ElevatorConstants.SHOOTING_POSE;
-        // }
-
-
+        if (RobotContainer.driverController.L2().getAsBoolean()) {
+            setPoint = ElevatorConstants.SHOOTING_POSE;
+        }
     }
 }

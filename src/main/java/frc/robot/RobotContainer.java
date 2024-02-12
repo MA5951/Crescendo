@@ -12,6 +12,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PS4Controller;
@@ -22,6 +23,10 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.swerve.SwerveConstants;
@@ -30,6 +35,7 @@ import frc.robot.automations.AMPScore;
 import frc.robot.automations.AdjustRing;
 import frc.robot.automations.CenterRing;
 import frc.robot.automations.GettingReadyToScore;
+import frc.robot.automations.GoToAmp;
 import frc.robot.automations.IntakeAndRingCenter;
 import frc.robot.automations.IntakeAutomation;
 import frc.robot.automations.ResetAll;
@@ -73,7 +79,7 @@ public class RobotContainer {
     operatorController = new CommandPS5Controller(PortMap.Controllers.operatorID);
 
   public static final Limelight APRILTAGS_LIMELIGHT = new Limelight(
-    "limelight-one", new Transform3d());
+    "limelight-one", 0.25, 33.8);
 
   public static boolean isIntakeRunning = false;
 
@@ -142,11 +148,10 @@ public class RobotContainer {
       new InstantCommand(SwerveDrivetrainSubsystem.getInstance()::updateOffset)
     );
 
-    driverController.button(9).whileTrue(
-      new AngleAdjust(
-        () -> Math.toRadians(90),
-        RobotContainer.driverController::getLeftX,
-        RobotContainer.driverController::getLeftY)
+    new CreateButton(driverController.circle(),
+     new GoToAmp().andThen(new AMPScore().alongWith(
+        new InstantCommand(() -> isAmp = false)
+      ))
     );
 
     driverController.touchpad().whileTrue(
@@ -161,17 +166,15 @@ public class RobotContainer {
 
     new CreateButton(driverController.povLeft(), new ResetElevator());
 
-    // driverController.povUp().whileTrue(new MotorCommand(
-    //   Elevator.getInstance(), 0.3, 0
-    // ))//.whileFalse(
-    //   //new InstantCommand(() -> Elevator.getInstance().setSetPoint(Elevator.getInstance().getPosition()))
-    // ;
+    driverController.povUp().whileTrue(new MotorCommand(
+      Elevator.getInstance(), 0.3, 0
+    )).whileFalse(
+      new InstantCommand(() -> Elevator.getInstance().setSetPoint(Elevator.getInstance().getPosition())));
     
-    // driverController.povDown().whileTrue(new MotorCommand(
-    //   Elevator.getInstance(), -0.3, 0
-    // ))//.whileFalse(
-    //   //new InstantCommand(() -> Elevator.getInstance().setSetPoint(Elevator.getInstance().getPosition()))
-    // ;
+    driverController.povDown().whileTrue(new MotorCommand(
+      Elevator.getInstance(), -0.3, 0
+    )).whileFalse(
+      new InstantCommand(() -> Elevator.getInstance().setSetPoint(Elevator.getInstance().getPosition())));
 
     // shooting linked to the speaker 
     new CreateButton(driverController.L1(), 
@@ -183,7 +186,7 @@ public class RobotContainer {
     );
     
     // amp
-    new CreateButton(driverController.circle(), new AMPScore().alongWith(
+    new CreateButton(driverController.button(9), new AMPScore().alongWith(
         new InstantCommand(() -> isAmp = false)
       ));
 
@@ -191,29 +194,39 @@ public class RobotContainer {
     // shooting normal
     new CreateButton(driverController.square(), new RunShoot());
 
-    // shooting in motion
+    // // shooting in motion
     // new CreateButton(
     //   new Trigger(
     //     () -> {return driverController.getL2Axis() > 0.1
     //       && (SwerveDrivetrainSubsystem.getInstance().disFromSpeakerX
     //        < SwerveConstants.MAX_SHOOT_DISTANCE && !isIntakeRunning);}
-    //   ),new ShootInMotion());
+    //   ), new ShootInMotion());
 
     //auto align
     new CreateButton(
-      new Trigger(
-        () -> driverController.L2().getAsBoolean()
-        && !SwerveDrivetrainSubsystem.getInstance().canShoot()),
-        new AngleAdjust(Shoot::getAngle, RobotContainer.driverController::getLeftX,
-        RobotContainer.driverController::getLeftY).repeatedly()
-      );
-
-    new CreateButton(
-      new Trigger(
-        () -> driverController.L2().getAsBoolean() &&
-        SwerveDrivetrainSubsystem.getInstance().canShoot()
-      ), new RunShoot()
+      driverController.L2(),
+          new InstantCommand(
+            () -> AngleAdjust.align = true
+          ).andThen(
+          new ParallelDeadlineGroup(
+            new WaitUntilCommand(
+              () -> {
+                return SwerveDrivetrainSubsystem.getInstance().disFormSpeaker < 
+                SwerveConstants.MAX_SHOOT_DISTANCE * 0.95;
+              }
+            ), 
+            new AngleAdjust(Shoot::getAngle, RobotContainer.driverController::getLeftX,
+            RobotContainer.driverController::getLeftY)
+          ) .andThen(
+          new WaitCommand(0.1).andThen(new RunShoot().repeatedly())))
     );
+
+    // new CreateButton(
+    //   new Trigger(
+    //     () -> driverController.L2().getAsBoolean() &&
+    //     SwerveDrivetrainSubsystem.getInstance().canShoot()
+    //   ), new RunShoot()
+    // );
 
     // floor or source intake
     driverController.R1().onTrue( 
