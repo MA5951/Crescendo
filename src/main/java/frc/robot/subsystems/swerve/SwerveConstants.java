@@ -15,7 +15,7 @@ public class SwerveConstants {
         public final static double VELOCITY_TIME_UNIT_IN_SECONDS = 1;
 
         public final static double DISTANCE_PER_PULSE = ((2 * WHEEL_RADIUS * Math.PI)
-                        / DRIVE_GEAR_RATIO); //* 0.96989967;
+                        / DRIVE_GEAR_RATIO) * 0.96989967;
         public final static double ANGLE_PER_PULSE = 360d / TURNING_GEAR_RATIO;
 
         // front left module
@@ -90,7 +90,7 @@ public class SwerveConstants {
         public final static double SPEAKER_TAGET_X_RED = 16.54;
         public final static double SPEAKER_TARGET_Y = 5.55;
 
-        public final static double ANGLE_PID_TOLORANCE = Math.toRadians(10);
+        public final static double ANGLE_PID_TOLORANCE = Math.toRadians(5);
 
         public final static double MAX_SHOOT_DISTANCE = 2;
 
@@ -103,14 +103,14 @@ public class SwerveConstants {
 
         public final static double LOWER_SPEED = 0.4;
 
-        public final static double PODUIM_LINE_RED = 13.390;
-        public final static double PODUIM_LINE_BLUE = 3.282;
+        public final static double SPEED_LINE_RED = 10.737;
+        public final static double SPEED_LINE_BLUE = 5.88;
 
-        public final static double MAX_LIMELIGHT_DIS = 1.3;
+        public final static double MAX_LIMELIGHT_DIS = 2.7;
 
         public final static double AMP_X_BLUE = 1.95;
-        public final static double AMP_X_RED = 14.64;
-        public final static double AMP_Y = 7.85;
+        public final static double AMP_X_RED = 14.65;
+        public final static double AMP_Y = 7.8;
         
         public static double lowerSpeedFactor = LOWER_SPEED;
         // public static double shootingSpeed = 0.12;

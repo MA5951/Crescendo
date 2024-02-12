@@ -207,18 +207,24 @@ public class RobotContainer {
       driverController.L2(),
           new InstantCommand(
             () -> AngleAdjust.align = true
-          ).andThen(
+          ).alongWith(
+            new InstantCommand(() -> SwerveDrivetrainSubsystem.getInstance().FactorVelocityTo(0.5))
+          ).alongWith(new InstantCommand(
+            () -> SwerveDrivetrainSubsystem.getInstance().update = false
+          )).
+          andThen(
           new ParallelDeadlineGroup(
             new WaitUntilCommand(
               () -> {
                 return SwerveDrivetrainSubsystem.getInstance().disFormSpeaker < 
-                SwerveConstants.MAX_SHOOT_DISTANCE * 0.95;
+                SwerveConstants.MAX_SHOOT_DISTANCE * 0.95
+                && SwerveDrivetrainSubsystem.getInstance().update;
               }
             ), 
             new AngleAdjust(Shoot::getAngle, RobotContainer.driverController::getLeftX,
             RobotContainer.driverController::getLeftY)
           ) .andThen(
-          new WaitCommand(0.1).andThen(new RunShoot().repeatedly())))
+          (new RunShoot().repeatedly())))
     );
 
     // new CreateButton(

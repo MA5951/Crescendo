@@ -38,8 +38,6 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
 
   private final DigitalInput sensor;
 
-  private double lastTimeAtSetPoint;
-
   private double setPoint = ShooterConstants.defaultVUp;
 
   public boolean changeToDefaultV = false;
@@ -158,7 +156,7 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
     board.addBoolean("sensor", isGamePiceInShooter());
 
     double poduimLine = DriverStation.getAlliance().get() == Alliance.Red ?
-      SwerveConstants.PODUIM_LINE_RED : SwerveConstants.PODUIM_LINE_BLUE;
+      SwerveConstants.SPEED_LINE_RED : SwerveConstants.SPEED_LINE_BLUE;
     double factor = DriverStation.getAlliance().get() == Alliance.Red ?
       -1 : 1;
 

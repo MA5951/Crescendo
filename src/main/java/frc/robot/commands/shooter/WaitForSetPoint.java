@@ -6,11 +6,9 @@ package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.elevator.ElevatorConstants;
 import frc.robot.subsystems.shooter.LowerShooter;
 import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.shooter.UpperShooter;
-import frc.robot.subsystems.swerve.SwerveConstants;
 
 public class WaitForSetPoint extends Command {
   /** Creates a new WaitForSetPoint. */

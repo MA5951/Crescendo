@@ -7,9 +7,9 @@ public class ElevatorConstants {
     public static final double TOLERANCE = 0.01;
 
     public static final double MIN_POSE = 0.01;
-    public static final double MAX_POSE = 0.45;
+    public static final double MAX_POSE = 0.46;
 
-    public static final double DEFAULT_POSE = 0.17;
+    public static final double DEFAULT_POSE = 0.15;
 
     public static final double SHOOTING_POSE = 0.24;
 
@@ -23,8 +23,6 @@ public class ElevatorConstants {
     public static final double CLOSE_CLIMB_POSE = 0.02;
 
     public static final double WHEEL_RADIUS = 1.61671;
-
-
 
     public static final double GEAR = 10.9;
 

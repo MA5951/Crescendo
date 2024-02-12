@@ -16,6 +16,7 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -59,6 +60,8 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
 
   public double disFormSpeaker = 0;
   public double disFromSpeakerX = 0;
+
+  public boolean update = false;
 
   private final MAShuffleboard board;
 
@@ -125,8 +128,18 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
       PortMap.CanBus.CANivoreBus);
 
   private final SwerveDrivePoseEstimator odometry = new SwerveDrivePoseEstimator(kinematics,
-      new Rotation2d(0), getSwerveModulePositions(),
-      new Pose2d(0, 0, new Rotation2d(0)));
+      getRotation2d(), getSwerveModulePositions(),
+      new Pose2d(0, 0, new Rotation2d(0)),
+      /**
+       * Standard deviations of model states. Increase these numbers to trust your model's state estimates less. This
+       * matrix is in the form [x, y, theta]ᵀ, with units in meters and radians, then meters.
+      */
+      VecBuilder.fill(0.1, 0.1, 0.1),
+      /**
+       * Standard deviations of the vision measurements. Increase these numbers to trust global measurements from vision
+       * less. This matrix is in the form [x, y, theta]ᵀ, with units in meters and radians.
+      */
+      VecBuilder.fill(0.5, 0.5, 0.5));
 
   private final Field2d field = new Field2d();
 
@@ -374,39 +387,17 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
       SwerveDrivetrainSubsystem.getInstance().getPose().getX(),
         0).getDistance(new Translation2d(xSpeaker, 0));
 
-    disFormSpeaker = new Translation2d(xSpeaker, ySpeaker).getDistance(
-        getPose().getTranslation()
+    disFormSpeaker = Math.abs(new Translation2d(xSpeaker, ySpeaker).getDistance(
+        getPose().getTranslation())
     );
-
-    board.addNum("distnace from target april tag", RobotContainer.APRILTAGS_LIMELIGHT.distance());
-
-    
-
-    // int[] apirlTagIdSpeaker = {DriverStation.getAlliance().get() == Alliance.Blue ?
-    //   7 : 3, DriverStation.getAlliance().get() == Alliance.Blue ? 8 : 4};
-
-    // int ampAprilTag = DriverStation.getAlliance().get() == Alliance.Red ? 5 : 6;
-
-    // double apirlTagId = RobotContainer.APRILTAGS_LIMELIGHT.getTagId();
-
-    // if (RobotContainer.APRILTAGS_LIMELIGHT.hasTarget()
-    //   && (((apirlTagId == apirlTagIdSpeaker[0]
-    //   || apirlTagId == apirlTagIdSpeaker[1]) && !RobotContainer.isAmp) ||
-    //     (apirlTagId == ampAprilTag && RobotContainer.isAmp))
-    //   && !DriverStation.isAutonomous()) {
-    //   Pose2d estPose = RobotContainer.APRILTAGS_LIMELIGHT.getEstPose();
-    //   if (estPose.getTranslation().getDistance(new Translation2d(xSpeaker, ySpeaker)) < 
-    //     SwerveConstants.MAX_LIMELIGHT_DIS || RobotContainer.isAmp)
-    //     resetOdometry(estPose);
-    // }
 
     if (RobotContainer.APRILTAGS_LIMELIGHT.hasTarget() && 
       RobotContainer.APRILTAGS_LIMELIGHT.getTagId() != -1
       && RobotContainer.APRILTAGS_LIMELIGHT.distance() < SwerveConstants.MAX_LIMELIGHT_DIS 
-      && Math.abs(RobotContainer.APRILTAGS_LIMELIGHT.getX()) < 20 &&
-      !DriverStation.isAutonomous()) {
+      && Math.abs(RobotContainer.APRILTAGS_LIMELIGHT.getX()) < 1) {
         Pose2d estPose = RobotContainer.APRILTAGS_LIMELIGHT.getEstPose();
-        resetOdometry(estPose);
+          odometry.addVisionMeasurement(estPose, RobotContainer.APRILTAGS_LIMELIGHT.getTimeStamp());
+          update = true;
       }
   }
 }

@@ -13,6 +13,7 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.Timer;
 
 public class Limelight {
   private double cammeraHight = 0;
@@ -51,7 +52,7 @@ public class Limelight {
   private final NetworkTableEntry botPose;
 
   private Pose2d estPose;
-  private double updateTime;
+  private double latency;
 
 
   // private String PIAddress;
@@ -170,8 +171,8 @@ public class Limelight {
     return estPose;
   }
 
-  public double getPoseUpdate() {
-    return updateTime / 1000;
+  public double getTimeStamp() {
+    return Timer.getFPGATimestamp() - (latency / 1000);
   }
 
   public int getTagId() {
@@ -199,7 +200,7 @@ public class Limelight {
     botposeEntry = botPose;
 
     double[] data = botposeEntry.getDoubleArray(new double[7]);
-    updateTime = data[6];
+    latency = data[6];
     Pose3d pose = new Pose3d(
       data[0],
       data[1],

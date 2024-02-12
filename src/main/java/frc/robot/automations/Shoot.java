@@ -53,7 +53,8 @@ public class Shoot extends SequentialCommandGroup {
           LowerShooter.getInstance()::getVelocityForShooting,
           elevatorPose)
       ),
-      new ScoreAutomation()
+      new ScoreAutomation(UpperShooter.getInstance()::getVelocityForShooting,
+          LowerShooter.getInstance()::getVelocityForShooting)
     );
   }
 }
