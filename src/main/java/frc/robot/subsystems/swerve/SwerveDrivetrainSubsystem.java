@@ -394,7 +394,7 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
     if (RobotContainer.APRILTAGS_LIMELIGHT.hasTarget() && 
       RobotContainer.APRILTAGS_LIMELIGHT.getTagId() != -1
       && RobotContainer.APRILTAGS_LIMELIGHT.distance() < SwerveConstants.MAX_LIMELIGHT_DIS 
-      && Math.abs(RobotContainer.APRILTAGS_LIMELIGHT.getX()) < 1) {
+      && Math.abs(RobotContainer.APRILTAGS_LIMELIGHT.getX()) < 20) {
         Pose2d estPose = RobotContainer.APRILTAGS_LIMELIGHT.getEstPose();
           odometry.addVisionMeasurement(estPose, RobotContainer.APRILTAGS_LIMELIGHT.getTimeStamp());
           update = true;
