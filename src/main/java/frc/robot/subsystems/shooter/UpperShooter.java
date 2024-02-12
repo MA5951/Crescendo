@@ -38,6 +38,8 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
 
   private final DigitalInput sensor;
 
+  private double lastTimeAtSetPoint;
+
   private double setPoint = ShooterConstants.defaultVUp;
 
   public boolean changeToDefaultV = false;
@@ -135,6 +137,8 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
     return ShooterConstants.sample(
       SwerveDrivetrainSubsystem.getInstance().disFormSpeaker)[0] * ShooterConstants.V_FACTOR;
   }
+
+
 
   public static UpperShooter getInstance() {
     if (instance == null) {

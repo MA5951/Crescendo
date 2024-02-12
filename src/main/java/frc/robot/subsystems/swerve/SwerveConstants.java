@@ -92,7 +92,7 @@ public class SwerveConstants {
 
         public final static double ANGLE_PID_TOLORANCE = Math.toRadians(10);
 
-        public final static double MAX_SHOOT_DISTANCE = 2.1;
+        public final static double MAX_SHOOT_DISTANCE = 2;
 
         public final static double SHOOTING_IN_MOTION_TOLORANCE = 0.3;
 

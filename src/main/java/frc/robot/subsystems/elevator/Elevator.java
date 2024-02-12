@@ -90,6 +90,11 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
 
     @Override
     public void setSetPoint(double setPoint) {
+        if (setPoint < ElevatorConstants.MIN_POSE) {
+            this.setPoint = ElevatorConstants.MIN_POSE;
+        } else if (setPoint > ElevatorConstants.MAX_POSE) {
+            this.setPoint = ElevatorConstants.MAX_POSE;
+        }
         this.setPoint = setPoint;
     }
 

@@ -22,7 +22,6 @@ public class GettingReadyToScore extends SequentialCommandGroup {
     addCommands(
       new ParallelCommandGroup(
         new SetElevator(elevatorPose.get()),
-        new WaitCommand(0.2),
         new SetShooter(upperVel, lowerVel)
       )
     );

@@ -5,12 +5,13 @@ public class ShooterConstants {
     public static final double CONVERTION_FACTOR_UPPER = 1.36;
     public static final double CONVERTION_FACTOR_LOWER = 1.33;
     public static final double TOLORANCE = 100;
+    public static final double TIME_AT_SETPOINT = 0.15;
 
-    public static final double KP_UP = 0.0005;
+    public static final double KP_UP = 0.00035;
     public static final double KI_UP = 0;
-    public static final double KD_UP = 0;
+    public static final double KD_UP = 0.0000003;
 
-    public static final double KP_LOW = 0.0005;
+    public static final double KP_LOW = 0.00055;
     public static final double KI_LOW = 0;
     public static final double KD_LOW = 0;
     
@@ -27,7 +28,7 @@ public class ShooterConstants {
     public static final double AMP_V_LOWER = 0.35;
     public static final double INTAKE_SOURCE_V = -0.4;
 
-    public static final double V_FACTOR = 1;
+    public static final double V_FACTOR = 1.03;
 
     public static double defaultVUp = 0;
     public static double defaultVDown = 0;
@@ -39,10 +40,11 @@ public class ShooterConstants {
         {1.78, 1760, 1790},
         {1.83, 1750, 1780},
         {1.9, 1750, 1880},
-        {1.95, 1800, 1810},
-        {1.983, 1740, 1760},
-        {1.986, 1720, 1720},
-        {2.04, 1720, 1720},
+        {1.95, 1800, 1810}// ,
+        // {1.983, 1740, 1760},
+        // {1.986, 1720, 1720},
+        // {2.04, 1960, 1450},
+        // {2.27, 1960, 1450}
     };
 
     // up, down

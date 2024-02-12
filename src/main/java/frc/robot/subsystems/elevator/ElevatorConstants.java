@@ -24,10 +24,13 @@ public class ElevatorConstants {
 
     public static final double WHEEL_RADIUS = 1.61671;
 
+
+
     public static final double GEAR = 10.9;
 
     public static final double POSITION_CONVERSION_FACTOR =
-        ((2 * WHEEL_RADIUS * Math.PI) / GEAR) / 100;
+        ((2 * WHEEL_RADIUS * 
+        Math.PI) / GEAR) / 100;
 
     public static final double CLOSING_POWER = -0.15;
     

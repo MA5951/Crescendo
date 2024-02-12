@@ -24,10 +24,7 @@ public class SetShooter extends SequentialCommandGroup {
                 .setSetPoint(upperSetPoint)), 
             new InstantCommand(() -> LowerShooter.getInstance()
                 .setSetPoint(lowerSetpoint)),
-            new ParallelCommandGroup(
-                new WaitUntilCommand(UpperShooter.getInstance()::atPoint),
-                new WaitUntilCommand(LowerShooter.getInstance()::atPoint)
-            )
+            new WaitForSetPoint()
         );
     }
 }

@@ -10,7 +10,7 @@ public class SetElevator extends SequentialCommandGroup {
     public SetElevator(double setPoint) {
         addCommands(
             new InstantCommand(() -> Elevator.getInstance().setSetPoint(setPoint)),
-            new WaitUntilCommand(Elevator.getInstance()::atPoint)
+            new WaitUntilCommand(Elevator.getInstance()::atPoint )
         );
     }
 }
