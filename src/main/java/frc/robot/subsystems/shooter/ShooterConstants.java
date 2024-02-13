@@ -35,7 +35,7 @@ public class ShooterConstants {
 
     // dis, up, down
     public static final double[][] shootingPoses = {
-        {1.4, SPEAKER_UPPER_V * 0.75, SPEAKER_LOWER_V * 0.75},
+        {1.4, SPEAKER_UPPER_V * 0.82, SPEAKER_LOWER_V * 0.82},
         {1.64, 1900, 1980},
         {1.78, 1760, 1790},
         {1.83, 1750, 1780},

@@ -203,29 +203,34 @@ public class RobotContainer {
     //   ), new ShootInMotion());
 
     //auto align
-    new CreateButton(
-      driverController.L2(),
-          new InstantCommand(
-            () -> AngleAdjust.align = true
-          ).alongWith(
-            new InstantCommand(() -> SwerveDrivetrainSubsystem.getInstance().FactorVelocityTo(0.5))
-          ).alongWith(new InstantCommand(
+      driverController.L2().whileTrue(
+            new InstantCommand(() -> SwerveDrivetrainSubsystem.getInstance().FactorVelocityTo(0.3))
+          .alongWith(new InstantCommand(
             () -> SwerveDrivetrainSubsystem.getInstance().update = false
           )).
+          // andThen(
+          // new ParallelDeadlineGroup(
+          //   new WaitUntilCommand(
+          //     () -> {
+          //       return SwerveDrivetrainSubsystem.getInstance().update;
+          //     }
+          //   ), 
+          //   new AngleAdjust(() -> Math.toRadians(
+          //     SwerveDrivetrainSubsystem.getInstance().getOffsetAngle() - 180),
+          //     RobotContainer.driverController::getLeftX,
+          //   RobotContainer.driverController::getLeftY, true, true))
+          // ).
           andThen(
-          new ParallelDeadlineGroup(
-            new WaitUntilCommand(
-              () -> {
-                return SwerveDrivetrainSubsystem.getInstance().disFormSpeaker < 
-                SwerveConstants.MAX_SHOOT_DISTANCE * 0.95
-                && SwerveDrivetrainSubsystem.getInstance().update;
-              }
-            ), 
-            new AngleAdjust(Shoot::getAngle, RobotContainer.driverController::getLeftX,
-            RobotContainer.driverController::getLeftY)
-          ) .andThen(
-          (new RunShoot().repeatedly())))
-    );
+            new ParallelDeadlineGroup (
+                new WaitUntilCommand(() -> {
+                  return SwerveDrivetrainSubsystem.getInstance().disFormSpeaker < 
+                  SwerveConstants.MAX_SHOOT_DISTANCE * 0.87 && SwerveDrivetrainSubsystem.getInstance().update;}),
+                new AngleAdjust(Shoot::getAngle, RobotContainer.driverController::getLeftX,
+                    RobotContainer.driverController::getLeftY, false, true)
+              )).andThen((new RunShoot().repeatedly()))).whileFalse(
+                new ResetAll(ElevatorConstants.DEFAULT_POSE).alongWith(new InstantCommand(() -> 
+                  SwerveDrivetrainSubsystem.getInstance().FactorVelocityTo(1)))
+              );
 
     // new CreateButton(
     //   new Trigger(

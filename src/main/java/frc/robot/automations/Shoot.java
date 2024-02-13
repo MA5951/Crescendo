@@ -8,7 +8,6 @@ import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.swerve.AngleAdjust;
@@ -46,7 +45,6 @@ public class Shoot extends SequentialCommandGroup {
     Supplier<Double> elevatorPose = ()  -> ElevatorConstants.SHOOTING_POSE;
     addCommands(
       new ParallelCommandGroup(
-        new InstantCommand(() -> AngleAdjust.align = false),
         new AngleAdjust(Shoot::getAngle, () -> 0d, () -> 0d),
         new GettingReadyToScore(
           UpperShooter.getInstance()::getVelocityForShooting,

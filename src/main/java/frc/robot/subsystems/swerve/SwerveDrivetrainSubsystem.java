@@ -128,19 +128,18 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
       PortMap.CanBus.CANivoreBus);
 
   private final SwerveDrivePoseEstimator odometry = new SwerveDrivePoseEstimator(kinematics,
-      getRotation2d(), getSwerveModulePositions(),
+  getRotation2d(), getSwerveModulePositions(),
       new Pose2d(0, 0, new Rotation2d(0)),
       /**
        * Standard deviations of model states. Increase these numbers to trust your model's state estimates less. This
        * matrix is in the form [x, y, theta]ᵀ, with units in meters and radians, then meters.
       */
-      VecBuilder.fill(0.1, 0.1, 0.1),
+      VecBuilder.fill(0.9,0.9, 0.9),
       /**
        * Standard deviations of the vision measurements. Increase these numbers to trust global measurements from vision
        * less. This matrix is in the form [x, y, theta]ᵀ, with units in meters and radians.
       */
-      VecBuilder.fill(0.5, 0.5, 0.5));
-
+      VecBuilder.fill(0.1, 0.1, 0.1));
   private final Field2d field = new Field2d();
 
   private static SwerveModulePosition[] getSwerveModulePositions() {
@@ -197,6 +196,10 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
     frontRightModule.resetEncoders();
     rearLeftModule.resetEncoders();
     rearRightModule.resetEncoders();
+  }
+
+  public double getOffsetAngle() {
+    return offsetAngle;
   }
 
   public void resetOdometry(Pose2d pose) {
@@ -373,6 +376,10 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
 
     board.addBoolean("can shoot", canShoot());
 
+    board.addNum("distance", RobotContainer.APRILTAGS_LIMELIGHT.distance());
+
+    board.addBoolean("update", update);
+
     double ySpeaker = SwerveConstants.SPEAKER_TARGET_Y;
     double xSpeaker =  DriverStation.getAlliance().get() == Alliance.Blue ? 
       SwerveConstants.SPEAKER_TARGET_X_BLUE : SwerveConstants.SPEAKER_TAGET_X_RED;
@@ -393,8 +400,8 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
 
     if (RobotContainer.APRILTAGS_LIMELIGHT.hasTarget() && 
       RobotContainer.APRILTAGS_LIMELIGHT.getTagId() != -1
-      && RobotContainer.APRILTAGS_LIMELIGHT.distance() < SwerveConstants.MAX_LIMELIGHT_DIS 
-      && Math.abs(RobotContainer.APRILTAGS_LIMELIGHT.getX()) < 20) {
+      && RobotContainer.APRILTAGS_LIMELIGHT.distance() < SwerveConstants.MAX_LIMELIGHT_DIS
+      && getVelocity() < 15) {
         Pose2d estPose = RobotContainer.APRILTAGS_LIMELIGHT.getEstPose();
           odometry.addVisionMeasurement(estPose, RobotContainer.APRILTAGS_LIMELIGHT.getTimeStamp());
           update = true;

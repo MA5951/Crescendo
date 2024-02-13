@@ -83,18 +83,18 @@ public class SwerveConstants {
         public final static double KI_TRANSLATION = 0; //0.0009;
 
         // swerve theta PID_CONTROLLER radians
-        public final static double THATA_KP = 4.6;
-        public final static double THATA_KI = 0;
-        public final static double THATA_KD = 0;
+        public final static double THATA_KP = 5.4;
+        public final static double THATA_KI = 0.2;
+        public final static double THATA_KD = 0.0;
 
         // ------------2024--------------------
         public final static double SPEAKER_TARGET_X_BLUE = 0;
         public final static double SPEAKER_TAGET_X_RED = 16.54;
         public final static double SPEAKER_TARGET_Y = 5.55;
 
-        public final static double ANGLE_PID_TOLORANCE = Math.toRadians(5);
+        public final static double ANGLE_PID_TOLORANCE = Math.toRadians(4.5);
 
-        public final static double MAX_SHOOT_DISTANCE = 2;
+        public final static double MAX_SHOOT_DISTANCE = 1.95;
 
         public final static double SHOOTING_IN_MOTION_TOLORANCE = 0.3;
 
@@ -108,7 +108,7 @@ public class SwerveConstants {
         public final static double SPEED_LINE_RED = 10.737;
         public final static double SPEED_LINE_BLUE = 5.88;
 
-        public final static double MAX_LIMELIGHT_DIS = 2.7;
+        public final static double MAX_LIMELIGHT_DIS = 1.53;// 2.4;
 
         public final static double AMP_X_BLUE = 1.95;
         public final static double AMP_X_RED = 14.65;

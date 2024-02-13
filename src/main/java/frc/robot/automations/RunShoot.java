@@ -17,6 +17,7 @@ public class RunShoot extends Command {
   @Override
   public void initialize() {
     commandShoot.initialize();
+    System.out.println("start");
   }
 
   @Override

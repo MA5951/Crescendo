@@ -7,6 +7,8 @@ package frc.robot.commands.swerve;
 import java.util.function.Supplier;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.swerve.SwerveConstants;
 import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
@@ -18,16 +20,20 @@ public class AngleAdjust extends Command {
   private Supplier<Double> angle;
   private Supplier<Double> xSupplier;
   private Supplier<Double> ySupplier;
-  public static boolean align = false;
+  private boolean align = false;
+  private boolean alingTospeaker;
 
   public static boolean atPoint() {
     return pid.atSetpoint();
   }
 
   public AngleAdjust(Supplier<Double> angle,
-    Supplier<Double> xSupplier, Supplier<Double> ySupplier) {
+    Supplier<Double> xSupplier, Supplier<Double> ySupplier, boolean alingTospeaker, boolean align) {
     swerve = SwerveDrivetrainSubsystem.getInstance();
     addRequirements(swerve);
+
+    this.alingTospeaker = alingTospeaker;
+    this.align = align;
 
     this.xSupplier = xSupplier;
     this.ySupplier = ySupplier;
@@ -41,6 +47,11 @@ public class AngleAdjust extends Command {
     pid.setTolerance(SwerveConstants.ANGLE_PID_TOLORANCE);
     pid.enableContinuousInput(-Math.PI, Math.PI);
   }
+
+  public AngleAdjust(Supplier<Double> angle,
+    Supplier<Double> xSupplier, Supplier<Double> ySupplier) {
+      this(angle, xSupplier, ySupplier, false, false);
+    }
 
   // Called when the command is initially scheduled.
   @Override
@@ -64,9 +75,10 @@ public class AngleAdjust extends Command {
       swerve.maxVelocity *
       (SwerveDrivetrainSubsystem.getInstance().isYReversed ? -1 : 1);
 
+    Supplier<Double> getMeserment = alingTospeaker ? () -> Math.toRadians(swerve.getFusedHeading()) : swerve.getPose().getRotation()::getRadians;
     swerve.drive(
       xSpeed, ySpeed,
-      pid.calculate(swerve.getPose().getRotation().getRadians())
+      pid.calculate(getMeserment.get())
       , true);
   }
 
