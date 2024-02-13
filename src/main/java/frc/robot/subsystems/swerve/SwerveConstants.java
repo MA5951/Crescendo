@@ -10,7 +10,7 @@ public class SwerveConstants {
         // Modules constants
         public final static double TURNING_GEAR_RATIO = 150d / 7;
         private final static double DRIVE_GEAR_RATIO = 6.12;
-        private final static double WHEEL_RADIUS = 0.05;
+        private final static double WHEEL_RADIUS = 0.0508;
 
         public final static double VELOCITY_TIME_UNIT_IN_SECONDS = 1;
 
@@ -72,7 +72,7 @@ public class SwerveConstants {
         public final static boolean DRIVE_ENBLE_CURRENT_LIMIT = true;
 
         // swerve physics
-        public final static double MAX_VELOCITY = 5.3;
+        public final static double MAX_VELOCITY = 5.3 ;
         public final static double MAX_ACCELERATION = 10.91;
         public final static double MAX_ANGULAR_VELOCITY = MAX_VELOCITY / RADIUS; // radians
 

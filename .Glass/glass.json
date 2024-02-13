@@ -1,35 +1,31 @@
 {
   "NetworkTables": {
+    "transitory": {
+      "FMSInfo": {
+        "open": true
+      },
+      "LiveWindow": {
+        ".status": {
+          "open": true
+        },
+        "open": true
+      },
+      "Shuffleboard": {
+        "open": true
+      },
+      "SmartDashboard": {
+        "Field": {
+          "open": true
+        }
+      }
+    },
     "types": {
       "/FMSInfo": "FMSInfo",
       "/SmartDashboard/Field": "Field2d"
     },
     "windows": {
       "/SmartDashboard/Field": {
-        "Robot": {
-          "arrowColor": [
-            0.49307963252067566,
-            0.8823529481887817,
-            0.0,
-            255.0
-          ],
-          "color": [
-            0.8676470518112183,
-            0.0,
-            0.0,
-            255.0
-          ],
-          "length": 0.8199999928474426,
-          "style": "Box/Image",
-          "width": 0.8199999928474426
-        },
-        "bottom": 1476,
-        "height": 8.210550308227539,
-        "left": 150,
-        "right": 2961,
-        "top": 79,
-        "units": "meters",
-        "width": 16.541748046875,
+        "units": "",
         "window": {
           "visible": true
         }
@@ -37,10 +33,7 @@
     }
   },
   "NetworkTables Settings": {
-    "mode": "Client (NT4)",
-    "visible": false
-  },
-  "NetworkTables View": {
-    "visible": false
+    "mode": "Client (NT3)",
+    "serverTeam": "5951"
   }
 }
