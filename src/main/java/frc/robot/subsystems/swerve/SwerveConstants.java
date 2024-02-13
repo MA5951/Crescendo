@@ -51,10 +51,11 @@ public class SwerveConstants {
         public final static double OPEN_LOOP_RAMP = 0.25;
         public final static double CLOSED_LOOP_RAMP = 0;
         // Current Limit
+        public final static int TURNING_PEAK_CURRENT_LIMIT_TORQUE_CURRENT = 400;
+        public final static int TURNING_PEAK_CURRENT_LIMIT = 40;
         public final static int TURNING_CONTINUOUS_CURRENT_LIMIT = 25;
-        public final static int TURNING_PEAK_CURRENT_LIMIT = 400;
-        public final static double TURNING_PEAK_CURRENTDURATION = 0.1;
-        public final static boolean turningEnableCurrentLimit = true;
+        public final static double TURNING_PEAK_CURRENT_DURATION = 0.1;
+        public final static boolean TURNING_ENABLE_CURRENT_LIMIT = true;
 
         // Modules drive config
         // PID
@@ -64,8 +65,9 @@ public class SwerveConstants {
         public final static double DRIVE_KS = 0;
         public final static double DRIVE_KV = 0.18 * 12;
         // Current Limit
+        public final static int DRIVE_PEAK_CURRENT_LIMIT_TORQUE_CURRENT = 400;
+        public final static int DRIVE_PEAK_CURRENT_LIMIT = 60;
         public final static int DRIVE_CONTINUOS_CURRENT_LIMIT = 35;
-        public final static int DRIVE_PEAK_CURRENT_LIMIT = 400;
         public final static double DRIVE_PEAK_CURRENT_DURATION = 0.1;
         public final static boolean DRIVE_ENBLE_CURRENT_LIMIT = true;
 

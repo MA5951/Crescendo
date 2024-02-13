@@ -81,8 +81,19 @@ public class SwerveModuleTalonFX extends SwerveModule {
         turningConfiguration.Slot0.kP = SwerveConstants.TURNING_PID_KP;
         turningConfiguration.Slot0.kI = SwerveConstants.TURNING_PID_KI;
         turningConfiguration.Slot0.kD = SwerveConstants.TURNING_PID_KD;
-        turningConfiguration.TorqueCurrent.PeakForwardTorqueCurrent = SwerveConstants.TURNING_PEAK_CURRENT_LIMIT;
-        turningConfiguration.TorqueCurrent.PeakReverseTorqueCurrent = -SwerveConstants.TURNING_PEAK_CURRENT_LIMIT;
+        turningConfiguration.TorqueCurrent.PeakForwardTorqueCurrent = 
+            SwerveConstants.TURNING_PEAK_CURRENT_LIMIT_TORQUE_CURRENT;
+        turningConfiguration.TorqueCurrent.PeakReverseTorqueCurrent = 
+            -SwerveConstants.TURNING_PEAK_CURRENT_LIMIT_TORQUE_CURRENT;
+
+        turningConfiguration.CurrentLimits.SupplyCurrentLimitEnable = 
+            SwerveConstants.TURNING_ENABLE_CURRENT_LIMIT;
+        turningConfiguration.CurrentLimits.SupplyCurrentLimit =
+            SwerveConstants.TURNING_CONTINUOUS_CURRENT_LIMIT;
+        turningConfiguration.CurrentLimits.SupplyCurrentThreshold =
+            SwerveConstants.TURNING_PEAK_CURRENT_LIMIT;
+        turningConfiguration.CurrentLimits.SupplyTimeThreshold = 
+            SwerveConstants.TURNING_PEAK_CURRENT_DURATION;
         
         turningMotor.getConfigurator().apply(turningConfiguration);
     }
@@ -104,8 +115,19 @@ public class SwerveModuleTalonFX extends SwerveModule {
         driveConfiguration.Slot0.kI = SwerveConstants.DRIVE_PID_KI;
         driveConfiguration.Slot0.kD = SwerveConstants.DRIVE_PID_KD;
 
-        driveConfiguration.TorqueCurrent.PeakForwardTorqueCurrent = SwerveConstants.DRIVE_PEAK_CURRENT_LIMIT;
-        driveConfiguration.TorqueCurrent.PeakReverseTorqueCurrent = -SwerveConstants.DRIVE_PEAK_CURRENT_LIMIT;
+        driveConfiguration.TorqueCurrent.PeakForwardTorqueCurrent = 
+            SwerveConstants.DRIVE_PEAK_CURRENT_LIMIT_TORQUE_CURRENT;
+        driveConfiguration.TorqueCurrent.PeakReverseTorqueCurrent = 
+            -SwerveConstants.DRIVE_PEAK_CURRENT_LIMIT_TORQUE_CURRENT;
+
+        driveConfiguration.CurrentLimits.SupplyCurrentLimitEnable = 
+            SwerveConstants.DRIVE_ENBLE_CURRENT_LIMIT;
+        driveConfiguration.CurrentLimits.SupplyCurrentLimit = 
+            SwerveConstants.DRIVE_CONTINUOS_CURRENT_LIMIT;
+        driveConfiguration.CurrentLimits.SupplyCurrentThreshold = 
+            SwerveConstants.DRIVE_PEAK_CURRENT_LIMIT;
+        driveConfiguration.CurrentLimits.SupplyTimeThreshold = 
+            SwerveConstants.DRIVE_PEAK_CURRENT_DURATION;
 
         driveMotor.getConfigurator().apply(driveConfiguration);
     }
