@@ -10,29 +10,16 @@ import com.ma5951.utils.commands.RunInternallyControlledSubsystem;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.PS4Controller;
-import edu.wpi.first.wpilibj.PS5Controller;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.swerve.SwerveConstants;
 import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
 import frc.robot.automations.AMPScore;
 import frc.robot.automations.AdjustRing;
+import frc.robot.automations.AutoShoot;
 import frc.robot.automations.CenterRing;
 import frc.robot.automations.GettingReadyToScore;
 import frc.robot.automations.GoToAmp;
@@ -202,42 +189,10 @@ public class RobotContainer {
     //        < SwerveConstants.MAX_SHOOT_DISTANCE && !isIntakeRunning);}
     //   ), new ShootInMotion());
 
-    //auto align
-      driverController.L2().whileTrue(
-            new InstantCommand(() -> SwerveDrivetrainSubsystem.getInstance().FactorVelocityTo(0.3))
-          .alongWith(new InstantCommand(
-            () -> SwerveDrivetrainSubsystem.getInstance().update = false
-          )).
-          // andThen(
-          // new ParallelDeadlineGroup(
-          //   new WaitUntilCommand(
-          //     () -> {
-          //       return SwerveDrivetrainSubsystem.getInstance().update;
-          //     }
-          //   ), 
-          //   new AngleAdjust(() -> Math.toRadians(
-          //     SwerveDrivetrainSubsystem.getInstance().getOffsetAngle() - 180),
-          //     RobotContainer.driverController::getLeftX,
-          //   RobotContainer.driverController::getLeftY, true, true))
-          // ).
-          andThen(
-            new ParallelDeadlineGroup (
-                new WaitUntilCommand(() -> {
-                  return SwerveDrivetrainSubsystem.getInstance().disFormSpeaker < 
-                  SwerveConstants.MAX_SHOOT_DISTANCE * 0.87 && SwerveDrivetrainSubsystem.getInstance().update;}),
-                new AngleAdjust(Shoot::getAngle, RobotContainer.driverController::getLeftX,
-                    RobotContainer.driverController::getLeftY, false, true)
-              )).andThen((new RunShoot().repeatedly()))).whileFalse(
-                new ResetAll(ElevatorConstants.DEFAULT_POSE).alongWith(new InstantCommand(() -> 
-                  SwerveDrivetrainSubsystem.getInstance().FactorVelocityTo(1)))
-              );
-
-    // new CreateButton(
-    //   new Trigger(
-    //     () -> driverController.L2().getAsBoolean() &&
-    //     SwerveDrivetrainSubsystem.getInstance().canShoot()
-    //   ), new RunShoot()
-    // );
+      driverController.L2().whileTrue(new AutoShoot()).whileFalse(
+        new ResetAll(ElevatorConstants.DEFAULT_POSE).alongWith(new InstantCommand(() -> 
+          SwerveDrivetrainSubsystem.getInstance().FactorVelocityTo(1)))
+      );
 
     // floor or source intake
     driverController.R1().onTrue( 
@@ -296,13 +251,13 @@ public class RobotContainer {
 
     // // //--------------------LEDS-----------------------
 
-    // // operatorController.R1().whileTrue(
-    // //   new InstantCommand(() -> LED.getInstance().activateAmp())
-    // // );
+    // operatorController.R1().whileTrue(
+    //   new InstantCommand(() -> LED.getInstance().activateAmp())
+    // );
 
-    // // operatorController.L1().whileTrue(
-    // //   new InstantCommand(() -> LED.getInstance().activateCoalition())
-    // // );
+    // operatorController.L1().whileTrue(
+    //   new InstantCommand(() -> LED.getInstance().activateCoalition())
+    // );
   }
   public Command getAutonomousCommand() {
     // return new FourGamePieces(); // 4 gmae piece

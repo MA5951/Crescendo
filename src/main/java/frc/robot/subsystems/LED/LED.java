@@ -4,11 +4,8 @@
 
 package frc.robot.subsystems.LED;
 
-import javax.sound.sampled.Port;
-
 import com.ma5951.utils.MAShuffleboard;
 import com.ma5951.utils.led.AddressableLEDController;
-import com.ma5951.utils.led.AddressableLEDPattern;
 import com.ma5951.utils.led.BlinkingColorPattern;
 import com.ma5951.utils.led.BreathingColorPattern;
 import com.ma5951.utils.led.BreathingTripleColorPattern;
@@ -25,13 +22,11 @@ import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.PortMap;
 import frc.robot.RobotContainer;
-import frc.robot.PortMap.Swerve;
 
 public class LED extends SubsystemBase {
   /** Creates a new LEDSubsystem. */
@@ -39,7 +34,6 @@ public class LED extends SubsystemBase {
 
   private AddressableLED addressableLED;
   private AddressableLEDBuffer addressableLEDBuffer;
-  private AddressableLEDPattern addressableLEDPattern;
 
   AddressableLEDController ledController;
   SolidColorPattern solidColorPattern;
@@ -55,11 +49,7 @@ public class LED extends SubsystemBase {
   EvenOddColorPattern evenOddColorPattern;
   
   private boolean activateAmp = false;
-  private double startAmpTime = 0;
   private boolean activateCoOp = false;
-  private double startCoOpTime = 0;
-
-  
 
   private MAShuffleboard board;
 
@@ -162,12 +152,10 @@ public class LED extends SubsystemBase {
 
   public void activateAmp() {
     activateAmp = true;
-    startAmpTime = Timer.getFPGATimestamp();
   }
 
   public void activateCoalition() {
     activateCoOp = true;
-    startCoOpTime = Timer.getFPGATimestamp();
   }
 
   @Override

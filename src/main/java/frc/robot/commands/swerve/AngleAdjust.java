@@ -7,8 +7,6 @@ package frc.robot.commands.swerve;
 import java.util.function.Supplier;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.swerve.SwerveConstants;
 import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
@@ -20,20 +18,20 @@ public class AngleAdjust extends Command {
   private Supplier<Double> angle;
   private Supplier<Double> xSupplier;
   private Supplier<Double> ySupplier;
-  private boolean align = false;
-  private boolean alingTospeaker;
+  private boolean dontStopAtPoint = false;
+  private boolean useGyro;
 
   public static boolean atPoint() {
     return pid.atSetpoint();
   }
 
   public AngleAdjust(Supplier<Double> angle,
-    Supplier<Double> xSupplier, Supplier<Double> ySupplier, boolean alingTospeaker, boolean align) {
+    Supplier<Double> xSupplier, Supplier<Double> ySupplier, boolean useGyro, boolean dontStopAtPoint) {
     swerve = SwerveDrivetrainSubsystem.getInstance();
     addRequirements(swerve);
 
-    this.alingTospeaker = alingTospeaker;
-    this.align = align;
+    this.useGyro = useGyro;
+    this.dontStopAtPoint = dontStopAtPoint;
 
     this.xSupplier = xSupplier;
     this.ySupplier = ySupplier;
@@ -75,7 +73,7 @@ public class AngleAdjust extends Command {
       swerve.maxVelocity *
       (SwerveDrivetrainSubsystem.getInstance().isYReversed ? -1 : 1);
 
-    Supplier<Double> getMeserment = alingTospeaker ? () -> Math.toRadians(swerve.getFusedHeading()) : swerve.getPose().getRotation()::getRadians;
+    Supplier<Double> getMeserment = useGyro ? () -> Math.toRadians(swerve.getFusedHeading()) : swerve.getPose().getRotation()::getRadians;
     swerve.drive(
       xSpeed, ySpeed,
       pid.calculate(getMeserment.get())
@@ -91,6 +89,6 @@ public class AngleAdjust extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return pid.atSetpoint() && !align;
+    return pid.atSetpoint() && !dontStopAtPoint;
   }
 }
