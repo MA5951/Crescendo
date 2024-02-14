@@ -135,12 +135,6 @@ public class RobotContainer {
       new InstantCommand(SwerveDrivetrainSubsystem.getInstance()::updateOffset)
     );
 
-    new CreateButton(driverController.circle(),
-     new GoToAmp().andThen(new AMPScore().alongWith(
-        new InstantCommand(() -> isAmp = false)
-      ))
-    );
-
     driverController.touchpad().whileTrue(
       new DriveSwerveCommand(
         () -> -RobotContainer.driverController.getLeftX(),
@@ -170,6 +164,13 @@ public class RobotContainer {
         () -> ShooterConstants.SPEAKER_LOWER_V,
           ElevatorConstants.SHOOTING_POSE)
           .alongWith(new InstantCommand(() -> isIntakeRunning = false))
+    );
+
+    // auto amp score
+    new CreateButton(driverController.circle(),
+     new GoToAmp().andThen(new AMPScore().alongWith(
+        new InstantCommand(() -> isAmp = false)
+      ))
     );
     
     // amp
