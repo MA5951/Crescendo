@@ -92,7 +92,7 @@ public class SwerveConstants {
         public final static double SPEAKER_TAGET_X_RED = 16.54;
         public final static double SPEAKER_TARGET_Y = 5.55;
 
-        public final static double ANGLE_PID_TOLORANCE = Math.toRadians(5);
+        public final static double ANGLE_PID_TOLORANCE = Math.toRadians(6);
 
         public final static double MAX_SHOOT_DISTANCE = 1.95;
 
