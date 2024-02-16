@@ -42,8 +42,11 @@ public class AngleAdjust extends Command {
       SwerveConstants.THATA_KD
     );
     this.angle = angle;
-    pid.setTolerance(SwerveConstants.ANGLE_PID_TOLORANCE);
     pid.enableContinuousInput(-Math.PI, Math.PI);
+  }
+
+  public void setUseGyro(boolean use) {
+    useGyro = use;
   }
 
   public AngleAdjust(Supplier<Double> angle,

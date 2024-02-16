@@ -86,7 +86,7 @@ public class LowerShooter extends SubsystemBase implements DefaultInternallyCont
 
   @Override
   public boolean atPoint() {
-    return Math.abs(getSetPoint() - getVelocity()) < ShooterConstants.TOLORANCE; 
+    return Math.abs(getSetPoint() - getVelocity()) < ShooterConstants.getTolorance(getSetPoint()); 
   }
 
   public double getVelocity(){

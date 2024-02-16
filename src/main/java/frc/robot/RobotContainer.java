@@ -13,6 +13,9 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.swerve.SwerveConstants;
@@ -87,8 +90,11 @@ public class RobotContainer {
     );
 
     NamedCommands.registerCommand(
-      "stop shooter", new InstantCommand(() -> UpperShooter.getInstance().setSetPoint(0))
-      .alongWith(new InstantCommand(() -> LowerShooter.getInstance().setSetPoint(0))));
+      "stop shooter", new RunInternallyControlledSubsystem(UpperShooter.getInstance(),
+      () -> 0d, true)
+      .alongWith(
+        new RunInternallyControlledSubsystem(LowerShooter.getInstance(),
+      () -> 0d, true)));
 
     NamedCommands.registerCommand("ResetElevator",
       new ResetElevator()
@@ -99,10 +105,11 @@ public class RobotContainer {
     NamedCommands.registerCommand("Feed To Shooter", new FeedToShooter());
     
     NamedCommands.registerCommand("Set Shooter Speed", new 
-      SetShooter(
-        UpperShooter.getInstance()::getVelocityForShooting,
-        LowerShooter.getInstance()::getVelocityForShooting
-      ));
+      RunInternallyControlledSubsystem(UpperShooter.getInstance(),
+      () -> ShooterConstants.SPEAKER_UPPER_V_AUTO, false)
+      .alongWith(
+        new RunInternallyControlledSubsystem(LowerShooter.getInstance(),
+      () -> ShooterConstants.SPEAKER_LOWER_V_AUTO, false)));
 
     NamedCommands.registerCommand("Shoot", new 
       SetShooter(
@@ -185,10 +192,12 @@ public class RobotContainer {
     // // shooting in motion
     // new CreateButton(
     //   new Trigger(
-    //     () -> {return driverController.getL2Axis() > 0.1
-    //       && (SwerveDrivetrainSubsystem.getInstance().disFromSpeakerX
-    //        < SwerveConstants.MAX_SHOOT_DISTANCE && !isIntakeRunning);}
-    //   ), new ShootInMotion());
+    //     () -> {return driverController.getL2Axis() > 0.1 && !isIntakeRunning;}
+    //   ), 
+    //   new SequentialCommandGroup(
+    //     new InstantCommand(() -> SwerveDrivetrainSubsystem.getInstance().update = false),
+    //     new ShootInMotion())
+    // );
 
       driverController.L2().whileTrue(new AutoShoot()).whileFalse(
         new ResetAll(ElevatorConstants.DEFAULT_POSE).alongWith(new InstantCommand(() -> 
@@ -252,13 +261,17 @@ public class RobotContainer {
 
     // // //--------------------LEDS-----------------------
 
-    // operatorController.R1().whileTrue(
-    //   new InstantCommand(() -> LED.getInstance().activateAmp())
-    // );
+    operatorController.square().whileTrue(
+      new InstantCommand(() -> LED.getInstance().activateAmp())
+    ).whileFalse(
+      new InstantCommand(() -> LED.getInstance().activateAmp = false)
+    );
 
-    // operatorController.L1().whileTrue(
-    //   new InstantCommand(() -> LED.getInstance().activateCoalition())
-    // );
+    operatorController.circle().whileTrue(
+      new InstantCommand(() -> LED.getInstance().activateCoalition())
+    ).whileFalse(
+      new InstantCommand(() -> LED.getInstance().activateCoOp = false)
+    );
   }
   public Command getAutonomousCommand() {
     // return new FourGamePieces(); // 4 gmae piece
@@ -268,7 +281,8 @@ public class RobotContainer {
     // return AutoBuilder.buildAuto("one game piece"); // one game piece
     // return AutoBuilder.buildAuto("Two pice Stage");
     // return AutoBuilder.buildAuto("Two pice Amp");
-    // return AutoBuilder.buildAuto("Theree pice Amp");
-    return AutoBuilder.buildAuto("Theree pice Stage");
+    return AutoBuilder.buildAuto("Two pice Amp").andThen(
+        AutoBuilder.buildAuto("Theree pice Amp"));
+    // return AutoBuilder.buildAuto("2 note far stage");
   }
 }

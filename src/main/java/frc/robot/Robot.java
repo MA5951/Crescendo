@@ -34,19 +34,21 @@ public class Robot extends TimedRobot {
     Elevator.getInstance();
     LED.getInstance();
 
-  CommandScheduler.getInstance().setDefaultCommand(
-    UpperShooter.getInstance(), new DefaultRunInternallyControlledSubsystem(
-      UpperShooter.getInstance(), 0));
-    
-  CommandScheduler.getInstance().setDefaultCommand(
+    CommandScheduler.getInstance().setDefaultCommand(
+      UpperShooter.getInstance(), new DefaultRunInternallyControlledSubsystem(
+        UpperShooter.getInstance(), 0));
+      
+    CommandScheduler.getInstance().setDefaultCommand(
     LowerShooter.getInstance(), new DefaultRunInternallyControlledSubsystem(
       LowerShooter.getInstance(), 0));
 
+    // CameraServer.startAutomaticCapture();
   }
 
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
+    
     if (DriverStation.isEnabled()) {
       RobotContainer.APRILTAGS_LIMELIGHT.periodic();
     }
@@ -56,8 +58,6 @@ public class Robot extends TimedRobot {
     
     SmartDashboard.putBoolean("shooting linked to speaker",
       RobotContainer.ShootingLinkedToSpeaker);
-
-    CameraServer.startAutomaticCapture();
   }
 
   @Override

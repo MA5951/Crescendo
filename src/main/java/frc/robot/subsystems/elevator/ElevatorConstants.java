@@ -1,17 +1,17 @@
 package frc.robot.subsystems.elevator;
 
 public class ElevatorConstants {
-    public static final double KP = 0.8;
+    public static final double KP = 1.5;
     public static final double KI = 0;
     public static final double KD = 0.004;
     public static final double TOLERANCE = 0.01;
 
     public static final double MIN_POSE = 0.01;
-    public static final double MAX_POSE = 0.46;
+    public static final double MAX_POSE = 0.45;
 
-    public static final double DEFAULT_POSE = 0.15;
+    public static final double DEFAULT_POSE = 0.12; // 0.17;
 
-    public static final double SHOOTING_POSE = 0.24;
+    public static final double SHOOTING_POSE = 0.27; // 0.24;
 
     public static final double AMP_POSE = MAX_POSE;
     public static final double INTAKE_POSE = MIN_POSE;

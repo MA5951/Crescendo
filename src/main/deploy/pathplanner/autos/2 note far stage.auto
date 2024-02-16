@@ -58,39 +58,27 @@
                 "data": {
                   "pathName": "Note 3 score Stageside"
                 }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot linked to speaker"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
               },
               {
-                "type": "path",
+                "type": "sequential",
                 "data": {
-                  "pathName": "Node 2 intake Stageside"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "stop shooter"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Center Ring"
+                      }
+                    }
+                  ]
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": " Node 2 score Stageside"
           }
         },
         {

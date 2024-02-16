@@ -34,14 +34,16 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
 
 
     private Elevator() {
-      master = new TalonFX(PortMap.Elevator.masterID);
-      slave = new TalonFX(PortMap.Elevator.slaveID);
+      master = new TalonFX(PortMap.Elevator.masterID, PortMap.CanBus.CANivoreBus);
+      slave = new TalonFX(PortMap.Elevator.slaveID, PortMap.CanBus.CANivoreBus);
  
       configMotors();
 
       PoseSetter = new PositionVoltage(0);
 
       pose = master.getPosition();
+
+      resetPose(0);
 
       board = new MAShuffleboard("Elevator");
 

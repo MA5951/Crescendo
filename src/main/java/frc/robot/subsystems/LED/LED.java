@@ -48,8 +48,8 @@ public class LED extends SubsystemBase {
   WaveBlinkColorPattern waveBlinkColorPattern;
   EvenOddColorPattern evenOddColorPattern;
   
-  private boolean activateAmp = false;
-  private boolean activateCoOp = false;
+  public boolean activateAmp = false;
+  public boolean activateCoOp = false;
 
   private MAShuffleboard board;
 
@@ -197,7 +197,11 @@ public class LED extends SubsystemBase {
     //     }
     //   }
     // }
-    if (SwerveDrivetrainSubsystem.getInstance().canShoot()) {
+    if (activateAmp) {
+      setColor(LedConstants.WHITE);
+    } else if (activateCoOp) {
+      setColor(LedConstants.ORANGE);
+    } if (SwerveDrivetrainSubsystem.getInstance().canShoot()) {
       setColor(LedConstants.Ring);
     } else if (Intake.getInstance().isGamePieceInIntake()) {
       setColor(LedConstants.GREEN);

@@ -36,6 +36,8 @@ public class ResetAll extends SequentialCommandGroup {
         () -> UpperShooter.getInstance().chengeIDLmode(IdleMode.kBrake))
       ).alongWith(
         new InstantCommand(() -> UpperShooter.getInstance().changeToDefaultV = true)
+      ).alongWith(
+        new InstantCommand(() -> UpperShooter.isShooting = false)
       )
     );
   }

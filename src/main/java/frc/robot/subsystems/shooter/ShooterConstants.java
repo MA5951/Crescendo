@@ -4,7 +4,7 @@ public class ShooterConstants {
 
     public static final double CONVERTION_FACTOR_UPPER = 1.36;
     public static final double CONVERTION_FACTOR_LOWER = 1.33;
-    public static final double TOLORANCE = 100;
+    public static final double TOLORANCE = 92.2;
     public static final double TIME_AT_SETPOINT = 0.15;
 
     public static final double KP_UP = 0.00035;
@@ -28,14 +28,18 @@ public class ShooterConstants {
     public static final double AMP_V_LOWER = 0.4; //0.35;
     public static final double INTAKE_SOURCE_V = -0.4;
 
-    public static final double V_FACTOR = 1.03;
+    public static final double V_FACTOR = 1.07;
 
     public static double defaultVUp = 0;
     public static double defaultVDown = 0;
 
+    public static double getTolorance(double setPoint) {
+        return Math.max(0.5952*setPoint + 5.8986, TOLORANCE);
+    }
+
     // dis, up, down
     public static final double[][] shootingPoses = {
-        {1.4, SPEAKER_UPPER_V * 0.82, SPEAKER_LOWER_V * 0.82},
+        {1.55, 2100, 2180},
         {1.64, 1900, 1980},
         {1.78, 1760, 1790},
         {1.83, 1750, 1780},

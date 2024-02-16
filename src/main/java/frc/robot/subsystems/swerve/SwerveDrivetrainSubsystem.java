@@ -41,6 +41,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.PortMap;
 import frc.robot.RobotContainer;
+import frc.robot.automations.Shoot;
 
 public class SwerveDrivetrainSubsystem extends SubsystemBase {
 
@@ -347,6 +348,11 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
     ).andThen(new InstantCommand(this::stop));
   }
 
+  public double getAngleTolorance(double setPoint) {
+    return (Math.max(-0.0003 * Math.pow(setPoint, 2) + 7e-17 * setPoint + 10,
+      SwerveConstants.ANGLE_PID_TOLORANCE)) * 0.9;
+  }
+
   public static SwerveDrivetrainSubsystem getInstance() {
     if (swerve == null) {
       swerve = new SwerveDrivetrainSubsystem();
@@ -400,10 +406,12 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
 
     if (RobotContainer.APRILTAGS_LIMELIGHT.hasTarget() && 
       RobotContainer.APRILTAGS_LIMELIGHT.getTagId() != -1
-      && RobotContainer.APRILTAGS_LIMELIGHT.distance() < SwerveConstants.MAX_LIMELIGHT_DIS) {
+      && RobotContainer.APRILTAGS_LIMELIGHT.distance() < SwerveConstants.MAX_LIMELIGHT_DIS
+      && !DriverStation.isAutonomous()
+      && Math.abs(RobotContainer.APRILTAGS_LIMELIGHT.getX()) < 12) {
         Pose2d estPose = RobotContainer.APRILTAGS_LIMELIGHT.getEstPose();
           odometry.addVisionMeasurement(estPose, RobotContainer.APRILTAGS_LIMELIGHT.getTimeStamp());
           update = true;
-      }
+      }      
   }
 }

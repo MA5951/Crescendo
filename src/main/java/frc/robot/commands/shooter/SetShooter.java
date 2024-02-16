@@ -18,6 +18,7 @@ public class SetShooter extends SequentialCommandGroup {
 
   public SetShooter(Supplier<Double> upperSetPoint, Supplier<Double> lowerSetpoint) {
         addCommands(
+            new InstantCommand(() -> UpperShooter.isShooting = true),
             new InstantCommand(() -> UpperShooter.getInstance()
                 .setSetPoint(upperSetPoint)), 
             new InstantCommand(() -> LowerShooter.getInstance()

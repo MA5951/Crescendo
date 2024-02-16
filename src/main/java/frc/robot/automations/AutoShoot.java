@@ -7,6 +7,7 @@ package frc.robot.automations;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.RobotContainer;
 import frc.robot.commands.swerve.AngleAdjust;
@@ -42,7 +43,8 @@ public class AutoShoot extends SequentialCommandGroup {
             new ParallelDeadlineGroup (
                 new WaitUntilCommand(() -> {
                   return SwerveDrivetrainSubsystem.getInstance().disFormSpeaker < 
-                  SwerveConstants.MAX_SHOOT_DISTANCE * 0.87 && SwerveDrivetrainSubsystem.getInstance().update;}),
+                  SwerveConstants.MAX_SHOOT_DISTANCE * 0.925 && SwerveDrivetrainSubsystem.getInstance().update;})
+                  .andThen(new WaitCommand(0.07)),
                 new AngleAdjust(Shoot::getAngle, RobotContainer.driverController::getLeftX,
                     RobotContainer.driverController::getLeftY, false, true)
               )).andThen((new RunShoot().repeatedly()))
