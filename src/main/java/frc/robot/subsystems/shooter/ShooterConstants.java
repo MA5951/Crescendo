@@ -25,7 +25,7 @@ public class ShooterConstants {
     public static final double SPEAKER_LOWER_V_AUTO= 3500;
 
     public static final double AMP_V_UPPER = 0;
-    public static final double AMP_V_LOWER = 0.4; //0.35;
+    public static final double AMP_V_LOWER = 0.35; // 0.4; //0.35;
     public static final double INTAKE_SOURCE_V = -0.4;
 
     public static final double V_FACTOR = 1.07;
