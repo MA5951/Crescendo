@@ -1,0 +1,63 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.63,
+      "y": 4.375440973104168
+    },
+    "rotation": -59.03624346792648
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ResetElevator"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shoot linked to speaker"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "stop shooter"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "eject"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "allababala"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

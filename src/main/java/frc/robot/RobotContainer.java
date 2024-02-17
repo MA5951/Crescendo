@@ -111,15 +111,8 @@ public class RobotContainer {
         new RunInternallyControlledSubsystem(LowerShooter.getInstance(),
       () -> ShooterConstants.SPEAKER_LOWER_V_AUTO, false)));
 
-    NamedCommands.registerCommand("Shoot", new 
-      SetShooter(
-        UpperShooter.getInstance()::getVelocityForShooting,
-        LowerShooter.getInstance()::getVelocityForShooting
-      ).andThen(new FeedToShooter()));
-
-    NamedCommands.registerCommand("SetForAmp", new SetForAmp());
-    
-    NamedCommands.registerCommand("Elvator Intake", new IntakeAutomation(IntakeConstants.INTAKE_POWER));
+    NamedCommands.registerCommand("eject", new MotorCommand(Intake.getInstance(),
+      -IntakeConstants.INTAKE_POWER, 0));
     
   }
 

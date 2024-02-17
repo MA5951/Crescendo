@@ -7,6 +7,7 @@ package frc.robot.automations;
 import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.swerve.RunLockModules;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -17,7 +18,7 @@ public class ScoreWithoutAdjust extends SequentialCommandGroup {
     Supplier<Double> lowerVel, double elevatorPose) {
     addCommands(
       new GettingReadyToScore(upperVel, lowerVel, () -> elevatorPose),
-      new ScoreAutomation(upperVel, lowerVel)
+      new ScoreAutomation(upperVel, lowerVel).alongWith(new RunLockModules())
     );
   }
 }
