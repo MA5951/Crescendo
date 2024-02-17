@@ -198,13 +198,10 @@ public class LED extends SubsystemBase {
     //   }
     // }
     
-    if (DriverStation.isDisabled()) {
-      setAllianceColor();
-    } else if (activateAmp) {
+    if (activateAmp) {
       setColor(LedConstants.WHITE);
     } else if (activateCoOp) {
-      // setColor(LedConstants.ORANGE);
-      setRainbow();
+      setColor(LedConstants.ORANGE);
     } if (SwerveDrivetrainSubsystem.getInstance().canShoot()) {
       setColor(LedConstants.Ring);
     } else if (Intake.getInstance().isGamePieceInIntake()) {
