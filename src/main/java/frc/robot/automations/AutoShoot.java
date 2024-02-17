@@ -4,6 +4,8 @@
 
 package frc.robot.automations;
 
+import com.ma5951.utils.MAShuffleboard.pidControllerGainSupplier;
+
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -19,9 +21,31 @@ import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AutoShoot extends SequentialCommandGroup {
   /** Creates a new AutoShoot. */
+  private static double target = 0;
+  private static boolean resetOffset = false;
+  public static void updateOffset() {
+    target = SwerveDrivetrainSubsystem.getInstance().getFusedHeading() -180;
+  } 
+
+  public static void setResetOffset(boolean set) {
+    resetOffset = set;
+  }
+
+  public static double getTarget() {
+    if (!resetOffset) {
+      return 0;
+    } else {
+      return target;
+    }
+  }
+
   public AutoShoot() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
+
+    
+
+
     addCommands(
       new InstantCommand(() -> SwerveDrivetrainSubsystem.getInstance().FactorVelocityTo(0.3))
           .alongWith(new InstantCommand(
@@ -43,11 +67,15 @@ public class AutoShoot extends SequentialCommandGroup {
             new ParallelDeadlineGroup (
                 new WaitUntilCommand(() -> {
                   return SwerveDrivetrainSubsystem.getInstance().disFormSpeaker < 
-                  SwerveConstants.MAX_SHOOT_DISTANCE * 0.925 && SwerveDrivetrainSubsystem.getInstance().update;})
-                  .andThen(new WaitCommand(0.07)),
-                new AngleAdjust(Shoot::getAngle, RobotContainer.driverController::getLeftX,
-                    RobotContainer.driverController::getLeftY, false, true)
-              )).andThen((new RunShoot().repeatedly()))
+                  SwerveConstants.MAX_SHOOT_DISTANCE * 0.9 && SwerveDrivetrainSubsystem.getInstance().update;}),
+                new AngleAdjust(() -> Math.toRadians(getTarget()), RobotContainer.driverController::getLeftX,
+                    RobotContainer.driverController::getLeftY, true, true)),
+            new InstantCommand(() -> SwerveDrivetrainSubsystem.getInstance().FactorVelocityTo(0.1)),
+            new ParallelDeadlineGroup(
+              new WaitCommand(0.05),
+              new AngleAdjust(() -> Math.toRadians(getTarget()), RobotContainer.driverController::getLeftX,
+              RobotContainer.driverController::getLeftY, true, true))
+              ,new RunShoot().repeatedly())
     );
   }
 }
