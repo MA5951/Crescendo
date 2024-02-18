@@ -70,9 +70,9 @@ public class AutoShoot extends SequentialCommandGroup {
                   SwerveConstants.MAX_SHOOT_DISTANCE * 0.9 && SwerveDrivetrainSubsystem.getInstance().update;}),
                 new AngleAdjust(() -> Math.toRadians(getTarget()), RobotContainer.driverController::getLeftX,
                     RobotContainer.driverController::getLeftY, true, true)),
-            new InstantCommand(() -> SwerveDrivetrainSubsystem.getInstance().FactorVelocityTo(0.1)),
+            new InstantCommand(() -> SwerveDrivetrainSubsystem.getInstance().FactorVelocityTo(0.15)),
             new ParallelDeadlineGroup(
-              new WaitCommand(0.05),
+              new WaitCommand(0.07),
               new AngleAdjust(() -> Math.toRadians(getTarget()), RobotContainer.driverController::getLeftX,
               RobotContainer.driverController::getLeftY, true, true))
               ,new RunShoot().repeatedly())
