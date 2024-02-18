@@ -348,6 +348,14 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
     ).andThen(new InstantCommand(this::stop));
   }
 
+
+  public void printAbsPositions() {
+    board.addNum("fl" , frontLeftModule.getAbsoluteEncoderPosition());
+    board.addNum("fr" , frontRightModule.getAbsoluteEncoderPosition());
+    board.addNum("rr" , rearRightModule.getAbsoluteEncoderPosition());
+    board.addNum("rl" , rearLeftModule.getAbsoluteEncoderPosition());
+  }
+
   public double getAngleTolorance(double setPoint) {
     return (Math.max(-0.0003 * Math.pow(setPoint, 2) + 7e-17 * setPoint + 10,
       SwerveConstants.ANGLE_PID_TOLORANCE)) * 0.9;
@@ -370,45 +378,36 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
 
     field.setRobotPose(getPose());
 
-    board.addNum("yaw", getFusedHeading());
-    board.addNum("roll", getRoll());
-    board.addNum("pitch", getPitch());
 
-    board.addNum("yaw pose", getPose().getRotation().getDegrees());
-
-    board.addString("pose", "(" + getPose().getX() + ", " + getPose().getY() + " )");
-
-    board.addNum("flV", frontLeftModule.getDriveVelocity());
-
-    board.addBoolean("can shoot", canShoot());
-
-    board.addNum("distance", RobotContainer.APRILTAGS_LIMELIGHT.distance());
-
-    board.addBoolean("update", update);
 
     double ySpeaker = SwerveConstants.SPEAKER_TARGET_Y;
     double xSpeaker =  DriverStation.getAlliance().get() == Alliance.Blue ? 
       SwerveConstants.SPEAKER_TARGET_X_BLUE : SwerveConstants.SPEAKER_TAGET_X_RED;
 
     board.addBoolean("can shoot", canShoot());
+    board.addBoolean("is finshed run shoot", !SwerveDrivetrainSubsystem.getInstance().canShoot() || RobotContainer.isIntakeRunning);
 
-    board.addNum("dis from speaker", disFormSpeaker);
 
-    board.addNum("dis x", disFromSpeakerX);
 
     disFromSpeakerX = new Translation2d(
       SwerveDrivetrainSubsystem.getInstance().getPose().getX(),
         0).getDistance(new Translation2d(xSpeaker, 0));
 
+    board.addNum("distance", disFormSpeaker);
     disFormSpeaker = Math.abs(new Translation2d(xSpeaker, ySpeaker).getDistance(
         getPose().getTranslation())
     );
 
+    board.addBoolean("L2 preesed", RobotContainer.driverController.L2().getAsBoolean());
+    board.addBoolean("can shoot in move", SwerveDrivetrainSubsystem.getInstance().disFormSpeaker < 
+    SwerveConstants.MAX_SHOOT_DISTANCE * 0.925 && SwerveDrivetrainSubsystem.getInstance().update);
+
     if (RobotContainer.APRILTAGS_LIMELIGHT.hasTarget() && 
       RobotContainer.APRILTAGS_LIMELIGHT.getTagId() != -1
+      && RobotContainer.APRILTAGS_LIMELIGHT.distance() > 0 
       && RobotContainer.APRILTAGS_LIMELIGHT.distance() < SwerveConstants.MAX_LIMELIGHT_DIS
       && !DriverStation.isAutonomous()
-      && Math.abs(RobotContainer.APRILTAGS_LIMELIGHT.getX()) < 12) {
+       && Math.abs(RobotContainer.APRILTAGS_LIMELIGHT.getX()) < 30) { 
         Pose2d estPose = RobotContainer.APRILTAGS_LIMELIGHT.getEstPose();
           odometry.addVisionMeasurement(estPose, RobotContainer.APRILTAGS_LIMELIGHT.getTimeStamp());
           update = true;
