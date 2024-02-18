@@ -41,6 +41,7 @@ public class AngleAdjust extends Command {
       SwerveConstants.THATA_KI,
       SwerveConstants.THATA_KD
     );
+    pid.setTolerance(Math.toRadians(2));
     this.angle = angle;
     pid.enableContinuousInput(-Math.PI, Math.PI);
   }
