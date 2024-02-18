@@ -133,6 +133,8 @@ public class RobotContainer {
 
     driverController.triangle().whileTrue(
       new InstantCommand(SwerveDrivetrainSubsystem.getInstance()::updateOffset)
+      .alongWith( new InstantCommand(AutoShoot::updateOffset))
+      .alongWith( new InstantCommand(() -> AutoShoot.setResetOffset(true)))
     );
 
     driverController.touchpad().whileTrue(
@@ -267,15 +269,15 @@ public class RobotContainer {
     );
   }
   public Command getAutonomousCommand() {
-    // return new FourGamePieces(); // 4 gmae piece
+    return new FourGamePieces(); // 4 gmae piece
     // return AutoBuilder.buildAuto("Two pice Stage"); // two pieces from stange side
     // return AutoBuilder.buildAuto("Two pice Middle")
     //   .andThen(AutoBuilder.buildAuto("Theree pice Spaker middle"));
     // return AutoBuilder.buildAuto("one game piece"); // one game piece
     // return AutoBuilder.buildAuto("Two pice Stage");
     // return AutoBuilder.buildAuto("Two pice Amp");
-    return AutoBuilder.buildAuto("Two pice Amp").andThen(
-        AutoBuilder.buildAuto("Theree pice Amp"));
+    // return AutoBuilder.buildAuto("Two pice Amp").andThen(
+    //     AutoBuilder.buildAuto("Theree pice Amp"));
     // return AutoBuilder.buildAuto("2 note far stage");
   }
 }
