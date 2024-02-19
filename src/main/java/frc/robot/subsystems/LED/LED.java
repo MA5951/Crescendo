@@ -5,141 +5,259 @@
 package frc.robot.subsystems.LED;
 
 import com.ma5951.utils.MAShuffleboard;
-import com.ma5951.utils.led.AddressableLEDController;
-import com.ma5951.utils.led.BlinkingColorPattern;
-import com.ma5951.utils.led.BreathingColorPattern;
-import com.ma5951.utils.led.BreathingTripleColorPattern;
-import com.ma5951.utils.led.EvenOddColorPattern;
-import com.ma5951.utils.led.RainbowColorPatterSimultaneously;
-import com.ma5951.utils.led.RainbowColorPattern;
 import com.ma5951.utils.led.SolidColorPattern;
-import com.ma5951.utils.led.WaveBlinkColorPattern;
-import com.ma5951.utils.led.SmoothColorTransitionPattern;
-import com.ma5951.utils.led.SmoothWaveColorPattern;
-import com.ma5951.utils.led.WavePattern;
-import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
+
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.PortMap;
-import frc.robot.RobotContainer;
+import frc.robot.PortMap.Swerve;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
 
 public class LED extends SubsystemBase {
-  /** Creates a new LEDSubsystem. */
+
   private static LED led;
 
-  private AddressableLED addressableLED;
-  private AddressableLEDBuffer addressableLEDBuffer;
+  private AddressableLED leds;
+  private AddressableLEDBuffer ledBuffer;
 
-  AddressableLEDController ledController;
-  SolidColorPattern solidColorPattern;
-  RainbowColorPattern rainbowColorPattern;
-  RainbowColorPatterSimultaneously rainbowColorPatterSimultaneously;
-  BlinkingColorPattern blinkingColorPattern;
-  BreathingColorPattern breathingColorPattern;
-  BreathingTripleColorPattern breathingTripleColorPattern;
-  SmoothColorTransitionPattern smoothColorTransitionPattern;
-  WavePattern wavePattern;
-  SmoothWaveColorPattern smoothWaveColorPattern;
-  WaveBlinkColorPattern waveBlinkColorPattern;
-  EvenOddColorPattern evenOddColorPattern;
-  
-  public boolean activateAmp = false;
-  public boolean activateCoOp = false;
+  public enum HPANIMATIONS {
+    AMPLIFY,
+    COLAB,
+    GROUND,
+    SOURCE,
+
+  }
+  private HPANIMATIONS lasAnimation;
+
+  private HPANIMATIONS activeAnimation;
+  private double startAmpTime = 0;
+  private double startCoOpTime = 0;
+  private int firstHue = 0;
+  private double lastChange;
+  private boolean on;
 
   private MAShuffleboard board;
 
   public LED() {
-
-    addressableLED = new AddressableLED(PortMap.LED.ledPort);
-    addressableLEDBuffer = new AddressableLEDBuffer(LedConstants.ledLength);
-    addressableLED.setLength(addressableLEDBuffer.getLength());
-    addressableLED.setData(addressableLEDBuffer);
-    addressableLED.start();
-    //ledController = new AddressableLEDController(PortMap.LED.ledPort, LedConstants.ledLength);
+    leds = new AddressableLED(PortMap.LED.ledPort);
+    ledBuffer = new AddressableLEDBuffer(LedConstants.ledLength);
+    leds.setLength(ledBuffer.getLength());
+    leds.setData(ledBuffer);
+    leds.start();
 
     board = new MAShuffleboard("LED");
   }
 
   public void setSolidColor(Color color) {
-    solidColorPattern.setColor(color);
-    ledController.setAddressableLEDPattern(solidColorPattern);
-  }
-
-  public void setColor(Color color) {
-    for (var i = 0; i < addressableLEDBuffer.getLength(); i++) {
-      addressableLEDBuffer.setLED(i, color);
+    for (var i = 0; i < ledBuffer.getLength(); i++) {
+      ledBuffer.setLED(i, color);
     }
 
-    addressableLED.setData(addressableLEDBuffer);
+    leds.setData(ledBuffer);
   }
 
-  public void setSmoothWave(int numColors, double period, double speed, Color[] colors) {
-    smoothWaveColorPattern.setParameters(numColors, period, speed, colors);
-    ledController.setAddressableLEDPattern(smoothWaveColorPattern);
+  public void setSolidColorDrivers(Color color) {
+    for (var i = 0; i < LedConstants.driversLedLength; i++) {
+      ledBuffer.setLED(i, color);
+    }
+
+    leds.setData(ledBuffer);
   }
 
-  public void setRainbow() {
-    ledController.setAddressableLEDPattern(rainbowColorPattern);
+  public void setSolidColorHP(Color color) {
+    for (var i = LedConstants.driversLedLength + 1; i < LedConstants.hpLedLength; i++) {
+      ledBuffer.setLED(i, color);
+    }
+
+    leds.setData(ledBuffer);
   }
 
-  public void setSmoothColorTransition(Color color, Color color2, double interval) {
-    smoothColorTransitionPattern.setParameters(color, color2, interval);
-    ledController.setAddressableLEDPattern(smoothColorTransitionPattern);
-  }
-  
-  public void setFullRainbow() {
-    ledController.setAddressableLEDPattern(rainbowColorPatterSimultaneously);
-  }
+  public void rainbowColorPatternDrivers() {
+    int currentHue;
+    int length = LedConstants.driversLedLength;
 
+    for (int i = 0; i < length; i++) {
+        currentHue = (firstHue + (i * 180 / length)) % 180;
+        ledBuffer.setHSV(i, currentHue, 255, 128);
+    }
 
-  public void setWave(int numColors, double period, double speed, Color[] colors) {
-    wavePattern.setParameters(numColors, period, speed, colors);
-    ledController.setAddressableLEDPattern(wavePattern);
-  }
-  
-  public void setEvenOdd(Color color, Color color2, double lenght) {
-    evenOddColorPattern.setParameters(color, color2, lenght);
-    ledController.setAddressableLEDPattern(evenOddColorPattern);
+    firstHue = (firstHue + 3) % 180;
   }
 
+  public void rainbowColorPatternHP() {
+    int currentHue;
+    int length = LedConstants.hpLedLength;
 
-  public void setWaveBlink(Color color, Color color2, double interval) {
-    waveBlinkColorPattern.setParameters(color, color2, interval);
-    ledController.setAddressableLEDPattern(waveBlinkColorPattern);
+    for (int i = LedConstants.driversLedLength + 1; i < length; i++) {
+        currentHue = (firstHue + (i * 180 / length)) % 180;
+        ledBuffer.setHSV(i, currentHue, 255, 128);
+    }
+
+    firstHue = (firstHue + 3) % 180;
   }
 
+  public void blinkColorPatternDrivers( double interval,Color colorOne, Color colorTwo) {
+    double timestamp = Timer.getFPGATimestamp();
 
-  public void setBlinking(Color color, Color color2, double interval) {
-    blinkingColorPattern.setParameters(color, color2, interval);
-    ledController.setAddressableLEDPattern(blinkingColorPattern);
+    if (timestamp - lastChange > interval) {
+        on = !on;
+        lastChange = timestamp;
+    }
+    if (on) {
+        setSolidColorDrivers(colorTwo);
+    }
+    else {
+        setSolidColorDrivers(colorTwo);
+    }
   }
 
-  public void setBreathing(Color color, double interval){
-    breathingColorPattern.setParameters(color, interval);
-    ledController.setAddressableLEDPattern(breathingColorPattern);
+  public void blinkColorPatternHP( double interval,Color colorOne, Color colorTwo) {
+    double timestamp = Timer.getFPGATimestamp();
+
+    if (timestamp - lastChange > interval) {
+        on = !on;
+        lastChange = timestamp;
+    }
+    if (on) {
+        setSolidColorHP(colorTwo);
+    }
+    else {
+        setSolidColorHP(colorTwo);
+    }
   }
 
-  public void setBreathingTriple(Color color, Color color2, double interval){
-    breathingTripleColorPattern.setParameters(color, color2, interval);
-    ledController.setAddressableLEDPattern(breathingTripleColorPattern);
+  public void waveColorPatternDrivers(int period , int numColors , Color[] colors) {
+    double elapsedTime = Timer.getFPGATimestamp() % period;
+    double progress = elapsedTime / period;
+    int numLeds = LedConstants.driversLedLength;
+
+    for (int i = 0; i < numLeds; i++) {
+      double position = (double) i / (double) numLeds;
+      double wavePosition = (position + progress) % 1.0;
+      int colorIndex = (int) (wavePosition * numColors);
+      
+      Color currentColor = colors[colorIndex];
+      ledBuffer.setLED(i, currentColor);
+    }
+  }
+
+  public void waveColorPatternHP(int period , int numColors , Color[] colors) {
+    double elapsedTime = Timer.getFPGATimestamp() % period;
+    double progress = elapsedTime / period;
+    int numLeds = LedConstants.hpLedLength;
+
+    for (int i = LedConstants.driversLedLength + 1; i < numLeds; i++) {
+      double position = (double) i / (double) numLeds;
+      double wavePosition = (position + progress) % 1.0;
+      int colorIndex = (int) (wavePosition * numColors);
+      
+      Color currentColor = colors[colorIndex];
+      ledBuffer.setLED(i, currentColor);
+    }
+  }
+
+  public void smoothWaveColorPatternDrivers(int numColors, double period, double speed, Color[] colors) {
+    double elapsedTime = Timer.getFPGATimestamp();
+
+    for (int i = 0; i < LedConstants.driversLedLength; i++) {
+      double position = ((double) i / LedConstants.driversLedLength) + (elapsedTime * speed / period);
+      double progress = position - (int) position;
+
+      int startColorIndex = (int) (position % numColors);
+      int endColorIndex = (startColorIndex + 1) % numColors;
+      Color startColor = colors[startColorIndex];
+      Color endColor = colors[endColorIndex];
+
+      Color currentColor = new Color(
+              startColor.red + (endColor.red - startColor.red) * progress,
+              startColor.green + (endColor.green - startColor.green) * progress,
+              startColor.blue + (endColor.blue - startColor.blue) * progress
+      );
+
+      ledBuffer.setLED(i, currentColor);
+    }
+  }
+
+  public void smoothWaveColorPatternHP(int numColors, double period, double speed, Color[] colors) {
+    double elapsedTime = Timer.getFPGATimestamp();
+
+    for (int i = LedConstants.driversLedLength + 1; i < LedConstants.hpLedLength; i++) {
+      double position = ((double) i / LedConstants.hpLedLength) + (elapsedTime * speed / period);
+      double progress = position - (int) position;
+
+      int startColorIndex = (int) (position % numColors);
+      int endColorIndex = (startColorIndex + 1) % numColors;
+      Color startColor = colors[startColorIndex];
+      Color endColor = colors[endColorIndex];
+
+      Color currentColor = new Color(
+              startColor.red + (endColor.red - startColor.red) * progress,
+              startColor.green + (endColor.green - startColor.green) * progress,
+              startColor.blue + (endColor.blue - startColor.blue) * progress
+      );
+
+      ledBuffer.setLED(i, currentColor);
+    }
+  }
+
+  public void smoothWaveColorPattern(int numColors, double period, double speed, Color[] colors) {
+    double elapsedTime = Timer.getFPGATimestamp();
+
+    for (int i = 0; i < ledBuffer.getLength(); i++) {
+      double position = ((double) i / ledBuffer.getLength()) + (elapsedTime * speed / period);
+      double progress = position - (int) position;
+
+      int startColorIndex = (int) (position % numColors);
+      int endColorIndex = (startColorIndex + 1) % numColors;
+      Color startColor = colors[startColorIndex];
+      Color endColor = colors[endColorIndex];
+
+      Color currentColor = new Color(
+              startColor.red + (endColor.red - startColor.red) * progress,
+              startColor.green + (endColor.green - startColor.green) * progress,
+              startColor.blue + (endColor.blue - startColor.blue) * progress
+      );
+
+      ledBuffer.setLED(i, currentColor);
+    }
+  }
+
+  public void blinkColorPattern( double interval,Color colorOne, Color colorTwo) {
+    double timestamp = Timer.getFPGATimestamp();
+
+    if (timestamp - lastChange > interval) {
+        on = !on;
+        lastChange = timestamp;
+    }
+    if (on) {
+        setSolidColor(colorTwo);
+    }
+    else {
+        setSolidColor(colorTwo);
+    }
+  }
+
+  public void updateLeds() {
+    leds.setData(ledBuffer);
   }
 
   public void setAllianceColor() {
-    if (DriverStation.isFMSAttached()) {
-      if (DriverStation.getAlliance().get() == Alliance.Red) {
-        setSmoothWave(2, 1, 1, new Color [] {LedConstants.RED, LedConstants.BLACK});
-      } else if (DriverStation.getAlliance().get() == Alliance.Blue) {
-        setSmoothWave(2, 1, 1, new Color [] {LedConstants.BLUE, LedConstants.BLACK});
-      } else {
-        setSmoothWave(2, 1, 1, new Color [] {LedConstants.PURPLE, LedConstants.BLACK});
-      }
+    if ( DriverStation.isFMSAttached()) {
+      if (DriverStation.getAlliance().get() == Alliance.Blue) {
+      smoothWaveColorPattern(2, 1, 0.2, new Color[] {LedConstants.BLACK , LedConstants.BLUE});
+    } else if ( DriverStation.getAlliance().get() == Alliance.Red) {
+      smoothWaveColorPattern(2, 1, 0.2, new Color[] {LedConstants.BLACK , LedConstants.RED});
     } else {
-      setBlinking(LedConstants.BLACK, LedConstants.RED, 2);
+      smoothWaveColorPattern(2, 1, 0.2, new Color[] {LedConstants.BLACK , LedConstants.PURPLE});
+    }
+    } else {
+      blinkColorPattern(1, LedConstants.PURPLE, LedConstants.BLACK);
     }
   }
 
@@ -151,67 +269,55 @@ public class LED extends SubsystemBase {
   }
 
   public void activateAmp() {
-    activateAmp = true;
+    lasAnimation = activeAnimation;
+    activeAnimation = HPANIMATIONS.AMPLIFY;
+    startAmpTime = Timer.getFPGATimestamp();
   }
 
   public void activateCoalition() {
-    activateCoOp = true;
+    lasAnimation = activeAnimation;
+    activeAnimation = HPANIMATIONS.COLAB;
+    startCoOpTime = Timer.getFPGATimestamp();
+  }
+
+  public void runDriversAnimations() {
+    if (SwerveDrivetrainSubsystem.getInstance().canShoot()) {
+      setSolidColorDrivers(LedConstants.Ring);
+    } else if (Intake.getInstance().isGamePieceInIntake()) {
+      setSolidColorDrivers(LedConstants.GREEN);
+    } else {
+      setSolidColor(LedConstants.BLUE);
+    }
+  }
+
+  public void runHpAnimations() {
+    if (activeAnimation == HPANIMATIONS.AMPLIFY) {
+      smoothWaveColorPatternHP(2, 1, 1, new Color[] {LedConstants.BLUE , LedConstants.BLACK});
+    } else if (activeAnimation == HPANIMATIONS.COLAB) {
+      smoothWaveColorPatternHP(2, 1, 1, new Color[] {LedConstants.Ring , LedConstants.BLACK});
+    } else if (activeAnimation == HPANIMATIONS.GROUND) {
+      setSolidColorHP(LedConstants.BLUE);
+    } else if (activeAnimation == HPANIMATIONS.SOURCE) {
+      setSolidColorHP(LedConstants.MAcolor);
+    }
+  }
+
+  public void setAnimation(HPANIMATIONS animation) {
+    activeAnimation = animation;
   }
 
   @Override
   public void periodic() {
-    // if (DriverStation.isDisabled()) {
+    // if (!DriverStation.isEnabled()) {
     //   setAllianceColor();
-    // } 
-    // else {
-    //   if (activateAmp) {
-    //     if (Timer.getFPGATimestamp() - startAmpTime < LedConstants.activateTime) {
-    //       setBlinking(LedConstants.BLUE, LedConstants.WHITE, 0.3);
-    //     } else if (Timer.getFPGATimestamp() - startAmpTime < 10 && Timer.getFPGATimestamp() - startAmpTime > LedConstants.activateTime) {
-    //       if (Intake.getInstance().isGamePieceInIntake()) {
-    //         setSmoothWave(2, 1, 1, new Color [] {LedConstants.GREEN, LedConstants.BLUE}); 
-    //       } else if (!Intake.getInstance().isGamePieceInIntake()) {
-    //         setSmoothWave(2, 1, 1, new Color [] {LedConstants.Ring, LedConstants.BLUE});
-    //       }
-    //     } else {
-    //       activateAmp = false;
-    //     }
-    //   } else if (activateCoOp) {
-    //     if (Timer.getFPGATimestamp() - startCoOpTime < LedConstants.activateTime) {
-    //       setBlinking(LedConstants.YELLOW, LedConstants.WHITE, 0.3);
-    //     } else if (Timer.getFPGATimestamp() - startCoOpTime < 10 && Timer.getFPGATimestamp() - startCoOpTime > LedConstants.activateTime) {
-    //       if (Intake.getInstance().isGamePieceInIntake()) {
-    //         setSmoothWave(2, 1, 1, new Color [] {LedConstants.GREEN, LedConstants.YELLOW}); 
-    //       } else if (!Intake.getInstance().isGamePieceInIntake()) {
-    //         setSmoothWave(2, 1, 1, new Color [] {LedConstants.Ring, LedConstants.YELLOW});
-    //       }
-    //     } else {
-    //       activateCoOp = false;
-    //     }
-    //   }  
-    //   else {
-    //     if (Intake.getInstance().isGamePieceInIntake()) {
-    //       setSmoothWave(2, 1, 1, new Color [] {LedConstants.GREEN, LedConstants.WHITE}); 
-    //     } else if (!Intake.getInstance().isGamePieceInIntake()) {
-    //       setSmoothWave(2, 1, 1, new Color [] {LedConstants.Ring, LedConstants.WHITE});
-    //     }
-    //   }
+    // } else if (DriverStation.isAutonomous()) {
+    //   //Auto animation
+    // } else {
+    //   runDriversAnimations();
     // }
-    
-    if (activateAmp) {
-      setColor(LedConstants.WHITE);
-    } else if (activateCoOp) {
-      setColor(LedConstants.ORANGE);
-    } if (SwerveDrivetrainSubsystem.getInstance().canShoot()) {
-      setColor(LedConstants.Ring);
-    } else if (Intake.getInstance().isGamePieceInIntake()) {
-      setColor(LedConstants.GREEN);
-    } else if (RobotContainer.IsFloor()){
-      setColor(LedConstants.BLUE);
-    } else {
-      setColor(LedConstants.MAcolor);
-    }
-    board.addBoolean("activateAmp", activateAmp);
-    board.addBoolean("activateCoOp", activateCoOp);
+
+    setSolidColor(LedConstants.GREEN);
+
+    updateLeds();
   }
 }
