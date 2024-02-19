@@ -41,7 +41,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.PortMap;
 import frc.robot.RobotContainer;
-import frc.robot.automations.Shoot;
 
 public class SwerveDrivetrainSubsystem extends SubsystemBase {
 
