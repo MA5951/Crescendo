@@ -45,6 +45,7 @@ import frc.robot.commands.shooter.SetShooter;
 import frc.robot.commands.swerve.AngleAdjust;
 import frc.robot.commands.swerve.DriveSwerveCommand;
 import frc.robot.subsystems.LED.LED;
+import frc.robot.subsystems.LED.LED.HPANIMATIONS;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorConstants;
 import frc.robot.subsystems.intake.Intake;
@@ -239,10 +240,12 @@ public class RobotContainer {
     // // choosing btween floor intake and source
     operatorController.povLeft().whileTrue(
       new InstantCommand(() -> intakepose = IntakePose.FLOOR)
+      .alongWith(new InstantCommand(() -> LED.getInstance().setAnimation(HPANIMATIONS.GROUND)))
     );
 
     operatorController.povRight().whileTrue(
       new InstantCommand(() -> intakepose = IntakePose.SOURCE)
+      .alongWith(new InstantCommand(() -> LED.getInstance().setAnimation(HPANIMATIONS.SOURCE)))
     );
 
     // choosing btween linked shoot or normal one
@@ -258,16 +261,14 @@ public class RobotContainer {
 
     operatorController.square().whileTrue(
       new InstantCommand(() -> LED.getInstance().activateAmp())
-    ).whileFalse(
-      new InstantCommand(() -> LED.getInstance().activateAmp = false)
     );
 
     operatorController.circle().whileTrue(
       new InstantCommand(() -> LED.getInstance().activateCoalition())
-    ).whileFalse(
-      new InstantCommand(() -> LED.getInstance().activateCoOp = false)
     );
+
   }
+
   public Command getAutonomousCommand() {
     return new FourGamePieces(); // 4 gmae piece
     // return AutoBuilder.buildAuto("Two pice Stage"); // two pieces from stange side
