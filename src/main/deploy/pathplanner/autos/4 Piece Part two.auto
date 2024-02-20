@@ -39,6 +39,12 @@
         {
           "type": "named",
           "data": {
+            "name": "Update Limelight"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Shoot linked to speaker"
           }
         },
@@ -62,15 +68,21 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "4 piece Part two 4"
+            "name": "Update Limelight"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Shoot linked to speaker"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "4 piece Part two 4"
           }
         },
         {

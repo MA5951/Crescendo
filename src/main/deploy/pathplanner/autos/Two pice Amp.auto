@@ -58,6 +58,12 @@
         {
           "type": "named",
           "data": {
+            "name": "Update Limelight"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Shoot linked to speaker"
           }
         }
