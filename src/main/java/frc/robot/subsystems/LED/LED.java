@@ -88,6 +88,7 @@ public class LED extends SubsystemBase {
     }
 
     firstHue = (firstHue + 3) % 180;
+    leds.setData(ledBuffer);
   }
 
   public void rainbowColorPatternHP() {
@@ -100,6 +101,7 @@ public class LED extends SubsystemBase {
     }
 
     firstHue = (firstHue + 3) % 180;
+    leds.setData(ledBuffer);
   }
 
   public void blinkColorPatternDrivers( double interval,Color colorOne, Color colorTwo) {
@@ -145,6 +147,8 @@ public class LED extends SubsystemBase {
       Color currentColor = colors[colorIndex];
       ledBuffer.setLED(i, currentColor);
     }
+
+    leds.setData(ledBuffer);
   }
 
   public void waveColorPatternHP(int period , int numColors , Color[] colors) {
@@ -160,6 +164,7 @@ public class LED extends SubsystemBase {
       Color currentColor = colors[colorIndex];
       ledBuffer.setLED(i, currentColor);
     }
+    leds.setData(ledBuffer);
   }
 
   public void smoothWaveColorPatternDrivers(int numColors, double period, double speed, Color[] colors) {
@@ -182,6 +187,8 @@ public class LED extends SubsystemBase {
 
       ledBuffer.setLED(i, currentColor);
     }
+
+    leds.setData(ledBuffer);
   }
 
   public void smoothWaveColorPatternHP(int numColors, double period, double speed, Color[] colors) {
@@ -204,6 +211,8 @@ public class LED extends SubsystemBase {
 
       ledBuffer.setLED(i, currentColor);
     }
+
+    leds.setData(ledBuffer);
   }
 
   public void smoothWaveColorPattern(int numColors, double period, double speed, Color[] colors) {
@@ -226,6 +235,8 @@ public class LED extends SubsystemBase {
 
       ledBuffer.setLED(i, currentColor);
     }
+
+    leds.setData(ledBuffer);
   }
 
   public void blinkColorPattern( double interval,Color colorOne, Color colorTwo) {
@@ -241,6 +252,8 @@ public class LED extends SubsystemBase {
     else {
         setSolidColor(colorTwo);
     }
+
+    leds.setData(ledBuffer);
   }
 
   public void updateLeds() {
@@ -251,11 +264,11 @@ public class LED extends SubsystemBase {
     if ( DriverStation.isFMSAttached()) {
       if (DriverStation.getAlliance().get() == Alliance.Blue) {
       smoothWaveColorPattern(2, 1, 0.2, new Color[] {LedConstants.BLACK , LedConstants.BLUE});
-    } else if ( DriverStation.getAlliance().get() == Alliance.Red) {
+      } else if ( DriverStation.getAlliance().get() == Alliance.Red) {
       smoothWaveColorPattern(2, 1, 0.2, new Color[] {LedConstants.BLACK , LedConstants.RED});
-    } else {
+      } else {
       smoothWaveColorPattern(2, 1, 0.2, new Color[] {LedConstants.BLACK , LedConstants.PURPLE});
-    }
+      }
     } else {
       blinkColorPattern(1, LedConstants.PURPLE, LedConstants.BLACK);
     }
@@ -286,7 +299,7 @@ public class LED extends SubsystemBase {
     } else if (Intake.getInstance().isGamePieceInIntake()) {
       setSolidColorDrivers(LedConstants.GREEN);
     } else {
-      setSolidColor(LedConstants.BLUE);
+      setSolidColorDrivers(LedConstants.BLUE);
     }
   }
 
@@ -308,15 +321,16 @@ public class LED extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // if (!DriverStation.isEnabled()) {
-    //   setAllianceColor();
-    // } else if (DriverStation.isAutonomous()) {
-    //   //Auto animation
-    // } else {
-    //   runDriversAnimations();
-    // }
+    if (!DriverStation.isEnabled()) {
+      setAllianceColor();
+    } else if (DriverStation.isAutonomous()) {
+      //Auto animation
+    } else {
+      runDriversAnimations();
+      runHpAnimations();
+    }
 
-    setSolidColor(LedConstants.GREEN);
+    //setSolidColor(LedConstants.GREEN);
 
     updateLeds();
   }
