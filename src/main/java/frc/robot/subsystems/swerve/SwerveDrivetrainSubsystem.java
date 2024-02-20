@@ -360,6 +360,11 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
       SwerveConstants.ANGLE_PID_TOLORANCE)) * 0.9;
   }
 
+  public void addVisionMeasurement() {
+     Pose2d estPose = RobotContainer.APRILTAGS_LIMELIGHT.getEstPose();
+      odometry.addVisionMeasurement(estPose, RobotContainer.APRILTAGS_LIMELIGHT.getTimeStamp());
+  }
+
   public static SwerveDrivetrainSubsystem getInstance() {
     if (swerve == null) {
       swerve = new SwerveDrivetrainSubsystem();
