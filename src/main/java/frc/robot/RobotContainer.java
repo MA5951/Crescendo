@@ -114,7 +114,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("eject", new MotorCommand(Intake.getInstance(),
       -IntakeConstants.INTAKE_POWER, 0));
     
-    NamedCommands.registerCommand("update LImelight", new InstantCommand(
+    NamedCommands.registerCommand("Update Limelight", new InstantCommand(
       () -> SwerveDrivetrainSubsystem.getInstance().addVisionMeasurement()
     ));
     
@@ -221,13 +221,11 @@ public class RobotContainer {
         )));
 
     // climb
-    new CreateButton(operatorController.triangle(), 
-      new SetElevator(ElevatorConstants.CLIMB_POSE),
-      ElevatorConstants.CLIMB_POSE);
-  
-    new CreateButton(operatorController.cross(), 
-      new SetElevator(ElevatorConstants.CLOSE_CLIMB_POSE),
-      ElevatorConstants.CLOSE_CLIMB_POSE);
+    operatorController.triangle().whileTrue(
+      new InstantCommand(() -> Elevator.getInstance().configMotorsForClimb())
+      .andThen(new SetElevator(ElevatorConstants.CLIMB_POSE)) 
+    ).whileFalse(new SetElevator(ElevatorConstants.CLOSE_CLIMB_POSE)
+    .andThen(() -> Elevator.getInstance().configMotors()));
 
     // elevator change + amp or shoot chooser
     new CreateButton(operatorController.L1(), 

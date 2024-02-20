@@ -5,6 +5,7 @@ public class ElevatorConstants {
     public static final double KI = 0;
     public static final double KD = 0.004;
     public static final double TOLERANCE = 0.01;
+    public static final double KP_CLIMB = 0.8;
 
     public static final double MIN_POSE = 0.01;
     public static final double MAX_POSE = 0.45;
