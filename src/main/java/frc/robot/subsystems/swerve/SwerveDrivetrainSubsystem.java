@@ -357,15 +357,18 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
 
   public double getAngleTolorance(double setPoint) {
     if (DriverStation.getAlliance().get() == Alliance.Red) {
-      setPoint = Math.PI - setPoint;
+      setPoint = -(setPoint - Math.PI);
     }
     return (Math.max(-0.0003 * Math.pow(setPoint, 2) + 7e-17 * setPoint + 10,
       SwerveConstants.ANGLE_PID_TOLORANCE)) * 1.3;
   }
 
   public void addVisionMeasurement() {
-     Pose2d estPose = RobotContainer.APRILTAGS_LIMELIGHT.getEstPose();
+    if (RobotContainer.APRILTAGS_LIMELIGHT.hasTarget()
+      && RobotContainer.APRILTAGS_LIMELIGHT.getTagId() != -1) {
+      Pose2d estPose = RobotContainer.APRILTAGS_LIMELIGHT.getEstPose();
       odometry.addVisionMeasurement(estPose, RobotContainer.APRILTAGS_LIMELIGHT.getTimeStamp());
+    }
   }
 
   public static SwerveDrivetrainSubsystem getInstance() {
@@ -384,8 +387,6 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
 
 
     field.setRobotPose(getPose());
-
-
 
     double ySpeaker = SwerveConstants.SPEAKER_TARGET_Y;
     double xSpeaker = 0;

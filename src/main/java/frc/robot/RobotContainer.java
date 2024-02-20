@@ -217,13 +217,12 @@ public class RobotContainer {
         )));
 
     // climb
-    new CreateButton(operatorController.triangle(), 
-      new SetElevator(ElevatorConstants.CLIMB_POSE),
-      ElevatorConstants.CLIMB_POSE);
-  
-    new CreateButton(operatorController.cross(), 
-      new SetElevator(ElevatorConstants.CLOSE_CLIMB_POSE),
-      ElevatorConstants.CLOSE_CLIMB_POSE);
+    operatorController.triangle().whileTrue(
+      new SetElevator(ElevatorConstants.CLIMB_POSE)
+    ).whileFalse(new InstantCommand (() -> Elevator.getInstance().configMotorsForClimb())
+    .andThen(new SetElevator(ElevatorConstants.CLOSE_CLIMB_POSE))
+    .andThen(new InstantCommand (() -> Elevator.getInstance().configMotors())));
+
 
     // elevator change + amp or shoot chooser
     new CreateButton(operatorController.L1(), 
@@ -268,16 +267,16 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    //return new FourGamePieces(); // 4 gmae piece
-    // return AutoBuilder.buildAuto("Two pice Stage"); // two pieces from stange side
-    // return AutoBuilder.buildAuto("Two pice Middle");
-    //   .andThen(AutoBuilder.buildAuto("Theree pice Spaker middle"));
+    // return new FourGamePieces(); // 4 gmae piece
+    // return AutoBuilder.buildAuto("Two pice Stage"); // two pieces from stage side
+    return AutoBuilder.buildAuto("Two pice Middle")
+      .andThen(AutoBuilder.buildAuto("Theree pice Spaker middle"));
     // return AutoBuilder.buildAuto("one game piece"); // one game piece
     // return AutoBuilder.buildAuto("Two pice Stage");
-    //return AutoBuilder.buildAuto("Two pice Amp");
+    // return AutoBuilder.buildAuto("Two pice Amp");
     //return AutoBuilder.buildAuto("Two pice Amp").andThen(
     //    AutoBuilder.buildAuto("Theree pice Amp"));
     // return AutoBuilder.buildAuto("2 note far stage");
-    return null;
+    // return null;
   }
 }

@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.2337167531477924,
-      "y": 5.541275082550166
+      "x": 1.33,
+      "y": 5.54
     },
     "rotation": 180.0
   },
@@ -68,6 +68,12 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "4 piece Part two 4"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "Update Limelight"
@@ -77,12 +83,6 @@
           "type": "named",
           "data": {
             "name": "Shoot linked to speaker"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "4 piece Part two 4"
           }
         },
         {
