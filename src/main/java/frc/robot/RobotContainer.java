@@ -40,8 +40,6 @@ import frc.robot.automations.Auto.SetForAmp;
 import frc.robot.commands.Intake.IntakeCommand;
 import frc.robot.commands.elevator.ResetElevator;
 import frc.robot.commands.elevator.SetElevator;
-import frc.robot.commands.shooter.SetShooter;
-import frc.robot.commands.swerve.AngleAdjust;
 import frc.robot.commands.swerve.DriveSwerveCommand;
 import frc.robot.subsystems.LED.LED;
 import frc.robot.subsystems.LED.LED.HPANIMATIONS;
@@ -137,8 +135,6 @@ public class RobotContainer {
 
     driverController.triangle().whileTrue(
       new InstantCommand(SwerveDrivetrainSubsystem.getInstance()::updateOffset)
-      .alongWith( new InstantCommand(AutoShoot::updateOffset))
-      .alongWith( new InstantCommand(() -> AutoShoot.setResetOffset(true)))
     );
 
     driverController.touchpad().whileTrue(
@@ -269,13 +265,12 @@ public class RobotContainer {
     operatorController.circle().whileTrue(
       new InstantCommand(() -> LED.getInstance().activateCoalition())
     );
-
   }
 
   public Command getAutonomousCommand() {
     //return new FourGamePieces(); // 4 gmae piece
     // return AutoBuilder.buildAuto("Two pice Stage"); // two pieces from stange side
-     return AutoBuilder.buildAuto("Two pice Middle");
+    // return AutoBuilder.buildAuto("Two pice Middle");
     //   .andThen(AutoBuilder.buildAuto("Theree pice Spaker middle"));
     // return AutoBuilder.buildAuto("one game piece"); // one game piece
     // return AutoBuilder.buildAuto("Two pice Stage");
@@ -283,5 +278,6 @@ public class RobotContainer {
     //return AutoBuilder.buildAuto("Two pice Amp").andThen(
     //    AutoBuilder.buildAuto("Theree pice Amp"));
     // return AutoBuilder.buildAuto("2 note far stage");
+    return null;
   }
 }

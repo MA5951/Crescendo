@@ -20,20 +20,21 @@ public class AngleAdjust extends Command {
   private Supplier<Double> ySupplier;
   private boolean dontStopAtPoint = false;
   private boolean useGyro;
+  private boolean aligningToSpeaker = false;
 
   public static boolean atPoint() {
     return pid.atSetpoint();
   }
 
   public AngleAdjust(Supplier<Double> angle,
-    Supplier<Double> xSupplier, Supplier<Double> ySupplier, boolean useGyro, boolean dontStopAtPoint) {
+    Supplier<Double> xSupplier, Supplier<Double> ySupplier, boolean useGyro, boolean dontStopAtPoint
+    , boolean aligningToSpeaker) {
     swerve = SwerveDrivetrainSubsystem.getInstance();
     addRequirements(swerve);
 
     this.useGyro = useGyro;
     this.dontStopAtPoint = dontStopAtPoint;
-
-
+    this.aligningToSpeaker = aligningToSpeaker;
 
     this.xSupplier = xSupplier;
     this.ySupplier = ySupplier;
@@ -43,7 +44,7 @@ public class AngleAdjust extends Command {
       SwerveConstants.THATA_KI,
       SwerveConstants.THATA_KD
     );
-    pid.setTolerance(Math.toRadians(6));
+    pid.setTolerance(SwerveConstants.ANGLE_PID_TOLORANCE);
     this.angle = angle;
     pid.enableContinuousInput(-Math.PI, Math.PI);
   }
@@ -53,8 +54,13 @@ public class AngleAdjust extends Command {
   }
 
   public AngleAdjust(Supplier<Double> angle,
+    Supplier<Double> xSupplier, Supplier<Double> ySupplier, boolean useGyro, boolean dontStopAtPoint) {
+      this(angle, xSupplier, ySupplier, useGyro, dontStopAtPoint, false);
+    }
+
+  public AngleAdjust(Supplier<Double> angle,
     Supplier<Double> xSupplier, Supplier<Double> ySupplier) {
-      this(angle, xSupplier, ySupplier, false, false);
+      this(angle, xSupplier, ySupplier, false, false, false);
     }
 
   // Called when the command is initially scheduled.
@@ -66,6 +72,9 @@ public class AngleAdjust extends Command {
   @Override
   public void execute() {
     pid.setSetpoint(angle.get());
+    if (aligningToSpeaker) {
+      pid.setTolerance(swerve.getAngleTolorance(angle.get()));
+    }
     double xSpeed = SwerveDrivetrainSubsystem.getInstance().isXYReversed ? 
       ySupplier.get() : xSupplier.get();
     double ySpeed = SwerveDrivetrainSubsystem.getInstance().isXYReversed ?

@@ -16,7 +16,7 @@ import frc.robot.subsystems.shooter.UpperShooter;
 import com.revrobotics.CANSparkMax;
 
 public class Intake extends SubsystemBase implements MotorSubsystem{
-  private static Intake intake;
+  private static Intake instance;
   
   private final DigitalInput upSensor;
   private final DigitalInput downSensor;
@@ -38,7 +38,7 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
 
     master.enableVoltageCompensation(12);
     slave.enableVoltageCompensation(12);
-
+    
     upSensor = new DigitalInput(PortMap.Intake.sensor1ID);
     downSensor = new DigitalInput(PortMap.Intake.sensor2ID);
     board = new MAShuffleboard("Intake");
@@ -72,10 +72,10 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
   }
 
   public static Intake getInstance() {
-  if (intake == null) {
-      intake = new Intake();  
+    if (instance == null) {
+        instance = new Intake();  
     }
-  return intake;
+    return instance;
   }
 
   @Override

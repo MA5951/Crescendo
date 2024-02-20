@@ -356,8 +356,11 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
   }
 
   public double getAngleTolorance(double setPoint) {
+    if (DriverStation.getAlliance().get() == Alliance.Red) {
+      setPoint = Math.PI - setPoint;
+    }
     return (Math.max(-0.0003 * Math.pow(setPoint, 2) + 7e-17 * setPoint + 10,
-      SwerveConstants.ANGLE_PID_TOLORANCE)) * 0.9;
+      SwerveConstants.ANGLE_PID_TOLORANCE)) * 1.3;
   }
 
   public void addVisionMeasurement() {
@@ -385,8 +388,11 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
 
 
     double ySpeaker = SwerveConstants.SPEAKER_TARGET_Y;
-    double xSpeaker =  DriverStation.getAlliance().get() == Alliance.Blue ? 
+    double xSpeaker = 0;
+    if (!DriverStation.getAlliance().isEmpty()) {
+      xSpeaker = DriverStation.getAlliance().get() == Alliance.Blue ? 
       SwerveConstants.SPEAKER_TARGET_X_BLUE : SwerveConstants.SPEAKER_TAGET_X_RED;
+    }
 
     board.addBoolean("can shoot", canShoot());
     board.addBoolean("is finshed run shoot", !SwerveDrivetrainSubsystem.getInstance().canShoot() || RobotContainer.isIntakeRunning);
@@ -411,10 +417,10 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
       && RobotContainer.APRILTAGS_LIMELIGHT.distance() > 0 
       && RobotContainer.APRILTAGS_LIMELIGHT.distance() < SwerveConstants.MAX_LIMELIGHT_DIS
       && !DriverStation.isAutonomous()
-       && Math.abs(RobotContainer.APRILTAGS_LIMELIGHT.getX()) < 30) { 
+      && Math.abs(RobotContainer.APRILTAGS_LIMELIGHT.getX()) < 30) { 
         Pose2d estPose = RobotContainer.APRILTAGS_LIMELIGHT.getEstPose();
           odometry.addVisionMeasurement(estPose, RobotContainer.APRILTAGS_LIMELIGHT.getTimeStamp());
           update = true;
-      }      
-  }
+      }
+    }
 }

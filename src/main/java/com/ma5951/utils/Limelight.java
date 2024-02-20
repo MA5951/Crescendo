@@ -86,11 +86,11 @@ public class Limelight {
       return -1;
     }
     double[] aprilTagsHights = {
-     0,1.22, 1.22, 1.32, 1.32, 1.22,
+     1.22, 1.22, 1.32, 1.32, 1.22,
       1.22, 1.32, 1.32, 1.22, 1.22,
       1.21, 1.21, 1.21, 1.21, 1.21, 1.21
     };
-    double deltaHight = aprilTagsHights[getTagId()] - cammeraHight;
+    double deltaHight = aprilTagsHights[getTagId() - 1] - cammeraHight;
     double deltaAngle = getY() + cammeraAngle;
     return deltaHight / Math.tan(Math.toRadians(deltaAngle));
   }
