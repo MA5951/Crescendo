@@ -18,32 +18,45 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Shoot linked to speaker"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
                   "name": "ResetElevator"
                 }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Note 3 intake Stageside"
-                }
               },
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "Intake"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Shoot linked to speaker"
+                      }
+                    },
+                    {
+                      "type": "parallel",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "stop shooter"
+                            }
+                          },
+                          {
+                            "type": "path",
+                            "data": {
+                              "pathName": "Note 3 intake Stageside"
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "Intake"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
                 }
               }
             ]
@@ -58,8 +71,33 @@
                 "data": {
                   "pathName": "Note 3 score Stageside"
                 }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Center Ring"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Set Shooter Speed"
+                      }
+                    }
+                  ]
+                }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Update Limelight"
           }
         },
         {
@@ -81,16 +119,54 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Node 2 intake Stageside"
+                  "pathName": "Node 2 intake Stageside 3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "stop shooter"
                 }
               }
             ]
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": " Node 2 score Stageside"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": " Node 2 score Stageside 3"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Center Ring"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Set Shooter Speed"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Update Limelight"
           }
         },
         {

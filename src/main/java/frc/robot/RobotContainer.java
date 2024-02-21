@@ -109,8 +109,9 @@ public class RobotContainer {
         new RunInternallyControlledSubsystem(LowerShooter.getInstance(),
       () -> ShooterConstants.SPEAKER_LOWER_V_AUTO, false)));
 
-    NamedCommands.registerCommand("eject", new MotorCommand(Intake.getInstance(),
-      -IntakeConstants.INTAKE_POWER, 0));
+    NamedCommands.registerCommand("close intake", new RunInternallyControlledSubsystem(
+      Elevator.getInstance(), () -> ElevatorConstants.SHOOTING_POSE, false)
+    );
     
     NamedCommands.registerCommand("update LImelight", new InstantCommand(
       () -> SwerveDrivetrainSubsystem.getInstance().addVisionMeasurement()
@@ -268,15 +269,15 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     // return new FourGamePieces(); // 4 gmae piece
-    // return AutoBuilder.buildAuto("Two pice Stage"); // two pieces from stage side
-    return AutoBuilder.buildAuto("Two pice Middle")
-      .andThen(AutoBuilder.buildAuto("Theree pice Spaker middle"));
+    // return AutoBuilder.buildAuto("Two pice Middle")
+    //   .andThen(AutoBuilder.buildAuto("Theree pice Spaker middle"));
     // return AutoBuilder.buildAuto("one game piece"); // one game piece
     // return AutoBuilder.buildAuto("Two pice Stage");
     // return AutoBuilder.buildAuto("Two pice Amp");
-    //return AutoBuilder.buildAuto("Two pice Amp").andThen(
-    //    AutoBuilder.buildAuto("Theree pice Amp"));
+    // return AutoBuilder.buildAuto("Theree pice Amp");
+    // return AutoBuilder.buildAuto("Theree pice Stage");
     // return AutoBuilder.buildAuto("2 note far stage");
+    return AutoBuilder.buildAuto("AllaBabala");
     // return null;
   }
 }

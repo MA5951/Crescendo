@@ -121,8 +121,9 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
             this.setPoint = ElevatorConstants.MIN_POSE;
         } else if (setPoint > ElevatorConstants.MAX_POSE) {
             this.setPoint = ElevatorConstants.MAX_POSE;
+        } else {
+            this.setPoint = setPoint;
         }
-        this.setPoint = setPoint;
     }
 
     @Override

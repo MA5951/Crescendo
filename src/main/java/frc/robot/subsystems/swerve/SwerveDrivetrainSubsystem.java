@@ -180,7 +180,7 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
           this::driveAuto,
           new HolonomicPathFollowerConfig(
             new PIDConstants(SwerveConstants.KP_TRANSLATION),
-            new PIDConstants(SwerveConstants.THATA_KP,
+            new PIDConstants(2.7,
               SwerveConstants.THATA_KI, SwerveConstants.THATA_KD),
             SwerveConstants.MAX_VELOCITY,
             SwerveConstants.RADIUS,
