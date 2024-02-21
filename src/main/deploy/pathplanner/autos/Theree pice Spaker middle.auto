@@ -12,6 +12,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "Update Limelight"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -31,15 +37,59 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Note 3 score Middle"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Note 3 score Middle"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "stop shooter"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Center Ring"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Set Shooter Speed"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Update Limelight"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Shoot linked to speaker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stop shooter"
           }
         }
       ]

@@ -8,10 +8,7 @@ import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.swerve.AngleAdjust;
 import frc.robot.subsystems.elevator.ElevatorConstants;
 import frc.robot.subsystems.shooter.LowerShooter;
@@ -46,11 +43,11 @@ public class Shoot extends SequentialCommandGroup {
   public Shoot() {
     Supplier<Double> elevatorPose = ()  -> ElevatorConstants.SHOOTING_POSE;
     addCommands(
-      new AngleAdjust(Shoot::getAngle, () -> 0d, () -> 0d),
+      new AngleAdjust(Shoot::getAngle, () -> 0d, () -> 0d).alongWith(
       new GettingReadyToScore(
           UpperShooter.getInstance()::getVelocityForShooting,
           LowerShooter.getInstance()::getVelocityForShooting,
-          elevatorPose),
+          elevatorPose)),
       new ScoreAutomation(UpperShooter.getInstance()::getVelocityForShooting,
           LowerShooter.getInstance()::getVelocityForShooting).alongWith(
             new AngleAdjust(Shoot::getAngle, () -> 0d, () -> 0d, false, true)));

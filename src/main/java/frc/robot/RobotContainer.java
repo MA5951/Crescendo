@@ -40,8 +40,6 @@ import frc.robot.automations.Auto.SetForAmp;
 import frc.robot.commands.Intake.IntakeCommand;
 import frc.robot.commands.elevator.ResetElevator;
 import frc.robot.commands.elevator.SetElevator;
-import frc.robot.commands.shooter.SetShooter;
-import frc.robot.commands.swerve.AngleAdjust;
 import frc.robot.commands.swerve.DriveSwerveCommand;
 import frc.robot.subsystems.LED.LED;
 import frc.robot.subsystems.LED.LED.HPANIMATIONS;
@@ -137,8 +135,6 @@ public class RobotContainer {
 
     driverController.triangle().whileTrue(
       new InstantCommand(SwerveDrivetrainSubsystem.getInstance()::updateOffset)
-      .alongWith( new InstantCommand(AutoShoot::updateOffset))
-      .alongWith( new InstantCommand(() -> AutoShoot.setResetOffset(true)))
     );
 
     driverController.touchpad().whileTrue(
@@ -222,10 +218,11 @@ public class RobotContainer {
 
     // climb
     operatorController.triangle().whileTrue(
-      new InstantCommand(() -> Elevator.getInstance().configMotorsForClimb())
-      .andThen(new SetElevator(ElevatorConstants.CLIMB_POSE)) 
-    ).whileFalse(new SetElevator(ElevatorConstants.CLOSE_CLIMB_POSE)
-    .andThen(() -> Elevator.getInstance().configMotors()));
+      new SetElevator(ElevatorConstants.CLIMB_POSE)
+    ).whileFalse(new InstantCommand (() -> Elevator.getInstance().configMotorsForClimb())
+    .andThen(new SetElevator(ElevatorConstants.CLOSE_CLIMB_POSE))
+    .andThen(new InstantCommand (() -> Elevator.getInstance().configMotors())));
+
 
     // elevator change + amp or shoot chooser
     new CreateButton(operatorController.L1(), 
@@ -267,19 +264,19 @@ public class RobotContainer {
     operatorController.circle().whileTrue(
       new InstantCommand(() -> LED.getInstance().activateCoalition())
     );
-
   }
 
   public Command getAutonomousCommand() {
-    //return new FourGamePieces(); // 4 gmae piece
-    // return AutoBuilder.buildAuto("Two pice Stage"); // two pieces from stange side
-     return AutoBuilder.buildAuto("Two pice Middle");
-    //   .andThen(AutoBuilder.buildAuto("Theree pice Spaker middle"));
+    // return new FourGamePieces(); // 4 gmae piece
+    // return AutoBuilder.buildAuto("Two pice Stage"); // two pieces from stage side
+    return AutoBuilder.buildAuto("Two pice Middle")
+      .andThen(AutoBuilder.buildAuto("Theree pice Spaker middle"));
     // return AutoBuilder.buildAuto("one game piece"); // one game piece
     // return AutoBuilder.buildAuto("Two pice Stage");
-    //return AutoBuilder.buildAuto("Two pice Amp");
+    // return AutoBuilder.buildAuto("Two pice Amp");
     //return AutoBuilder.buildAuto("Two pice Amp").andThen(
     //    AutoBuilder.buildAuto("Theree pice Amp"));
     // return AutoBuilder.buildAuto("2 note far stage");
+    // return null;
   }
 }

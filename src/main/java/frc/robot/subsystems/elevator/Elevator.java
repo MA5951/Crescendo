@@ -88,7 +88,7 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
       configuration.CurrentLimits.StatorCurrentLimitEnable = true;
       configuration.CurrentLimits.StatorCurrentLimit = 25;
 
-      configuration.Slot0.kP = ElevatorConstants.KP_CLIMB;
+      configuration.Slot0.kP = 0.2;
       configuration.Slot0.kI = ElevatorConstants.KI;
       configuration.Slot0.kD = ElevatorConstants.KD;
 

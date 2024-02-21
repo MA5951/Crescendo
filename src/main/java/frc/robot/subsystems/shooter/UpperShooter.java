@@ -72,9 +72,7 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
 
     feedforward = new SimpleMotorFeedforward(0, ShooterConstants.KV_UP);
 
-
     board = new MAShuffleboard("Upper shotter");
-
   }
 
   public void chengeIDLmode(IdleMode mode) {
@@ -156,11 +154,14 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
 
     board.addBoolean("sensor", isGamePiceInShooter());
 
-    double poduimLine = DriverStation.getAlliance().get() == Alliance.Red ?
-      SwerveConstants.SPEED_LINE_RED : SwerveConstants.SPEED_LINE_BLUE;
-    double factor = DriverStation.getAlliance().get() == Alliance.Red ?
-      -1 : 1;
-
+    double poduimLine = 0;
+    double factor = 0;
+    if (!DriverStation.getAlliance().isEmpty()) {
+      poduimLine = DriverStation.getAlliance().get() == Alliance.Red ?
+        SwerveConstants.SPEED_LINE_RED : SwerveConstants.SPEED_LINE_BLUE;
+      factor = DriverStation.getAlliance().get() == Alliance.Red ?
+        -1 : 1;
+    }
     if ((Intake.getInstance().isGamePieceInIntake() && !RobotContainer.isAmp
       && (SwerveDrivetrainSubsystem.getInstance().getPose().getX() * factor
        < poduimLine * factor || RobotContainer.driverController.L2().getAsBoolean()))
