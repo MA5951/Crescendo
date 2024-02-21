@@ -26,18 +26,20 @@ public class LED extends SubsystemBase {
   private AddressableLED leds;
   private AddressableLEDBuffer ledBuffer;
 
-  public enum HPANIMATIONS {
-    AMPLIFY,
-    COLAB,
+  public enum INTAKE {
     GROUND,
     SOURCE,
 
   }
-  private HPANIMATIONS lasAnimation;
 
-  private HPANIMATIONS activeAnimation;
+  public enum HP {
+    AMP,
+    CLAB
+  }
+
+  private HP activeAnimation;
+  private INTAKE intakeAnimation;
   private double startAmpTime = 0;
-  private double startCoOpTime = 0;
   private int firstHue = 0;
   private double lastChange;
   private boolean on;
@@ -71,7 +73,7 @@ public class LED extends SubsystemBase {
   }
 
   public void setSolidColorHP(Color color) {
-    for (var i = LedConstants.driversLedLength + 1; i < LedConstants.hpLedLength; i++) {
+    for (var i = LedConstants.driversLedLength + 1; i < LedConstants.ledLength; i++) {
       ledBuffer.setLED(i, color);
     }
 
@@ -93,7 +95,7 @@ public class LED extends SubsystemBase {
 
   public void rainbowColorPatternHP() {
     int currentHue;
-    int length = LedConstants.hpLedLength;
+    int length = LedConstants.ledLength;
 
     for (int i = LedConstants.driversLedLength + 1; i < length; i++) {
         currentHue = (firstHue + (i * 180 / length)) % 180;
@@ -104,21 +106,6 @@ public class LED extends SubsystemBase {
     leds.setData(ledBuffer);
   }
 
-  public void blinkColorPatternDrivers( double interval,Color colorOne, Color colorTwo) {
-    double timestamp = Timer.getFPGATimestamp();
-
-    if (timestamp - lastChange > interval) {
-        on = !on;
-        lastChange = timestamp;
-    }
-    if (on) {
-        setSolidColorDrivers(colorTwo);
-    }
-    else {
-        setSolidColorDrivers(colorTwo);
-    }
-  }
-
   public void blinkColorPatternHP( double interval,Color colorOne, Color colorTwo) {
     double timestamp = Timer.getFPGATimestamp();
 
@@ -127,7 +114,7 @@ public class LED extends SubsystemBase {
         lastChange = timestamp;
     }
     if (on) {
-        setSolidColorHP(colorTwo);
+        setSolidColorHP(colorOne);
     }
     else {
         setSolidColorHP(colorTwo);
@@ -154,7 +141,7 @@ public class LED extends SubsystemBase {
   public void waveColorPatternHP(int period , int numColors , Color[] colors) {
     double elapsedTime = Timer.getFPGATimestamp() % period;
     double progress = elapsedTime / period;
-    int numLeds = LedConstants.hpLedLength;
+    int numLeds = LedConstants.ledLength;
 
     for (int i = LedConstants.driversLedLength + 1; i < numLeds; i++) {
       double position = (double) i / (double) numLeds;
@@ -194,7 +181,7 @@ public class LED extends SubsystemBase {
   public void smoothWaveColorPatternHP(int numColors, double period, double speed, Color[] colors) {
     double elapsedTime = Timer.getFPGATimestamp();
 
-    for (int i = LedConstants.driversLedLength + 1; i < LedConstants.hpLedLength; i++) {
+    for (int i = LedConstants.driversLedLength + 1; i < LedConstants.ledLength; i++) {
       double position = ((double) i / LedConstants.hpLedLength) + (elapsedTime * speed / period);
       double progress = position - (int) position;
 
@@ -241,13 +228,12 @@ public class LED extends SubsystemBase {
 
   public void blinkColorPattern( double interval,Color colorOne, Color colorTwo) {
     double timestamp = Timer.getFPGATimestamp();
-
     if (timestamp - lastChange > interval) {
         on = !on;
         lastChange = timestamp;
     }
     if (on) {
-        setSolidColor(colorTwo);
+        setSolidColor(colorOne);
     }
     else {
         setSolidColor(colorTwo);
@@ -270,7 +256,7 @@ public class LED extends SubsystemBase {
       smoothWaveColorPattern(2, 1, 0.2, new Color[] {LedConstants.BLACK , LedConstants.PURPLE});
       }
     } else {
-      blinkColorPattern(1, LedConstants.PURPLE, LedConstants.BLACK);
+      //blinkColorPattern(1, LedConstants.PURPLE, LedConstants.BLACK);
     }
   }
 
@@ -282,41 +268,40 @@ public class LED extends SubsystemBase {
   }
 
   public void activateAmp() {
-    lasAnimation = activeAnimation;
-    activeAnimation = HPANIMATIONS.AMPLIFY;
+    activeAnimation = HP.AMP;
     startAmpTime = Timer.getFPGATimestamp();
   }
 
-  public void activateCoalition() {
-    lasAnimation = activeAnimation;
-    activeAnimation = HPANIMATIONS.COLAB;
-    startCoOpTime = Timer.getFPGATimestamp();
+  public void activateCOLAB() {
+    activeAnimation = HP.CLAB;
+    startAmpTime = Timer.getFPGATimestamp();
   }
+
 
   public void runDriversAnimations() {
     if (SwerveDrivetrainSubsystem.getInstance().canShoot()) {
       setSolidColorDrivers(LedConstants.Ring);
     } else if (Intake.getInstance().isGamePieceInIntake()) {
       setSolidColorDrivers(LedConstants.GREEN);
-    } else {
+    } else if (intakeAnimation == INTAKE.GROUND) {
       setSolidColorDrivers(LedConstants.BLUE);
+    } else if (intakeAnimation == INTAKE.SOURCE) {
+      setSolidColorDrivers(LedConstants.MAcolor);
     }
   }
 
   public void runHpAnimations() {
-    if (activeAnimation == HPANIMATIONS.AMPLIFY) {
-      smoothWaveColorPatternHP(2, 1, 1, new Color[] {LedConstants.BLUE , LedConstants.BLACK});
-    } else if (activeAnimation == HPANIMATIONS.COLAB) {
-      smoothWaveColorPatternHP(2, 1, 1, new Color[] {LedConstants.Ring , LedConstants.BLACK});
-    } else if (activeAnimation == HPANIMATIONS.GROUND) {
-      setSolidColorHP(LedConstants.BLUE);
-    } else if (activeAnimation == HPANIMATIONS.SOURCE) {
-      setSolidColorHP(LedConstants.MAcolor);
+    if (activeAnimation == HP.AMP && Timer.getFPGATimestamp() - startAmpTime < 5) {
+      blinkColorPatternHP(0.1, LedConstants.BLACK, LedConstants.PURPLE);
+    } else if (activeAnimation == HP.CLAB && Timer.getFPGATimestamp() - startAmpTime < 5){
+      blinkColorPatternHP(0.1, LedConstants.BLACK, LedConstants.Ring);
+    } else {
+      setSolidColorHP(LedConstants.BLACK);
     }
   }
 
-  public void setAnimation(HPANIMATIONS animation) {
-    activeAnimation = animation;
+  public void setIntakeAnimation(INTAKE animation) {
+    intakeAnimation = animation;
   }
 
   @Override
@@ -329,6 +314,7 @@ public class LED extends SubsystemBase {
       runDriversAnimations();
       runHpAnimations();
     }
+
 
     //setSolidColor(LedConstants.GREEN);
 
