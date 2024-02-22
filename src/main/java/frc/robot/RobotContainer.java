@@ -220,13 +220,17 @@ public class RobotContainer {
     // climb
     operatorController.triangle().whileTrue(
       new SetElevator(ElevatorConstants.CLIMB_POSE)
-    ).whileFalse(new InstantCommand (() -> Elevator.getInstance().configMotorsForClimb())
-    .andThen(new SetElevator(ElevatorConstants.CLOSE_CLIMB_POSE))
+    );
+
+
+    operatorController.cross().onTrue(
+      new InstantCommand (() -> Elevator.getInstance().configMotorsForClimb()).andThen(
+      new SetElevator(ElevatorConstants.CLOSE_CLIMB_POSE))
     .andThen(new InstantCommand (() -> Elevator.getInstance().configMotors())));
 
 
     // elevator change + amp or shoot chooser
-    new CreateButton(operatorController.L1(), 
+    new CreateButton(operatorController.L1(),
       new SetElevator(ElevatorConstants.AMP_POSE).alongWith(
         new InstantCommand(() -> isAmp = true)
       ),
