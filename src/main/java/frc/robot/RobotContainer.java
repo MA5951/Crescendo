@@ -42,6 +42,7 @@ import frc.robot.commands.elevator.ResetElevator;
 import frc.robot.commands.elevator.SetElevator;
 import frc.robot.commands.swerve.DriveSwerveCommand;
 import frc.robot.subsystems.LED.LED;
+import frc.robot.subsystems.LED.LED.HP;
 import frc.robot.subsystems.LED.LED.INTAKE;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorConstants;
@@ -263,10 +264,8 @@ public class RobotContainer {
 
     operatorController.square().whileTrue(
       new InstantCommand(() -> LED.getInstance().activateAmp())
-    );
-
-    operatorController.circle().whileTrue(
-      new InstantCommand(() -> LED.getInstance().activateCOLAB())
+    ).whileFalse(
+      new InstantCommand(() -> LED.getInstance().activeAnimation = HP.NONE)
     );
 
   }

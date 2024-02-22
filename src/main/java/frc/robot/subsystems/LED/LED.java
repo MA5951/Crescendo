@@ -34,10 +34,11 @@ public class LED extends SubsystemBase {
 
   public enum HP {
     AMP,
-    CLAB
+    CLAB,
+    NONE
   }
 
-  private HP activeAnimation;
+  public HP activeAnimation;
   private INTAKE intakeAnimation;
   private double startAmpTime = 0;
   private int firstHue = 0;
@@ -292,8 +293,8 @@ public class LED extends SubsystemBase {
   }
 
   public void runHpAnimations() {
-    if (activeAnimation == HP.AMP && Timer.getFPGATimestamp() - startAmpTime < 5) {
-      smoothWaveColorPattern(2, 0.4, 0.5, new Color[] {LedConstants.BLACK , currentColor});
+    if (activeAnimation == HP.AMP) {
+      blinkColorPattern(0.2, currentColor, LedConstants.BLACK);
     } else {
       setSolidColor(currentColor);
     }
