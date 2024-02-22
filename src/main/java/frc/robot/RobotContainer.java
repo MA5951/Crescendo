@@ -42,7 +42,7 @@ import frc.robot.commands.elevator.ResetElevator;
 import frc.robot.commands.elevator.SetElevator;
 import frc.robot.commands.swerve.DriveSwerveCommand;
 import frc.robot.subsystems.LED.LED;
-import frc.robot.subsystems.LED.LED.HPANIMATIONS;
+import frc.robot.subsystems.LED.LED.INTAKE;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorConstants;
 import frc.robot.subsystems.intake.Intake;
@@ -113,7 +113,7 @@ public class RobotContainer {
       Elevator.getInstance(), () -> ElevatorConstants.SHOOTING_POSE, false)
     );
     
-    NamedCommands.registerCommand("update LImelight", new InstantCommand(
+    NamedCommands.registerCommand("Update Limelight", new InstantCommand(
       () -> SwerveDrivetrainSubsystem.getInstance().addVisionMeasurement()
     ));
     
@@ -228,7 +228,6 @@ public class RobotContainer {
       new SetElevator(ElevatorConstants.CLOSE_CLIMB_POSE))
     .andThen(new InstantCommand (() -> Elevator.getInstance().configMotors())));
 
-
     // elevator change + amp or shoot chooser
     new CreateButton(operatorController.L1(),
       new SetElevator(ElevatorConstants.AMP_POSE).alongWith(
@@ -243,12 +242,12 @@ public class RobotContainer {
     // // choosing btween floor intake and source
     operatorController.povLeft().whileTrue(
       new InstantCommand(() -> intakepose = IntakePose.FLOOR)
-      .alongWith(new InstantCommand(() -> LED.getInstance().setAnimation(HPANIMATIONS.GROUND)))
+      .alongWith(new InstantCommand(() -> LED.getInstance().setIntakeAnimation(INTAKE.GROUND)))
     );
 
     operatorController.povRight().whileTrue(
       new InstantCommand(() -> intakepose = IntakePose.SOURCE)
-      .alongWith(new InstantCommand(() -> LED.getInstance().setAnimation(HPANIMATIONS.SOURCE)))
+      .alongWith(new InstantCommand(() -> LED.getInstance().setIntakeAnimation(INTAKE.SOURCE)))
     );
 
     // choosing btween linked shoot or normal one
@@ -267,8 +266,9 @@ public class RobotContainer {
     );
 
     operatorController.circle().whileTrue(
-      new InstantCommand(() -> LED.getInstance().activateCoalition())
+      new InstantCommand(() -> LED.getInstance().activateCOLAB())
     );
+
   }
 
   public Command getAutonomousCommand() {
