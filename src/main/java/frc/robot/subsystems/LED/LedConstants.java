@@ -13,6 +13,8 @@ public class LedConstants {
   public static final Color CYAN = new Color(51, 204, 204);
   public static final Color MAcolor = new Color(127, 0, 0);
   public static final Color Ring = new Color(244, 136, 7) ; 
+  public static final Color CONE_YELLOW = new Color(255, 237, 70);
+  public static final Color CUBE_PURPLE = new Color(230, 0, 255);
 
   public static final int ledLength = 81;
   public static final int hpLedLength = 33;

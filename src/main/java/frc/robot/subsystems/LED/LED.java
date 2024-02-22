@@ -43,6 +43,7 @@ public class LED extends SubsystemBase {
   private int firstHue = 0;
   private double lastChange;
   private boolean on;
+  private Color currentColor;
 
   private MAShuffleboard board;
 
@@ -52,6 +53,7 @@ public class LED extends SubsystemBase {
     leds.setLength(ledBuffer.getLength());
     leds.setData(ledBuffer);
     leds.start();
+    currentColor = LedConstants.BLUE;
 
     board = new MAShuffleboard("LED");
   }
@@ -256,7 +258,7 @@ public class LED extends SubsystemBase {
       smoothWaveColorPattern(2, 1, 0.2, new Color[] {LedConstants.BLACK , LedConstants.PURPLE});
       }
     } else {
-      //blinkColorPattern(1, LedConstants.PURPLE, LedConstants.BLACK);
+      blinkColorPattern(1, LedConstants.PURPLE, LedConstants.BLACK);
     }
   }
 
@@ -277,26 +279,23 @@ public class LED extends SubsystemBase {
     startAmpTime = Timer.getFPGATimestamp();
   }
 
-
   public void runDriversAnimations() {
     if (SwerveDrivetrainSubsystem.getInstance().canShoot()) {
-      setSolidColorDrivers(LedConstants.Ring);
+      currentColor = LedConstants.Ring;
     } else if (Intake.getInstance().isGamePieceInIntake()) {
-      setSolidColorDrivers(LedConstants.GREEN);
+      currentColor = LedConstants.GREEN;
     } else if (intakeAnimation == INTAKE.GROUND) {
-      setSolidColorDrivers(LedConstants.BLUE);
+      currentColor = LedConstants.BLUE;
     } else if (intakeAnimation == INTAKE.SOURCE) {
-      setSolidColorDrivers(LedConstants.MAcolor);
+      currentColor = LedConstants.MAcolor;
     }
   }
 
   public void runHpAnimations() {
     if (activeAnimation == HP.AMP && Timer.getFPGATimestamp() - startAmpTime < 5) {
-      blinkColorPatternHP(0.1, LedConstants.BLACK, LedConstants.PURPLE);
-    } else if (activeAnimation == HP.CLAB && Timer.getFPGATimestamp() - startAmpTime < 5){
-      blinkColorPatternHP(0.1, LedConstants.BLACK, LedConstants.Ring);
+      smoothWaveColorPattern(2, 0.4, 0.5, new Color[] {LedConstants.BLACK , currentColor});
     } else {
-      setSolidColorHP(LedConstants.BLACK);
+      setSolidColor(currentColor);
     }
   }
 
@@ -309,7 +308,7 @@ public class LED extends SubsystemBase {
     if (!DriverStation.isEnabled()) {
       setAllianceColor();
     } else if (DriverStation.isAutonomous()) {
-      //Auto animation
+      smoothWaveColorPattern(3, 1, 1, new Color [] {LedConstants.CONE_YELLOW, LedConstants.CUBE_PURPLE, LedConstants.CYAN});
     } else {
       runDriversAnimations();
       runHpAnimations();
@@ -317,7 +316,6 @@ public class LED extends SubsystemBase {
 
 
     //setSolidColor(LedConstants.GREEN);
-
     updateLeds();
   }
 }
