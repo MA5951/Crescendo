@@ -5,6 +5,7 @@
 package frc.robot.subsystems.LED;
 
 import com.ma5951.utils.MAShuffleboard;
+import com.ma5951.utils.led.BlinkingColorPattern;
 import com.ma5951.utils.led.SolidColorPattern;
 
 import edu.wpi.first.wpilibj.AddressableLED;
@@ -16,6 +17,8 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.PortMap;
 import frc.robot.PortMap.Swerve;
+import frc.robot.subsystems.elevator.Elevator;
+import frc.robot.subsystems.elevator.ElevatorConstants;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
 
@@ -289,7 +292,7 @@ public class LED extends SubsystemBase {
       currentColor = LedConstants.BLUE;
     } else if (intakeAnimation == INTAKE.SOURCE) {
       currentColor = LedConstants.MAcolor;
-    }
+    } 
   }
 
   public void runHpAnimations() {
@@ -306,7 +309,9 @@ public class LED extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if (!DriverStation.isEnabled()) {
+    if (ElevatorConstants.DEFAULT_POSE == ElevatorConstants.DEFAULT_POSE_DEFANCE) {
+      blinkColorPattern( 0.1, LedConstants.RED, LedConstants.BLUE);
+    } else if (!DriverStation.isEnabled()) {
       setAllianceColor();
     } else if (DriverStation.isAutonomous()) {
       smoothWaveColorPattern(3, 1, 1, new Color [] {LedConstants.CONE_YELLOW, LedConstants.CUBE_PURPLE, LedConstants.CYAN});

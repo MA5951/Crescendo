@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -17,7 +19,7 @@ import frc.robot.subsystems.shooter.UpperShooter;
 public class CreateButton {
 
   public CreateButton(Trigger button, Command automation,
-    double elevatorEndPose) {
+    Supplier<Double> elevatorEndPose) {
     button.whileTrue(automation.alongWith(
       new InstantCommand(() -> UpperShooter.getInstance().changeToDefaultV = false)
     )).whileFalse(
@@ -26,6 +28,6 @@ public class CreateButton {
   }
 
   public CreateButton(Trigger button, Command automation) {
-    this(button, automation, ElevatorConstants.DEFAULT_POSE);
+    this(button, automation, () -> ElevatorConstants.DEFAULT_POSE);
   }
 }

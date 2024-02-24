@@ -203,7 +203,7 @@ public class RobotContainer {
     new CreateButton(driverController.square(), new RunShoot());
 
     driverController.L2().whileTrue(new AutoShoot()).whileFalse(
-      new ResetAll(ElevatorConstants.DEFAULT_POSE).alongWith(new InstantCommand(() -> 
+      new ResetAll(() -> ElevatorConstants.DEFAULT_POSE).alongWith(new InstantCommand(() -> 
         SwerveDrivetrainSubsystem.getInstance().FactorVelocityTo(1)))
     );
 
@@ -213,20 +213,19 @@ public class RobotContainer {
         new SourceIntake(),
         RobotContainer::IsFloor
       ).alongWith(new InstantCommand(() -> isIntakeRunning = true)).andThen(
-        new ResetAll(ElevatorConstants.DEFAULT_POSE)
+        new ResetAll(() ->ElevatorConstants.DEFAULT_POSE)
       .alongWith(new InstantCommand(() -> isIntakeRunning = false)))
     );
 
-    driverController.povRight().whileTrue(
-      new InstantCommand(() -> Elevator.getInstance().toggleDeafultPose())
-    );
+    new CreateButton(driverController.povRight(), 
+      new InstantCommand(() -> Elevator.getInstance().toggleDeafultPose()));
 
     // eject
-    new CreateButton(driverController.cross(), new MotorCommand(
-      Intake.getInstance(), -IntakeConstants.INTAKE_POWER, 0).alongWith(
-        new InstantCommand(() -> isIntakeRunning = false).alongWith(
-          new SetElevator(ElevatorConstants.SHOOTING_POSE)
-        )));
+    new CreateButton(driverController.cross(),
+          new SetElevator(ElevatorConstants.SHOOTING_POSE).andThen(new MotorCommand(
+          Intake.getInstance(), -IntakeConstants.INTAKE_POWER, 0)).alongWith(
+          new InstantCommand(() -> isIntakeRunning = false))
+        );
 
     // climb
     operatorController.triangle().whileTrue(
@@ -245,11 +244,11 @@ public class RobotContainer {
       new SetElevator(ElevatorConstants.AMP_POSE).alongWith(
         new InstantCommand(() -> isAmp = true)
       ),
-      ElevatorConstants.AMP_POSE);
+      () -> ElevatorConstants.AMP_POSE);
 
     new CreateButton(operatorController.povDown(), 
       new SetElevator(ElevatorConstants.DEFAULT_POSE),
-      ElevatorConstants.DEFAULT_POSE);
+      () -> ElevatorConstants.DEFAULT_POSE);
 
     // // choosing btween floor intake and source
     operatorController.povLeft().whileTrue(
