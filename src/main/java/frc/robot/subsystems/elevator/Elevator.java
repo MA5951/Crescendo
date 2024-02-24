@@ -43,6 +43,8 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
 
       pose = master.getPosition();
 
+      ElevatorConstants.DEFAULT_POSE = ElevatorConstants.DEFAULT_POSE_STAGE;
+
       resetPose(0);
 
       board = new MAShuffleboard("Elevator");
@@ -151,6 +153,14 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
     public boolean canMove() {
         return setPoint >= ElevatorConstants.MIN_POSE &&
          setPoint <= ElevatorConstants.MAX_POSE;
+    }
+
+    public void toggleDeafultPose() {
+        if (ElevatorConstants.DEFAULT_POSE == ElevatorConstants.DEFAULT_POSE_STAGE) {
+            ElevatorConstants.DEFAULT_POSE = ElevatorConstants.DEFAULT_POSE_DEFANCE;
+        } else {
+            ElevatorConstants.DEFAULT_POSE = ElevatorConstants.DEFAULT_POSE_STAGE;
+        }
     }
 
     public static Elevator getInstance() {

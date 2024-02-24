@@ -10,11 +10,14 @@ import com.ma5951.utils.commands.RunInternallyControlledSubsystem;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -42,7 +45,6 @@ import frc.robot.commands.elevator.ResetElevator;
 import frc.robot.commands.elevator.SetElevator;
 import frc.robot.commands.swerve.DriveSwerveCommand;
 import frc.robot.subsystems.LED.LED;
-import frc.robot.subsystems.LED.LED.HP;
 import frc.robot.subsystems.LED.LED.INTAKE;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorConstants;
@@ -61,6 +63,7 @@ public class RobotContainer {
   public static IntakePose intakepose = IntakePose.FLOOR;
   public static boolean isAmp = false;
   public static boolean ShootingLinkedToSpeaker = false;
+  public static int factor = 1;
 
   public static final CommandPS5Controller
     driverController = new CommandPS5Controller(PortMap.Controllers.driveID);
@@ -77,7 +80,8 @@ public class RobotContainer {
   }
 
   private void registerCommands() {
-    NamedCommands.registerCommand("Intake", new IntakeCommand(IntakeConstants.INTAKE_POWER));
+    NamedCommands.registerCommand("Intake", new IntakeCommand(IntakeConstants.INTAKE_POWER)
+    .raceWith(new WaitCommand(2.5)));
     
     NamedCommands.registerCommand("Shoot linked to speaker",
       new RunInternallyControlledSubsystem(UpperShooter.getInstance(),
@@ -99,7 +103,7 @@ public class RobotContainer {
       new ResetElevator()
     );
 
-    NamedCommands.registerCommand("Center Ring", new CenterRing());
+    NamedCommands.registerCommand("Center Ring", new CenterRing().raceWith(new WaitCommand(2)));
 
     NamedCommands.registerCommand("Feed To Shooter", new FeedToShooter());
     
@@ -186,20 +190,10 @@ public class RobotContainer {
     // shooting normal
     new CreateButton(driverController.square(), new RunShoot());
 
-    // // shooting in motion
-    // new CreateButton(
-    //   new Trigger(
-    //     () -> {return driverController.getL2Axis() > 0.1 && !isIntakeRunning;}
-    //   ), 
-    //   new SequentialCommandGroup(
-    //     new InstantCommand(() -> SwerveDrivetrainSubsystem.getInstance().update = false),
-    //     new ShootInMotion())
-    // );
-
-      driverController.L2().whileTrue(new AutoShoot()).whileFalse(
-        new ResetAll(ElevatorConstants.DEFAULT_POSE).alongWith(new InstantCommand(() -> 
-          SwerveDrivetrainSubsystem.getInstance().FactorVelocityTo(1)))
-      );
+    driverController.L2().whileTrue(new AutoShoot()).whileFalse(
+      new ResetAll(ElevatorConstants.DEFAULT_POSE).alongWith(new InstantCommand(() -> 
+        SwerveDrivetrainSubsystem.getInstance().FactorVelocityTo(1)))
+    );
 
     // floor or source intake
     driverController.R1().onTrue( 
@@ -209,6 +203,10 @@ public class RobotContainer {
       ).alongWith(new InstantCommand(() -> isIntakeRunning = true)).andThen(
         new ResetAll(ElevatorConstants.DEFAULT_POSE)
       .alongWith(new InstantCommand(() -> isIntakeRunning = false)))
+    );
+
+    driverController.povRight().whileTrue(
+      new InstantCommand(() -> Elevator.getInstance().toggleDeafultPose())
     );
 
     // eject
@@ -228,6 +226,7 @@ public class RobotContainer {
       new InstantCommand (() -> Elevator.getInstance().configMotorsForClimb()).andThen(
       new SetElevator(ElevatorConstants.CLOSE_CLIMB_POSE))
     .andThen(new InstantCommand (() -> Elevator.getInstance().configMotors())));
+
 
     // elevator change + amp or shoot chooser
     new CreateButton(operatorController.L1(),
@@ -264,23 +263,40 @@ public class RobotContainer {
 
     operatorController.square().whileTrue(
       new InstantCommand(() -> LED.getInstance().activateAmp())
-    ).whileFalse(
-      new InstantCommand(() -> LED.getInstance().activeAnimation = HP.NONE)
-    );
+    ).whileFalse(new InstantCommand(() -> LED.getInstance().activateCOLAB()));
 
   }
 
   public Command getAutonomousCommand() {
-    // return new FourGamePieces(); // 4 gmae piece
+    
+    // //4 Game Piece
+    // return new FourGamePieces();
+
+    // //2 Game Piece Stage
+    // return AutoBuilder.buildAuto("Two pice Stage");    
+
+    //2 Game Piece Amp
+    return AutoBuilder.buildAuto("Two pice Amp");
+
+    // //2 Game Piece Middle
+    // return AutoBuilder.buildAuto("Two pice Middle");
+
+    // //3 Game Piece Middle
     // return AutoBuilder.buildAuto("Two pice Middle")
     //   .andThen(AutoBuilder.buildAuto("Theree pice Spaker middle"));
-    // return AutoBuilder.buildAuto("one game piece"); // one game piece
-    // return AutoBuilder.buildAuto("Two pice Stage");
-    // return AutoBuilder.buildAuto("Two pice Amp");
-    // return AutoBuilder.buildAuto("Theree pice Amp");
+
+    // //3 Game Piece Amp
+    // return AutoBuilder.buildAuto("Theree pice Amp");    
+
+    // //3 Game Piece Stage
     // return AutoBuilder.buildAuto("Theree pice Stage");
+
+    // //2 Game Piece Stage Far
     // return AutoBuilder.buildAuto("2 note far stage");
-    return AutoBuilder.buildAuto("AllaBabala");
+
+    // //One Game Piece
+    // return AutoBuilder.buildAuto("one game piece");
+
     // return null;
   }
 }

@@ -46,6 +46,10 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
 
   private static SwerveDrivetrainSubsystem swerve;
 
+  private double autoStartAngle = 0;
+  private double gyroStartAngle = 0;
+  private boolean isFirstOdometryReset = true;
+
   public final boolean isXReversed = true;
   public final boolean isYReversed = true;
   public final boolean isXYReversed = true;
@@ -202,8 +206,27 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
     return offsetAngle;
   }
 
+  public void setFirstOdometryReset(boolean isFirst) {
+    isFirstOdometryReset = isFirst;
+  }
+
   public void resetOdometry(Pose2d pose) {
+    if (isFirstOdometryReset) {
+      autoStartAngle = pose.getRotation().getDegrees();
+      gyroStartAngle = getFusedHeading();
+
+      isFirstOdometryReset = false;
+    }
     odometry.resetPosition(getRotation2d(), getSwerveModulePositions(), pose);
+  }
+
+  public void fixOffsetAuto() {
+    offsetAngle = -Math.abs(getPose().getRotation().getDegrees()) - Math.abs(getFusedHeading());
+    if (!DriverStation.getAlliance().isEmpty()) {
+      if (DriverStation.getAlliance().get() == Alliance.Red){
+        offsetAngle += 180;
+      }
+    }
   }
 
   public void updateOffset() {
@@ -312,10 +335,6 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
     rearRightModule.setAccelerationLimit(limit);
   }
 
-  public void setOffsetangle(double offset) {
-    offsetAngle = offset;
-  }
-
   public boolean canShoot() {
     return disFormSpeaker < SwerveConstants.MAX_SHOOT_DISTANCE;
   }
@@ -422,6 +441,7 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
         Pose2d estPose = RobotContainer.APRILTAGS_LIMELIGHT.getEstPose();
           odometry.addVisionMeasurement(estPose, RobotContainer.APRILTAGS_LIMELIGHT.getTimeStamp());
           update = true;
-      }
+    }
+    
     }
 }

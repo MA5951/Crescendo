@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.swerve.DriveSwerveCommand;
 import frc.robot.subsystems.LED.LED;
 import frc.robot.subsystems.elevator.Elevator;
+import frc.robot.subsystems.elevator.ElevatorConstants;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.LowerShooter;
 import frc.robot.subsystems.shooter.UpperShooter;
@@ -22,6 +23,7 @@ import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
+  private boolean wasAuto = false;
 
   private RobotContainer m_robotContainer;
 
@@ -71,8 +73,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    SwerveDrivetrainSubsystem.getInstance().setFirstOdometryReset(true);
     SwerveDrivetrainSubsystem.getInstance().resetEncoders();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    wasAuto = true;
     
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
@@ -91,7 +95,16 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
 
-    Elevator.getInstance().setSetPoint(Elevator.getInstance().getPosition());
+    SwerveDrivetrainSubsystem.getInstance().fixOffsetAuto();
+    UpperShooter.getInstance().setSetPoint(0);
+    LowerShooter.getInstance().setSetPoint(0);
+
+    if (wasAuto) {
+      Elevator.getInstance().setSetPoint(ElevatorConstants.DEFAULT_POSE);
+    } else {
+      Elevator.getInstance().setSetPoint(Elevator.getInstance().getPosition());
+    }
+
 
     SwerveDrivetrainSubsystem.getInstance().resetEncoders();
     

@@ -25,7 +25,7 @@ public class SwerveConstants {
         public final static boolean FRONT_LEFT_MODULE_IS_ABSOLUTE_ENCODER_REVERSED = false;
 
         // front right module
-        public final static double FRONT_RIGHT_MODULE_OFFSET_ENCODER = 300;
+        public final static double FRONT_RIGHT_MODULE_OFFSET_ENCODER = 316;
         public final static boolean FRONT_RIGHT_MOUDLE_IS_DRIVE_MOTOR_REVERSED = false;
         public final static boolean FRONT_RIGHT_MODULES_IS_TURNING_MOTOR_REVERSED = true;
         public final static boolean FRONT_RIGHT_MODULE_IS_ABSOLUTE_ENCODER_REVERSED = false;
