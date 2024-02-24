@@ -5,41 +5,31 @@
 package frc.robot;
 
 import com.ma5951.utils.Limelight;
+import com.ma5951.utils.MAShuffleboard;
 import com.ma5951.utils.commands.MotorCommand;
 import com.ma5951.utils.commands.RunInternallyControlledSubsystem;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.subsystems.swerve.SwerveConstants;
 import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
 import frc.robot.automations.AMPScore;
-import frc.robot.automations.AdjustRing;
 import frc.robot.automations.AutoShoot;
 import frc.robot.automations.CenterRing;
-import frc.robot.automations.GettingReadyToScore;
 import frc.robot.automations.GoToAmp;
-import frc.robot.automations.IntakeAndRingCenter;
-import frc.robot.automations.IntakeAutomation;
 import frc.robot.automations.ResetAll;
 import frc.robot.automations.RunIntake;
 import frc.robot.automations.RunShoot;
 import frc.robot.automations.ScoreWithoutAdjust;
-import frc.robot.automations.ShootInMotion;
 import frc.robot.automations.SourceIntake;
 import frc.robot.automations.Auto.FeedToShooter;
 import frc.robot.automations.Auto.FourGamePieces;
-import frc.robot.automations.Auto.SetForAmp;
+import frc.robot.automations.Auto.TwoPieceCloseAmp;
+import frc.robot.automations.Auto.TwoPieceCloseStage;
 import frc.robot.commands.Intake.IntakeCommand;
 import frc.robot.commands.elevator.ResetElevator;
 import frc.robot.commands.elevator.SetElevator;
@@ -55,6 +45,8 @@ import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.shooter.UpperShooter;
 
 public class RobotContainer {
+  private final MAShuffleboard board = new MAShuffleboard("Autonamous");
+
   public enum IntakePose {
     FLOOR,
     SOURCE,
@@ -80,8 +72,7 @@ public class RobotContainer {
   }
 
   private void registerCommands() {
-    NamedCommands.registerCommand("Intake", new IntakeCommand(IntakeConstants.INTAKE_POWER)
-    .raceWith(new WaitCommand(2.5)));
+    NamedCommands.registerCommand("Intake", new IntakeCommand(IntakeConstants.INTAKE_POWER));
     
     NamedCommands.registerCommand("Shoot linked to speaker",
       new RunInternallyControlledSubsystem(UpperShooter.getInstance(),
@@ -103,7 +94,7 @@ public class RobotContainer {
       new ResetElevator()
     );
 
-    NamedCommands.registerCommand("Center Ring", new CenterRing().raceWith(new WaitCommand(2)));
+    NamedCommands.registerCommand("Center Ring", new CenterRing().raceWith(new WaitCommand(1)));
 
     NamedCommands.registerCommand("Feed To Shooter", new FeedToShooter());
     
@@ -126,6 +117,27 @@ public class RobotContainer {
 
   public RobotContainer() {
     registerCommands();
+
+    SwerveDrivetrainSubsystem.getInstance();
+
+    board.initSendableChooser("Autonomous Paths");
+
+    board.addOptionToChooser("Four Game Pieces", new FourGamePieces()); // 4 game piece
+    board.addOptionToChooser("Two Piece Stage", AutoBuilder.buildAuto("Two pice Stage")); // 2 Game Piece Stage
+    board.addOptionToChooser("Two Piece Amp", AutoBuilder.buildAuto("Two pice Amp")); // 2 Game Piece Amp
+    board.addOptionToChooser("Two Piece Middle", AutoBuilder.buildAuto("Two pice Middle")); // 2 Game Piece Middle
+    board.addOptionToChooser("Three Piece Middle", AutoBuilder.buildAuto("Two pice Middle")
+      .andThen(AutoBuilder.buildAuto("Theree pice Spaker middle"))); // 3 Game Piece Middle
+    board.addOptionToChooser("Theree pice Amp", AutoBuilder.buildAuto("Theree pice Amp")); // 3 Game Piece Amp
+    board.addOptionToChooser("Theree pice Stage", AutoBuilder.buildAuto("Theree pice Stage")); // 3 Game Piece Stage
+    board.addOptionToChooser("2 note far stage", AutoBuilder.buildAuto("2 note far stage")); // 2 Game Piece Stage Far
+    board.addOptionToChooser("one game piece", AutoBuilder.buildAuto("one game piece")); // One Game Piece
+    board.addOptionToChooser("three Piece Close Amp", new TwoPieceCloseAmp()); // Two piece close amp
+    board.addOptionToChooser("three Piece Close Stage", new TwoPieceCloseStage());// Two piece close amp
+    board.addOptionToChooser("none", null); // none
+
+    board.addDefaultOptionToChooser("none", null);
+
     configureBindings();
   }
 
@@ -268,35 +280,6 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    
-    // //4 Game Piece
-    // return new FourGamePieces();
-
-    // //2 Game Piece Stage
-    // return AutoBuilder.buildAuto("Two pice Stage");    
-
-    //2 Game Piece Amp
-    return AutoBuilder.buildAuto("Two pice Amp");
-
-    // //2 Game Piece Middle
-    // return AutoBuilder.buildAuto("Two pice Middle");
-
-    // //3 Game Piece Middle
-    // return AutoBuilder.buildAuto("Two pice Middle")
-    //   .andThen(AutoBuilder.buildAuto("Theree pice Spaker middle"));
-
-    // //3 Game Piece Amp
-    // return AutoBuilder.buildAuto("Theree pice Amp");    
-
-    // //3 Game Piece Stage
-    // return AutoBuilder.buildAuto("Theree pice Stage");
-
-    // //2 Game Piece Stage Far
-    // return AutoBuilder.buildAuto("2 note far stage");
-
-    // //One Game Piece
-    // return AutoBuilder.buildAuto("one game piece");
-
-    // return null;
+    return board.getSelectedCommand();
   }
 }
