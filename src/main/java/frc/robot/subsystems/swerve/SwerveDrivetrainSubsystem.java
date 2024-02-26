@@ -417,6 +417,7 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
     board.addBoolean("can shoot", canShoot());
     board.addBoolean("is finshed run shoot", !SwerveDrivetrainSubsystem.getInstance().canShoot() || RobotContainer.isIntakeRunning);
 
+    printAbsPositions();
 
 
     disFromSpeakerX = new Translation2d(

@@ -94,7 +94,7 @@ public class RobotContainer {
       new ResetElevator()
     );
 
-    NamedCommands.registerCommand("Center Ring", new CenterRing().raceWith(new WaitCommand(1)));
+    NamedCommands.registerCommand("Center Ring", new CenterRing());
 
     NamedCommands.registerCommand("Feed To Shooter", new FeedToShooter());
     
