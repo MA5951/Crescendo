@@ -21,8 +21,8 @@ public class ShooterConstants {
     public static final double SPEAKER_UPPER_V = 1800;//1800
     public static final double SPEAKER_LOWER_V = 3300;//3300
 
-    public static final double SPEAKER_UPPER_V_AUTO = 2000;
-    public static final double SPEAKER_LOWER_V_AUTO= 2080;
+    public static final double SPEAKER_UPPER_V_AUTO = 2000;//2200
+    public static final double SPEAKER_LOWER_V_AUTO= 2080;//3100
 
     public static final double AMP_V_UPPER = 0;
     public static final double AMP_V_LOWER = 0.35;
