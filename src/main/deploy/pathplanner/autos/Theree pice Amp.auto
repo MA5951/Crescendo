@@ -28,7 +28,7 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "Shoot linked to speaker"
+                        "name": "Shoot linked to speaker side"
                       }
                     },
                     {
@@ -85,7 +85,7 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "Set Shooter Speed"
+                        "name": "Shoot linked to speaker side"
                       }
                     }
                   ]
@@ -103,7 +103,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot linked to speaker"
+            "name": "Shoot linked to speaker side"
           }
         },
         {
@@ -161,7 +161,7 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "Set Shooter Speed"
+                        "name": "Set Shooter Speed side"
                       }
                     }
                   ]
@@ -179,7 +179,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot linked to speaker"
+            "name": "Shoot linked to speaker side"
           }
         }
       ]

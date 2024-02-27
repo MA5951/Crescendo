@@ -83,6 +83,15 @@ public class RobotContainer {
         .andThen(new FeedToShooter())
     );
 
+    NamedCommands.registerCommand("Shoot linked to speaker side", 
+    new RunInternallyControlledSubsystem(UpperShooter.getInstance(),
+    () -> ShooterConstants.SPEAKER_UPPER_V_AUTO_SIDE, false)
+    .alongWith(
+      new RunInternallyControlledSubsystem(LowerShooter.getInstance(),
+    () -> ShooterConstants.SPEAKER_LOWER_V_AUTO_SIDE, false))
+      .andThen(new FeedToShooter())
+    );
+
     NamedCommands.registerCommand(
       "stop shooter", new RunInternallyControlledSubsystem(UpperShooter.getInstance(),
       () -> 0d, true)
@@ -103,7 +112,16 @@ public class RobotContainer {
       () -> ShooterConstants.SPEAKER_UPPER_V_AUTO, false)
       .alongWith(
         new RunInternallyControlledSubsystem(LowerShooter.getInstance(),
-      () -> ShooterConstants.SPEAKER_LOWER_V_AUTO, false)));
+      () -> ShooterConstants.SPEAKER_LOWER_V_AUTO, false))
+    );
+
+    NamedCommands.registerCommand("Set Shooter Speed side", new 
+      RunInternallyControlledSubsystem(UpperShooter.getInstance(),
+      () -> ShooterConstants.SPEAKER_UPPER_V_AUTO_SIDE, false)
+      .alongWith(
+        new RunInternallyControlledSubsystem(LowerShooter.getInstance(),
+      () -> ShooterConstants.SPEAKER_LOWER_V_AUTO_SIDE, false))
+    );
 
     NamedCommands.registerCommand("close intake", new RunInternallyControlledSubsystem(
       Elevator.getInstance(), () -> ElevatorConstants.SHOOTING_POSE, false)

@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.24,
-        "y": 5.53
+        "x": 1.3363329583802028,
+        "y": 5.55593454044051
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.24,
-        "y": 6.717416089117894
+        "x": 1.7991523640190148,
+        "y": 6.725306796327879
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.49,
-        "y": 6.992561413692931
+        "x": 2.5677274211691286,
+        "y": 7.007220871584601
       },
       "prevControl": {
-        "x": 1.3905406582309117,
-        "y": 6.963242497913567
+        "x": 1.820095068761567,
+        "y": 6.670053340106681
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,5 +45,5 @@
   "reversed": false,
   "folder": "Speaker- 4 Node",
   "previewStartingState": null,
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }
