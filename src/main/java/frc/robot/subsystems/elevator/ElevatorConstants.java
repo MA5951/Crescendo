@@ -22,7 +22,7 @@ public class ElevatorConstants {
     public static final double SOURCE_POSE = MAX_POSE;
     public static final double CENTER_POSE = INTAKE_POSE + 0.05;
 
-    public static final double CLIMB_POSE = 0.35;
+    public static final double CLIMB_POSE = 0.38;
     public static final double CLOSE_CLIMB_POSE = 0.058;
 
     public static final double WHEEL_RADIUS = 1.61671;
