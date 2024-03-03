@@ -4,29 +4,26 @@
 
 package com.ma5951.utils.Logger;
 
-import edu.wpi.first.networktables.DoublePublisher;
+import edu.wpi.first.networktables.BooleanPublisher;
 import edu.wpi.first.networktables.NetworkTable;
 
 /** Add your docs here. */
-public class LoggedNum {
+public class LoggedBool {
 
-    private DoublePublisher loggedNum;
-    private double lastNum;
+    private BooleanPublisher loggedBool;
+    private boolean lastBool;
 
-    public LoggedNum(NetworkTable networkTable , String name) {
-        loggedNum = networkTable.getDoubleTopic(name).publish();
-        loggedNum.set(0);
-        lastNum = 0;
+    public LoggedBool(NetworkTable networkTable , String name) {
+        loggedBool = networkTable.getBooleanTopic(name).publish();
+        loggedBool.set(false);
+        lastBool = false;
     }
 
-    public void updateNum(Double num) {
-        if (lastNum != num) {
-            loggedNum.set(num);
-            lastNum = num;
-            System.out.println("Updated num");
+    public void updateNum(Boolean bool) {
+        if (lastBool != bool) {
+            loggedBool.set(bool);
+            lastBool = bool;
         }   
 
     }
-
-
 }
