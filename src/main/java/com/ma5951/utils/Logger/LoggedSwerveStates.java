@@ -5,7 +5,6 @@
 package com.ma5951.utils.Logger;
 
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.networktables.BooleanPublisher;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.StructArrayPublisher;
 
