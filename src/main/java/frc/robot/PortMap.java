@@ -2,6 +2,10 @@ package frc.robot;
 
 public class PortMap {
 
+  public static class Robot {
+    public static final int PDH = 1;//TODO
+  }
+
   public static class CanBus {
     public static final String CANivoreBus = "Swerve";
     public static final String RioBus = "rio";
