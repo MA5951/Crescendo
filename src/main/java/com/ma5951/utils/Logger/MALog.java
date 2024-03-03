@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.util.datalog.DataLog;
 
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -13,20 +15,22 @@ import edu.wpi.first.wpilibj.DriverStation;
 public class MALog {
     private static MALog logger;
     private final DataLog WPIlogger;
+    private NetworkTable table;
+    private final NetworkTableInstance networkTable;
     
-    /*
-     * Starts Logging the NT and the driver station data.
-     */
+
     public MALog() {
         DataLogManager.start();
         WPIlogger = DataLogManager.getLog();
         DriverStation.startDataLog(DataLogManager.getLog());
+        networkTable = NetworkTableInstance.getDefault();
     }
 
+    public NetworkTable getMainNT() {
+        table = networkTable.getTable("/");
+        return table;
+    }
 
-    /*
-     * Stop Logging.
-     */
     public void stopLog() {
         DataLogManager.stop();
     }
