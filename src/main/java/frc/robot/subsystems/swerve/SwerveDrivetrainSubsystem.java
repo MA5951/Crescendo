@@ -198,13 +198,23 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
     rearRightModule.resetEncoders();
   }
 
-  public SwerveModuleState[] getModuleStates() {
+  public SwerveModuleState[] getModulesStates() {
     return new SwerveModuleState[] {
         frontLeftModule.getState(),
         frontRightModule.getState(),
         rearLeftModule.getState(),
         rearRightModule.getState()
     };
+  }
+
+  public Double[] getModulesCurrent() {
+    Double [] currents = {
+      frontLeftModule.getCurrent(),
+      frontRightModule.getCurrent(),
+      rearLeftModule.getCurrent(),
+      rearRightModule.getCurrent()
+    };
+    return currents;
   }
 
   public double getOffsetAngle() {
