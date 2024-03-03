@@ -16,6 +16,7 @@ import frc.robot.commands.swerve.DriveSwerveCommand;
 import frc.robot.subsystems.LED.LED;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.logger.Logger;
 import frc.robot.subsystems.shooter.LowerShooter;
 import frc.robot.subsystems.shooter.UpperShooter;
 import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
@@ -25,6 +26,7 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
+
   @Override
   public void robotInit() {
     m_robotContainer = new RobotContainer();
@@ -33,6 +35,7 @@ public class Robot extends TimedRobot {
     Intake.getInstance();
     Elevator.getInstance();
     LED.getInstance();
+    Logger.getInstance();
 
     CommandScheduler.getInstance().setDefaultCommand(
       UpperShooter.getInstance(), new DefaultRunInternallyControlledSubsystem(
