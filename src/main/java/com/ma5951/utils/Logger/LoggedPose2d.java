@@ -4,29 +4,27 @@
 
 package com.ma5951.utils.Logger;
 
-import edu.wpi.first.networktables.DoublePublisher;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.StructPublisher;
 
 /** Add your docs here. */
-public class LoggedNum {
+public class LoggedPose2d {
 
-    private DoublePublisher loggedNum;
-    private double lastNum;
+    private StructPublisher<Pose2d> loggedPose;
+    private Pose2d lastPose;
 
-    public LoggedNum(NetworkTable networkTable , String name) {
-        loggedNum = networkTable.getDoubleTopic(name).publish();
-        loggedNum.set(0);
-        lastNum = 0;
+    public LoggedPose2d(NetworkTable networkTable , String name) {
+        loggedPose = networkTable.getStructTopic(name , Pose2d.struct).publish();
+        loggedPose.set(null);
+        lastPose = null;
     }
 
-    public void updateNum(Double num) {
-        if (lastNum != num) {
-            loggedNum.set(num);
-            lastNum = num;
-            System.out.println("Updated num");
+    public void update(Pose2d pose) {
+        if (lastPose != pose) {
+            loggedPose.set(pose);
+            lastPose = pose;
         }   
 
     }
-
-
 }

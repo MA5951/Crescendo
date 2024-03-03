@@ -19,7 +19,7 @@ public class LoggedBool {
         lastBool = false;
     }
 
-    public void updateNum(Boolean bool) {
+    public void update(Boolean bool) {
         if (lastBool != bool) {
             loggedBool.set(bool);
             lastBool = bool;

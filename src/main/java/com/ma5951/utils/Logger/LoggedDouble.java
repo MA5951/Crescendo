@@ -8,18 +8,18 @@ import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTable;
 
 /** Add your docs here. */
-public class LoggedNum {
+public class LoggedDouble {
 
     private DoublePublisher loggedNum;
     private double lastNum;
 
-    public LoggedNum(NetworkTable networkTable , String name) {
+    public LoggedDouble(NetworkTable networkTable , String name) {
         loggedNum = networkTable.getDoubleTopic(name).publish();
         loggedNum.set(0);
         lastNum = 0;
     }
 
-    public void updateNum(Double num) {
+    public void update(Double num) {
         if (lastNum != num) {
             loggedNum.set(num);
             lastNum = num;

@@ -4,22 +4,22 @@
 
 package com.ma5951.utils.Logger;
 
-import edu.wpi.first.networktables.DoublePublisher;
+import edu.wpi.first.networktables.IntegerPublisher;
 import edu.wpi.first.networktables.NetworkTable;
 
 /** Add your docs here. */
 public class LoggedInt {
 
-    private IntPublisher loggedNum;
+    private IntegerPublisher loggedNum;
     private int lastNum;
 
     public LoggedInt(NetworkTable networkTable , String name) {
-        loggedNum = networkTable.getDoubleTopic(name).publish();
+        loggedNum = networkTable.getIntegerTopic(name).publish();
         loggedNum.set(0);
         lastNum = 0;
     }
 
-    public void updateNum(int num) {
+    public void update(int num) {
         if (lastNum != num) {
             loggedNum.set(num);
             lastNum = num;
