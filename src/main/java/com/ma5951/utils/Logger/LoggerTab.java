@@ -4,7 +4,6 @@
 
 package com.ma5951.utils.Logger;
 
-import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
@@ -20,7 +19,7 @@ public class LoggerTab {
         table = networkTable.getTable(name);    
     }
 
-    public NetworkTable getTable() {
+    public NetworkTable getTab() {
         return table;
     }
 
