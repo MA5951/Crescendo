@@ -58,8 +58,7 @@
       "Shuffleboard": {
         "Lower shotter": {
           "open": true
-        },
-        "open": true
+        }
       },
       "SmartDashboard": {
         "Field": {
@@ -67,6 +66,9 @@
         }
       },
       "Swerve": {
+        "Pose": {
+          "open": true
+        },
         "open": true
       }
     }
