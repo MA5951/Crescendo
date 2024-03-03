@@ -23,10 +23,7 @@ public class LoggedNum {
         if (lastNum != num) {
             loggedNum.set(num);
             lastNum = num;
-            System.out.println("Updated num");
         }   
 
     }
-
-
 }
