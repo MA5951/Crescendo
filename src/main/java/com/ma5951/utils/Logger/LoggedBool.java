@@ -6,14 +6,18 @@ package com.ma5951.utils.Logger;
 
 import edu.wpi.first.networktables.BooleanPublisher;
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 
 /** Add your docs here. */
 public class LoggedBool {
 
     private BooleanPublisher loggedBool;
     private boolean lastBool;
+    private NetworkTable networkTable;
 
-    public LoggedBool(NetworkTable networkTable , String name) {
+
+    public LoggedBool(String name) {
+        networkTable = NetworkTableInstance.getDefault().getTable("/");
         loggedBool = networkTable.getBooleanTopic(name).publish();
         loggedBool.set(false);
         lastBool = false;

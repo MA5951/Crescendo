@@ -6,14 +6,17 @@ package com.ma5951.utils.Logger;
 
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 
 /** Add your docs here. */
 public class LoggedDouble {
 
     private DoublePublisher loggedNum;
     private double lastNum;
+    private NetworkTable networkTable;
 
-    public LoggedDouble(NetworkTable networkTable , String name) {
+    public LoggedDouble(String name) {
+        networkTable = NetworkTableInstance.getDefault().getTable("/");
         loggedNum = networkTable.getDoubleTopic(name).publish();
         loggedNum.set(0);
         lastNum = 0;

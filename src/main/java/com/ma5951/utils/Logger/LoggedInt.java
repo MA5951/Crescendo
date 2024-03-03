@@ -6,14 +6,18 @@ package com.ma5951.utils.Logger;
 
 import edu.wpi.first.networktables.IntegerPublisher;
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 
 /** Add your docs here. */
 public class LoggedInt {
 
     private IntegerPublisher loggedNum;
     private int lastNum;
+    private NetworkTable networkTable;
 
-    public LoggedInt(NetworkTable networkTable , String name) {
+
+    public LoggedInt(String name) {
+        networkTable = NetworkTableInstance.getDefault().getTable("/");
         loggedNum = networkTable.getIntegerTopic(name).publish();
         loggedNum.set(0);
         lastNum = 0;

@@ -6,6 +6,7 @@ package com.ma5951.utils.Logger;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
 
 /** Add your docs here. */
@@ -13,8 +14,11 @@ public class LoggedPose2d {
 
     private StructPublisher<Pose2d> loggedPose;
     private Pose2d lastPose;
+    private NetworkTable networkTable;
 
-    public LoggedPose2d(NetworkTable networkTable , String name) {
+
+    public LoggedPose2d(String name) {
+        networkTable = NetworkTableInstance.getDefault().getTable("/");
         loggedPose = networkTable.getStructTopic(name , Pose2d.struct).publish();
         loggedPose.set(null);
         lastPose = null;

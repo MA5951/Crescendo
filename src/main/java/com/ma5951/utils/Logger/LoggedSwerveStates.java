@@ -6,6 +6,7 @@ package com.ma5951.utils.Logger;
 
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 
 /** Add your docs here. */
@@ -13,8 +14,11 @@ public class LoggedSwerveStates {
 
     private StructArrayPublisher<SwerveModuleState> loggedStates;
     private SwerveModuleState[] lastStates;
+    private NetworkTable networkTable;
 
-    public LoggedSwerveStates(NetworkTable networkTable , String name) {
+
+    public LoggedSwerveStates(String name) {
+        networkTable = NetworkTableInstance.getDefault().getTable("/");
         loggedStates = networkTable.getStructArrayTopic(name , SwerveModuleState.struct).publish();
         loggedStates.set(null);
         lastStates = null;
