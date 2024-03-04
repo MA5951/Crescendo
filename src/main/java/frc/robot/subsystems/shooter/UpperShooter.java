@@ -79,6 +79,14 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
     motor.setIdleMode(mode);
   }
 
+  public String getIDLmode() {
+    if (motor.getIdleMode() == IdleMode.kBrake) {
+      return "Brake";
+    } else {
+      return "Coast";
+    }
+  }
+
   @Override
   public void setVoltage(double voltage) {
     motor.set(voltage / 12);

@@ -54,6 +54,18 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
     return !downSensor.get();
   }
 
+  public boolean getUpperSensore() {
+    return !upSensor.get();
+  }
+
+  public boolean getLowerSensor() {
+    return !downSensor.get();
+  }
+
+  public double getCurrent() {
+    return (master.getOutputCurrent() + slave.getOutputCurrent()) / 2;
+  }
+
   @Override
   public boolean canMove() {
     return (!isGamePieceInIntake())
