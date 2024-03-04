@@ -146,7 +146,6 @@ public class SwerveModuleTalonFX extends SwerveModule {
     public double getAbsoluteEncoderPosition() {
         StatusSignal<Double> pose = absoluteEcoder.getAbsolutePosition();
         pose.refresh();
-        // return pose.getValue();
         return isAbsoluteEncoderReversed ? 360 - ((pose.getValue() + 0.5)) * 360
                 : ((pose.getValue() + 0.5)) * 360;
     }
