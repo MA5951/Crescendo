@@ -316,7 +316,10 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
                 new Rotation2d(
                   Math.toRadians((getFusedHeading() - offsetAngle))))
                 : new ChassisSpeeds(x, y, omega));
-    setModules(states);
+    board.addNum("set Point", states[0].speedMetersPerSecond);
+    board.addNum("actual", getSwerveModuleStates()[0].speedMetersPerSecond);
+    
+                setModules(states);
   }
 
   public void driveAuto(ChassisSpeeds speeds) {
@@ -404,7 +407,7 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
 
     lastVelocity = frontLeftModule.getDriveVelocity();
 
-
+    
     field.setRobotPose(getPose());
 
     double ySpeaker = SwerveConstants.SPEAKER_TARGET_Y;

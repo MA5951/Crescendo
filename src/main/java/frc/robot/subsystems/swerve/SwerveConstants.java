@@ -25,19 +25,19 @@ public class SwerveConstants {
         public final static boolean FRONT_LEFT_MODULE_IS_ABSOLUTE_ENCODER_REVERSED = false;
 
         // front right module
-        public final static double FRONT_RIGHT_MODULE_OFFSET_ENCODER = 327;//16
+        public final static double FRONT_RIGHT_MODULE_OFFSET_ENCODER = 162.6;
         public final static boolean FRONT_RIGHT_MOUDLE_IS_DRIVE_MOTOR_REVERSED = false;
         public final static boolean FRONT_RIGHT_MODULES_IS_TURNING_MOTOR_REVERSED = true;
         public final static boolean FRONT_RIGHT_MODULE_IS_ABSOLUTE_ENCODER_REVERSED = false;
 
         // rear left module
-        public final static double REAR_LEFT_MODULE_OFFSET_ENCODER = 103;
+        public final static double REAR_LEFT_MODULE_OFFSET_ENCODER = 104.2;
         public final static boolean REAR_LEFT_MOUDLE_IS_DRIVE_MOTOR_REVERSED = true;
         public final static boolean REAR_LEFT_MODULES_IS_TURNING_MOTOR_REVERSED = true;
         public final static boolean REAR_LEFT_MODULE_IS_ABSOLUTE_ENCODER_REVERSED = false;
 
         // rear right module
-        public final static double REAR_RIGHT_MODULE_OFFSET_ENCODER = 99;
+        public final static double REAR_RIGHT_MODULE_OFFSET_ENCODER = 99.5;
         public final static boolean REAR_RIGHT_MOUDLE_IS_DRIVE_MOTOR_REVERSED = false;
         public final static boolean REAR_RIGHT_MODULES_IS_TURNING_MOTOR_REVERSED = true;
         public final static boolean REAR_RIGHT_MODULE_IS_ABSOLUTE_ENCODER_REVERSED = false;
@@ -59,7 +59,7 @@ public class SwerveConstants {
 
         // Modules drive config
         // PID
-        public final static double DRIVE_PID_KP = 3.1;
+        public final static double DRIVE_PID_KP = 0.2;//3.1
         public final static double DRIVE_PID_KI = 0;
         public final static double DRIVE_PID_KD = 0;
         public final static double DRIVE_KS = 0;
