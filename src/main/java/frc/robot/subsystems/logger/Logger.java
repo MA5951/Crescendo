@@ -74,6 +74,14 @@ public class Logger extends SubsystemBase {
   private LoggedBool uppershooterAtPoint;
   private LoggedString uppershooterIdleMode;
 
+<<<<<<< Updated upstream
+=======
+  //Lower Shooter Logged Variables
+  private LoggedDouble lowershooterSetPoint;
+  private LoggedDouble lowershooterSpeed;
+  private LoggedBool lowershooterAtPoint;
+
+>>>>>>> Stashed changes
   public Logger() {
     swerve = SwerveDrivetrainSubsystem.getInstance();
     intake = Intake.getInstance();
