@@ -14,6 +14,7 @@ import frc.robot.subsystems.elevator.ElevatorConstants;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeConstants;
 import frc.robot.subsystems.shooter.LowerShooter;
+import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.shooter.UpperShooter;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -28,10 +29,10 @@ public class Feeding extends SequentialCommandGroup {
       new SetElevator(ElevatorConstants.SHOOTING_POSE),
       new ParallelCommandGroup(
         new ParallelCommandGroup(
-          new MotorCommand(UpperShooter.getInstance(), 0.2, 0),
-          new MotorCommand(LowerShooter.getInstance(), 0.2, 0)
+          new MotorCommand(UpperShooter.getInstance(), ShooterConstants.FEDDING_UPPER_V, 0),
+          new MotorCommand(LowerShooter.getInstance(), ShooterConstants.FEEDING_LOWER_V, 0)
         ),
-        new InstantCommand(() -> Intake.getInstance().setPower(-0.8))
+        new InstantCommand(() -> Intake.getInstance().setPower(IntakeConstants.INTAKE_POWER))
       )
     );
   }

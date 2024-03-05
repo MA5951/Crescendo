@@ -20,6 +20,9 @@ public class ShooterConstants {
 
     public static final double V_FACTOR = 1.07;
 
+    public static final double FEDDING_UPPER_V = 0.2;
+    public static final double FEEDING_LOWER_V = 0.2;
+
     public static final double SPEAKER_UPPER_V_AUTO = 2000 * 1.169; //2200
     public static final double SPEAKER_LOWER_V_AUTO= 2080 * 1.169; //3100
 
