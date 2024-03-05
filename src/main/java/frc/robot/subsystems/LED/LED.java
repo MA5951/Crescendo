@@ -4,10 +4,6 @@
 
 package frc.robot.subsystems.LED;
 
-import com.ma5951.utils.MAShuffleboard;
-import com.ma5951.utils.led.BlinkingColorPattern;
-import com.ma5951.utils.led.SolidColorPattern;
-
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -16,8 +12,6 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.PortMap;
-import frc.robot.PortMap.Swerve;
-import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorConstants;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
@@ -43,13 +37,10 @@ public class LED extends SubsystemBase {
 
   public HP activeAnimation;
   private INTAKE intakeAnimation;
-  private double startAmpTime = 0;
   private int firstHue = 0;
   private double lastChange;
   private boolean on;
   private Color currentColor;
-
-  private MAShuffleboard board;
 
   public LED() {
     leds = new AddressableLED(PortMap.LED.ledPort);
@@ -59,7 +50,6 @@ public class LED extends SubsystemBase {
     leds.start();
     currentColor = LedConstants.BLUE;
 
-    board = new MAShuffleboard("LED");
   }
 
   public void setSolidColor(Color color) {
@@ -275,12 +265,10 @@ public class LED extends SubsystemBase {
 
   public void activateAmp() {
     activeAnimation = HP.AMP;
-    startAmpTime = Timer.getFPGATimestamp();
   }
 
   public void activateCOLAB() {
     activeAnimation = HP.CLAB;
-    startAmpTime = Timer.getFPGATimestamp();
   }
 
   public void runDriversAnimations() {

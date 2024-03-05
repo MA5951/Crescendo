@@ -14,7 +14,6 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
 import frc.robot.automations.AMPScore;
@@ -184,7 +183,7 @@ public class RobotContainer {
 
     // // // ---------------------------------------------------------------
 
-    new CreateButton(driverController.povLeft(), new ResetElevator());
+    Button.Create(driverController.povLeft(), new ResetElevator());
 
     driverController.povUp().whileTrue(new MotorCommand(
       Elevator.getInstance(), 0.3, 0
@@ -197,7 +196,7 @@ public class RobotContainer {
       new InstantCommand(() -> Elevator.getInstance().setSetPoint(Elevator.getInstance().getPosition())));
 
     // shooting linked to the speaker 
-    new CreateButton(driverController.L1(), 
+    Button.Create(driverController.L1(), 
     new ScoreWithoutAdjust(
         () -> ShooterConstants.SPEAKER_UPPER_V, 
         () -> ShooterConstants.SPEAKER_LOWER_V,
@@ -206,20 +205,20 @@ public class RobotContainer {
     );
 
     // auto amp score
-    new CreateButton(driverController.circle(),
+    Button.Create(driverController.circle(),
      new GoToAmp().andThen(new AMPScore().alongWith(
         new InstantCommand(() -> isAmp = false)
       ))
     );
     
     // amp
-    new CreateButton(driverController.button(9), new AMPScore().alongWith(
+    Button.Create(driverController.button(9), new AMPScore().alongWith(
         new InstantCommand(() -> isAmp = false)
       ));
 
     
     // shooting normal
-    new CreateButton(driverController.square(), new RunShoot());
+    Button.Create(driverController.square(), new RunShoot());
 
     driverController.L2().whileTrue(new AutoShoot()).whileFalse(
       new ResetAll(() -> ElevatorConstants.DEFAULT_POSE).alongWith(new InstantCommand(() -> 
@@ -232,15 +231,15 @@ public class RobotContainer {
         new SourceIntake(),
         RobotContainer::IsFloor
       ).alongWith(new InstantCommand(() -> isIntakeRunning = true)).andThen(
-        new ResetAll(() ->ElevatorConstants.DEFAULT_POSE)
+        new ResetAll(() -> ElevatorConstants.DEFAULT_POSE)
       .alongWith(new InstantCommand(() -> isIntakeRunning = false)))
     );
 
-    new CreateButton(driverController.povRight(), 
+    Button.Create(driverController.povRight(), 
       new InstantCommand(() -> Elevator.getInstance().toggleDeafultPose()));
 
     // eject
-    new CreateButton(driverController.cross(),
+    Button.Create(driverController.cross(),
           new SetElevator(ElevatorConstants.SHOOTING_POSE).andThen(new MotorCommand(
           Intake.getInstance(), -IntakeConstants.INTAKE_POWER, 0)).alongWith(
           new InstantCommand(() -> isIntakeRunning = false))
@@ -259,13 +258,13 @@ public class RobotContainer {
 
 
     // elevator change + amp or shoot chooser
-    new CreateButton(operatorController.L1(),
+    Button.Create(operatorController.L1(),
       new SetElevator(ElevatorConstants.AMP_POSE).alongWith(
         new InstantCommand(() -> isAmp = true)
       ),
       () -> ElevatorConstants.AMP_POSE);
 
-    new CreateButton(operatorController.povDown(), 
+    Button.Create(operatorController.povDown(), 
       new SetElevator(ElevatorConstants.DEFAULT_POSE),
       () -> ElevatorConstants.DEFAULT_POSE);
 
@@ -289,7 +288,7 @@ public class RobotContainer {
       new InstantCommand(() -> ShootingLinkedToSpeaker = false)
     );
 
-    new CreateButton(operatorController.touchpad()
+    Button.Create(operatorController.touchpad()
     ,new Feeding());
 
     // // //--------------------LEDS-----------------------

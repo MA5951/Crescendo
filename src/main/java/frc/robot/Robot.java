@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import com.ctre.phoenix6.CANBus;
 import com.ma5951.utils.commands.DefaultRunInternallyControlledSubsystem;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
