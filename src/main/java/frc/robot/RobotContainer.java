@@ -288,7 +288,9 @@ public class RobotContainer {
     );
 
     operatorController.L2().whileTrue(
-      new InstantCommand(() -> ShootingLinkedToSpeaker = false)
+      new InstantCommand(() -> ShootingLinkedToSpeaker = false).alongWith(
+        new SetElevator(ElevatorConstants.DEFAULT_POSE)
+      )
     );
 
     Button.Create(operatorController.touchpad()

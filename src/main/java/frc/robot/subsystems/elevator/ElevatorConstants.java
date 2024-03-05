@@ -10,7 +10,7 @@ public class ElevatorConstants {
     public static final double MIN_POSE = 0.01;
     public static final double MAX_POSE = 0.45;
 
-    public static double DEFAULT_POSE = 0;;
+    public static double DEFAULT_POSE = 0;
     public static final double DEFAULT_POSE_STAGE = 0.17;
     public static final double DEFAULT_POSE_DEFANCE = 0.33;
 
