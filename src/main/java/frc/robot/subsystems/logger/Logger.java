@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems.logger;
 
+import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.CANBus.CANBusStatus;
 import com.ma5951.utils.Logger.LoggedBool;
 import com.ma5951.utils.Logger.LoggedDouble;
 import com.ma5951.utils.Logger.LoggedInt;
@@ -29,6 +31,7 @@ public class Logger extends SubsystemBase {
   private MALog log;
   private PowerDistribution pdh;
   private SwerveDrivetrainSubsystem swerve;
+  // private CANBusStatus canBusStats;
   private Intake intake;
   private Elevator elevator;
   private UpperShooter upperShooter;
@@ -74,14 +77,12 @@ public class Logger extends SubsystemBase {
   private LoggedBool uppershooterAtPoint;
   private LoggedString uppershooterIdleMode;
 
-<<<<<<< Updated upstream
-=======
   //Lower Shooter Logged Variables
   private LoggedDouble lowershooterSetPoint;
   private LoggedDouble lowershooterSpeed;
   private LoggedBool lowershooterAtPoint;
+  private LoggedString lowershooterIdleMode;
 
->>>>>>> Stashed changes
   public Logger() {
     swerve = SwerveDrivetrainSubsystem.getInstance();
     intake = Intake.getInstance();
@@ -133,7 +134,10 @@ public class Logger extends SubsystemBase {
     uppershooterIdleMode = new LoggedString("/Upper Shooter/Idle Mode");
 
     //Lower Shooter Logged Variables
-    
+    lowershooterSetPoint = new LoggedDouble("/Lower Shooter/Set Point");
+    lowershooterSpeed = new LoggedDouble("/Lower Shooter/Velocity");
+    lowershooterAtPoint = new LoggedBool("/Lower Shooter/At Point");
+    lowershooterIdleMode = new LoggedString("/Lower Shooter/Idle Mode");
 
   }
 
@@ -149,7 +153,7 @@ public class Logger extends SubsystemBase {
     //Power And Can Updates
     powerAndCanVoltage.update(pdh.getVoltage());
     powerAndCanAmpere.update(pdh.getTotalCurrent());
-    powerAndCanCanUtalisation.update(0);// TODO
+    // powerAndCanCanUtalisation.update(Math.round(canBusStats.BusUtilization));
 
     //Swerve Updates
     swerveGyroYaw.update(swerve.getFusedHeading());
@@ -184,6 +188,12 @@ public class Logger extends SubsystemBase {
     uppershooterSpeed.update(upperShooter.getVelocity());
     uppershooterAtPoint.update(upperShooter.atPoint());
     uppershooterIdleMode.update(upperShooter.getIDLmode());
+
+    //Lower Shooter Updates
+    lowershooterSetPoint.update(lowerShooter.getSetPoint());
+    lowershooterSpeed.update(lowerShooter.getVelocity());
+    lowershooterAtPoint.update(lowerShooter.atPoint());
+    lowershooterIdleMode.update(lowerShooter.getIDLmode());
 
 
   }
