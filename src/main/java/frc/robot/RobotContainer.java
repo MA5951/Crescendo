@@ -202,6 +202,7 @@ public class RobotContainer {
         () -> ShooterConstants.SPEAKER_LOWER_V,
           ElevatorConstants.SHOOTING_POSE)
           .alongWith(new InstantCommand(() -> isIntakeRunning = false))
+          .alongWith(new InstantCommand(() -> ShootingLinkedToSpeaker = false))
     );
 
     // auto amp score
@@ -281,7 +282,9 @@ public class RobotContainer {
 
     // choosing btween linked shoot or normal one
     operatorController.R2().whileTrue(
-      new InstantCommand(() -> ShootingLinkedToSpeaker = true)
+      new InstantCommand(() -> ShootingLinkedToSpeaker = true).alongWith(
+        new SetElevator(ElevatorConstants.SHOOTING_POSE)
+      )
     );
 
     operatorController.L2().whileTrue(
