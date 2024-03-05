@@ -20,6 +20,7 @@ import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
 import frc.robot.automations.AMPScore;
 import frc.robot.automations.AutoShoot;
 import frc.robot.automations.CenterRing;
+import frc.robot.automations.Feeding;
 import frc.robot.automations.GoToAmp;
 import frc.robot.automations.ResetAll;
 import frc.robot.automations.RunIntake;
@@ -287,6 +288,9 @@ public class RobotContainer {
     operatorController.L2().whileTrue(
       new InstantCommand(() -> ShootingLinkedToSpeaker = false)
     );
+
+    new CreateButton(operatorController.touchpad()
+    ,new Feeding());
 
     // // //--------------------LEDS-----------------------
 

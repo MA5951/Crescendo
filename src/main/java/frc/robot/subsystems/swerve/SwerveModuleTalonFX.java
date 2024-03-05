@@ -5,6 +5,7 @@ import com.ctre.phoenix6.configs.ClosedLoopRampsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
@@ -30,7 +31,7 @@ public class SwerveModuleTalonFX extends SwerveModule {
     private boolean isTurningMotorReversed;
 
     private PositionVoltage angleSetter = new PositionVoltage(0);
-    private VelocityTorqueCurrentFOC velocitySetter = new VelocityTorqueCurrentFOC(0);
+    private VelocityVoltage velocitySetter = new VelocityVoltage(0);
 
     private StatusSignal<Double> drivePosition;
     private StatusSignal<Double> driveVelocity;

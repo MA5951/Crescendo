@@ -316,8 +316,6 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
                 new Rotation2d(
                   Math.toRadians((getFusedHeading() - offsetAngle))))
                 : new ChassisSpeeds(x, y, omega));
-    board.addNum("set Point", states[0].speedMetersPerSecond);
-    board.addNum("actual", getSwerveModuleStates()[0].speedMetersPerSecond);
     
                 setModules(states);
   }
@@ -417,8 +415,9 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
       SwerveConstants.SPEAKER_TARGET_X_BLUE : SwerveConstants.SPEAKER_TAGET_X_RED;
     }
 
-    board.addBoolean("can shoot", canShoot());
-    board.addBoolean("is finshed run shoot", !SwerveDrivetrainSubsystem.getInstance().canShoot() || RobotContainer.isIntakeRunning);
+
+
+    board.addNum("front left speed (m/s)", frontLeftModule.getDriveVelocity());
 
     printAbsPositions();
 
@@ -427,7 +426,6 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
       SwerveDrivetrainSubsystem.getInstance().getPose().getX(),
         0).getDistance(new Translation2d(xSpeaker, 0));
 
-    board.addNum("distance", disFormSpeaker);
     disFormSpeaker = Math.abs(new Translation2d(xSpeaker, ySpeaker).getDistance(
         getPose().getTranslation())
     );

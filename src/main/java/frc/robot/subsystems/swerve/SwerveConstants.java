@@ -59,11 +59,11 @@ public class SwerveConstants {
 
         // Modules drive config
         // PID
-        public final static double DRIVE_PID_KP = 0.2;//3.1
+        public final static double DRIVE_PID_KP = 0.1;
         public final static double DRIVE_PID_KI = 0;
         public final static double DRIVE_PID_KD = 0;
-        public final static double DRIVE_KS = 0;
-        public final static double DRIVE_KV = 0.18 * 12;
+        public final static double DRIVE_KS = 0.015 * 12;
+        public final static double DRIVE_KV = 2.4;
         // Current Limit
         public final static int DRIVE_PEAK_CURRENT_LIMIT_TORQUE_CURRENT = 400;
         public final static int DRIVE_PEAK_CURRENT_LIMIT = 60;
@@ -72,8 +72,8 @@ public class SwerveConstants {
         public final static boolean DRIVE_ENBLE_CURRENT_LIMIT = true;
 
         // swerve physics
-        public final static double MAX_VELOCITY = 5.3 ;
-        public final static double MAX_ACCELERATION = 10.91;
+        public final static double MAX_VELOCITY =  5.1; // 5.14;
+        public final static double MAX_ACCELERATION = (10.91 / 1.15) * 1.3; // TODO - Needs Check
         public final static double MAX_ANGULAR_VELOCITY = MAX_VELOCITY / RADIUS; // radians
 
         // swerve controllers

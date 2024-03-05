@@ -50,8 +50,7 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
   }
 
   public boolean isGamePieceInIntake(){
-    // return !upSensor.get() || !downSensor.get();
-    return !downSensor.get();
+    return !upSensor.get() || !downSensor.get();
   }
 
   @Override
