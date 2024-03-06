@@ -9,6 +9,7 @@ import com.ma5951.utils.commands.MotorCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.elevator.SetElevator;
 import frc.robot.subsystems.elevator.ElevatorConstants;
 import frc.robot.subsystems.intake.Intake;
@@ -22,17 +23,29 @@ import frc.robot.subsystems.shooter.UpperShooter;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class Feeding extends SequentialCommandGroup {
   /** Creates a new Feeding. */
-  public Feeding() {
+  
+  public static double getWaitTime(boolean wait) {
+      if (wait) {
+        return 0.5;
+      } else {
+        return 0;
+      }
+    }
+  
+  public Feeding(double upperV , double lowerV , boolean shouldWait) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new SetElevator(ElevatorConstants.SHOOTING_POSE),
       new ParallelCommandGroup(
         new ParallelCommandGroup(
-          new MotorCommand(UpperShooter.getInstance(), ShooterConstants.FEDDING_UPPER_V, 0),
-          new MotorCommand(LowerShooter.getInstance(), ShooterConstants.FEEDING_LOWER_V, 0)
+          new MotorCommand(UpperShooter.getInstance(), upperV, 0),
+          new MotorCommand(LowerShooter.getInstance(), lowerV, 0)
         ),
-        new InstantCommand(() -> Intake.getInstance().setPower(IntakeConstants.INTAKE_POWER))
+        new SequentialCommandGroup(
+          new WaitCommand(getWaitTime(shouldWait)),
+          new InstantCommand(() -> Intake.getInstance().setPower(IntakeConstants.INTAKE_POWER))
+        )
       )
     );
   }

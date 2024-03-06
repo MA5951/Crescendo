@@ -191,7 +191,7 @@ public class RobotContainer {
       new InstantCommand(() -> Elevator.getInstance().setSetPoint(Elevator.getInstance().getPosition())));
     
     driverController.povDown().whileTrue(new MotorCommand(
-      Elevator.getInstance(), -0.3, 0
+      Elevator.getInstance(), -0.1, 0
     )).whileFalse(
       new InstantCommand(() -> Elevator.getInstance().setSetPoint(Elevator.getInstance().getPosition())));
 
@@ -294,7 +294,10 @@ public class RobotContainer {
     );
 
     Button.Create(operatorController.touchpad()
-    ,new Feeding());
+    ,new Feeding(ShooterConstants.FEDDING_UPPER_V , ShooterConstants.FEEDING_LOWER_V , false));
+
+    Button.Create(operatorController.options()
+    ,new Feeding(ShooterConstants.FAR_FEDDING_UPPER_V , ShooterConstants.FAR_FEEDING_LOWER_V , true));
 
     // // //--------------------LEDS-----------------------
 
