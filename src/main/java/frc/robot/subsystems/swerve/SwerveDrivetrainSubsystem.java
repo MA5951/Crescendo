@@ -46,10 +46,6 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
 
   private static SwerveDrivetrainSubsystem swerve;
 
-  private double autoStartAngle = 0;
-  private double gyroStartAngle = 0;
-  private boolean isFirstOdometryReset = true;
-
   public final boolean isXReversed = true;
   public final boolean isYReversed = true;
   public final boolean isXYReversed = true;
@@ -206,17 +202,7 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
     return offsetAngle;
   }
 
-  public void setFirstOdometryReset(boolean isFirst) {
-    isFirstOdometryReset = isFirst;
-  }
-
   public void resetOdometry(Pose2d pose) {
-    if (isFirstOdometryReset) {
-      autoStartAngle = pose.getRotation().getDegrees();
-      gyroStartAngle = getFusedHeading();
-
-      isFirstOdometryReset = false;
-    }
     odometry.resetPosition(getRotation2d(), getSwerveModulePositions(), pose);
   }
 
@@ -417,7 +403,8 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
 
 
 
-    board.addNum("front left speed (m/s)", frontLeftModule.getDriveVelocity());
+    board.addNum("distance", disFormSpeaker);
+    board.addBoolean("canshoot", canShoot());
 
     printAbsPositions();
 

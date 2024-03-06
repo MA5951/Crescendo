@@ -33,8 +33,8 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
     master.restoreFactoryDefaults();
     slave.restoreFactoryDefaults();
 
-    master.setSmartCurrentLimit(20);
-    slave.setSmartCurrentLimit(20);
+    master.setSmartCurrentLimit(45);
+    slave.setSmartCurrentLimit(45);
 
     master.enableVoltageCompensation(12);
     slave.enableVoltageCompensation(12);

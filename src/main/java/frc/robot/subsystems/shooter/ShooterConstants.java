@@ -23,11 +23,14 @@ public class ShooterConstants {
     public static final double FEDDING_UPPER_V = 0.2;
     public static final double FEEDING_LOWER_V = 0.2;
 
+    public static final double FAR_FEDDING_UPPER_V = 0.6;
+    public static final double FAR_FEEDING_LOWER_V = 0.6;
+
     public static final double SPEAKER_UPPER_V_AUTO = 2000 * 1.169; //2200
     public static final double SPEAKER_LOWER_V_AUTO= 2080 * 1.169; //3100
 
-    public static final double SPEAKER_UPPER_V = SPEAKER_UPPER_V_AUTO * 1.1 - 7; // 1800 * V_FACTOR * 0.63;
-    public static final double SPEAKER_LOWER_V = SPEAKER_LOWER_V_AUTO * 1.3 - 14; // 3300 * V_FACTOR * 0.63;
+    public static final double SPEAKER_UPPER_V = SPEAKER_UPPER_V_AUTO * 1.1 - 7 ; //1550
+    public static final double SPEAKER_LOWER_V = SPEAKER_LOWER_V_AUTO * 1.3 - 14; //1680
 
     public static final double SPEAKER_UPPER_V_AUTO_SIDE = 2200;
     public static final double SPEAKER_LOWER_V_AUTO_SIDE = 3100;
@@ -50,7 +53,7 @@ public class ShooterConstants {
         {1.78, 1760, 1790},
         {1.83, 1750, 1780},
         {1.9, 1750, 1780},
-        {1.95, 1750, 1780}// ,
+        {1.95, 1750, 1780} ,
         // {1.983, 1740, 1760},
         // {1.986, 1720, 1720},
         // {2.04, 1960, 1450},
