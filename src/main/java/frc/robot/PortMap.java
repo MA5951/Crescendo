@@ -3,7 +3,7 @@ package frc.robot;
 public class PortMap {
 
   public static class CanBus {
-    public static final String CANivoreBus = "Swerve";
+    public static final String CANivoreBus = "rio"; // "Swerve";
     public static final String RioBus = "rio";
   }
 

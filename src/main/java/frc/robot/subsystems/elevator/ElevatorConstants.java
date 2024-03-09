@@ -33,7 +33,7 @@ public class ElevatorConstants {
         ((2 * WHEEL_RADIUS * 
         Math.PI) / GEAR) / 100;
 
-    public static final double CLOSING_POWER = -0.25;
+    public static final double CLOSING_POWER = -0.42;
     
     public static final double CURRENT_THRESHOLD = 20;
     public static final double TIME_WITH_CURRENT_JUMP = 0.1;

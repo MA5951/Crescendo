@@ -44,7 +44,7 @@ public class SwerveModuleTalonFX extends SwerveModule {
             int turningID, int absoluteEncoderID, boolean isDriveMotorReversed,
             boolean isTurningMotorReversed, boolean isAbsoluteEncoderReversed,
             double offsetEncoder, String canbus) {
-        this.absoluteEcoder = new CANcoder(absoluteEncoderID, canbus);
+        this.absoluteEcoder = new CANcoder(absoluteEncoderID);
 
         this.offsetEncoder = offsetEncoder;
         this.isAbsoluteEncoderReversed = isAbsoluteEncoderReversed;
@@ -52,8 +52,8 @@ public class SwerveModuleTalonFX extends SwerveModule {
         this.isDriveMotorReversed = isDriveMotorReversed;
         this.isTurningMotorReversed = isTurningMotorReversed;
 
-        this.driveMotor = new TalonFX(driveID, canbus);
-        this.turningMotor = new TalonFX(turningID, canbus);
+        this.driveMotor = new TalonFX(driveID);
+        this.turningMotor = new TalonFX(turningID);
 
         drivePosition = driveMotor.getPosition();
         driveVelocity = driveMotor.getVelocity();
@@ -146,7 +146,6 @@ public class SwerveModuleTalonFX extends SwerveModule {
     public double getAbsoluteEncoderPosition() {
         StatusSignal<Double> pose = absoluteEcoder.getAbsolutePosition();
         pose.refresh();
-        // return pose.getValue();
         return isAbsoluteEncoderReversed ? 360 - ((pose.getValue() + 0.5)) * 360
                 : ((pose.getValue() + 0.5)) * 360;
     }

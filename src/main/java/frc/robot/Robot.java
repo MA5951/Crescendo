@@ -44,7 +44,7 @@ public class Robot extends TimedRobot {
     LowerShooter.getInstance(), new DefaultRunInternallyControlledSubsystem(
       LowerShooter.getInstance(), 0));
 
-    CameraServer.startAutomaticCapture();
+    // CameraServer.startAutomaticCapture();
   }
 
   @Override

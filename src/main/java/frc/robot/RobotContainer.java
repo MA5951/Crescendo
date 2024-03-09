@@ -12,6 +12,9 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.shooter.ShooterConstants;
+import frc.robot.automations.ScoreAutomation;
+import frc.robot.automations.GettingReadyToScore;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
@@ -144,11 +147,10 @@ public class RobotContainer {
     board.addOptionToChooser("Two Piece Stage", AutoBuilder.buildAuto("Two pice Stage")); // 2 Game Piece Stage
     board.addOptionToChooser("Two Piece Amp", AutoBuilder.buildAuto("Two pice Amp")); // 2 Game Piece Amp
     board.addOptionToChooser("Two Piece Middle", AutoBuilder.buildAuto("Two pice Middle")); // 2 Game Piece Middle
-    board.addOptionToChooser("Three Piece Middle", AutoBuilder.buildAuto("Two pice Middle")
-      .andThen(AutoBuilder.buildAuto("Theree pice Spaker middle"))); // 3 Game Piece Middle
+    board.addOptionToChooser("Three Piece Middle", AutoBuilder.buildAuto("Theree pice Spaker middle")); // 3 Game Piece Middle
     board.addOptionToChooser("Theree pice Amp", AutoBuilder.buildAuto("Theree pice Amp")); // 3 Game Piece Amp
     board.addOptionToChooser("Theree pice Stage", AutoBuilder.buildAuto("Theree pice Stage")); // 3 Game Piece Stage
-    board.addOptionToChooser("2 note far stage", AutoBuilder.buildAuto("2 note far stage")); // 2 Game Piece Stage Far
+    board.addOptionToChooser("2 n/ote far stage", AutoBuilder.buildAuto("2 note far stage")); // 2 Game Piece Stage Far
     board.addOptionToChooser("one game piece", AutoBuilder.buildAuto("one game piece")); // One Game Piece
     board.addOptionToChooser("three Piece Close Amp", new TwoPieceCloseAmp()); // Two piece close amp
     board.addOptionToChooser("three Piece Close Stage", new TwoPieceCloseStage());// Two piece close amp
@@ -191,7 +193,7 @@ public class RobotContainer {
       new InstantCommand(() -> Elevator.getInstance().setSetPoint(Elevator.getInstance().getPosition())));
     
     driverController.povDown().whileTrue(new MotorCommand(
-      Elevator.getInstance(), -0.1, 0
+      Elevator.getInstance(), -0.3, 0
     )).whileFalse(
       new InstantCommand(() -> Elevator.getInstance().setSetPoint(Elevator.getInstance().getPosition())));
 
@@ -205,12 +207,19 @@ public class RobotContainer {
           .alongWith(new InstantCommand(() -> ShootingLinkedToSpeaker = false))
     );
 
-    // auto amp score
+    // // auto amp score
+    // Button.Create(driverController.circle(),
+    //  new GoToAmp().andThen(new AMPScore().alongWith(
+    //     new InstantCommand(() -> isAmp = false)
+    //   ))
+    // );
+
     Button.Create(driverController.circle(),
-     new GoToAmp().andThen(new AMPScore().alongWith(
-        new InstantCommand(() -> isAmp = false)
-      ))
-    );
+    new GettingReadyToScore(() -> ShooterConstants.PiningShooting,
+      () -> ShooterConstants.PiningShooting, () -> ElevatorConstants.MAX_POSE
+      ).andThen(
+      new ScoreAutomation(() -> ShooterConstants.PiningShooting,
+      () -> ShooterConstants.PiningShooting)));
     
     // amp
     Button.Create(driverController.button(9), new AMPScore().alongWith(
@@ -308,6 +317,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
+    // return AutoBuilder.buildAuto("There pice far stage");
     return board.getSelectedCommand();
   }
 }

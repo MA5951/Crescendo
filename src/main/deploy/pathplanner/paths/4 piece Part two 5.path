@@ -33,7 +33,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 5.0,
-    "maxAcceleration": 7.0,
+    "maxAcceleration": 5.0,
     "maxAngularVelocity": 600.0,
     "maxAngularAcceleration": 700.0
   },
@@ -45,5 +45,5 @@
   "reversed": false,
   "folder": "Speaker- 4 Node",
   "previewStartingState": null,
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

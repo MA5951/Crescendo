@@ -48,7 +48,7 @@ public class ShootInMotion extends Command {
     * swerve.getRotation2d().getSin() + delay * 
       swerve.getRobotRelativeSpeeds().vyMetersPerSecond, 2) + Math.pow(swerve.disFromSpeakerX
         + delay * 
-      swerve.getRobotRelativeSpeeds().vxMetersPerSecond, 2))
+      swerve.getRobotRelativeSpeeds().vxMetersPerSecond, 2)), ShooterConstants.shootingPoses
     );
     LowerShooter.getInstance().setSetPoint(
       shootingValue[1] * ShooterConstants.V_FACTOR);

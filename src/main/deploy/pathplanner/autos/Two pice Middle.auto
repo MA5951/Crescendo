@@ -16,9 +16,16 @@
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "Shoot linked to speaker"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Shoot linked to speaker side"
+                      }
+                    }
+                  ]
                 }
               },
               {
@@ -45,6 +52,12 @@
                 "data": {
                   "pathName": "Note 2 intake Middle"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Set Shooter Speed"
+                }
               }
             ]
           }
@@ -60,12 +73,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Update Limelight"
           }
         },
         {

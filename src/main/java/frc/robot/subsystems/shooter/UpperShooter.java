@@ -132,7 +132,8 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
 
   public double getVelocityForShooting() {
     return ShooterConstants.sample(
-      SwerveDrivetrainSubsystem.getInstance().disFormSpeaker)[0] * ShooterConstants.V_FACTOR;
+      SwerveDrivetrainSubsystem.getInstance().disFormSpeaker,
+      ShooterConstants.shootingPoses)[0] * ShooterConstants.V_FACTOR;
   }
 
 
@@ -162,7 +163,8 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
       factor = DriverStation.getAlliance().get() == Alliance.Red ?
         -1 : 1;
     }
-    if ((Intake.getInstance().isGamePieceInIntake() && !RobotContainer.isAmp
+    if ((Intake.getInstance().isGamePieceInIntake
+    () && !RobotContainer.isAmp
       && (SwerveDrivetrainSubsystem.getInstance().getPose().getX() * factor
        < poduimLine * factor || RobotContainer.driverController.L2().getAsBoolean()))
        && !DriverStation.isAutonomous()) {
@@ -171,9 +173,12 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
           ShooterConstants.defaultVDown = ShooterConstants.SPEAKER_LOWER_V;
         } else {
           ShooterConstants.defaultVUp = 
-            ShooterConstants.sample(SwerveDrivetrainSubsystem.getInstance().disFormSpeaker)[0] * 
+            ShooterConstants.sample(SwerveDrivetrainSubsystem.getInstance().disFormSpeaker,
+            ShooterConstants.shootingPoses)[0] * 
             ShooterConstants.V_FACTOR;
-          ShooterConstants.defaultVDown = ShooterConstants.sample(SwerveDrivetrainSubsystem.getInstance().disFormSpeaker)[1] * 
+          ShooterConstants.defaultVDown = ShooterConstants.sample(
+            SwerveDrivetrainSubsystem.getInstance().disFormSpeaker,
+            ShooterConstants.shootingPoses)[1] * 
             ShooterConstants.V_FACTOR;
         }
   } else {
@@ -181,14 +186,12 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
       ShooterConstants.defaultVDown = 0;
     }
 
-    if (changeToDefaultV && DriverStation.isTeleop() && !isShooting) {
+    if (changeToDefaultV && DriverStation.isTeleop() && !isShooting && !RobotContainer.isIntakeRunning) {
       LowerShooter.getInstance().setSetPoint(ShooterConstants.defaultVUp);
       setSetPoint(ShooterConstants.defaultVDown);
     }
 
     board.addBoolean("atpoint", atPoint());
-
-    board.addNum("set", setPoint);
 
     board.addNum("current", getCurrent());
   }

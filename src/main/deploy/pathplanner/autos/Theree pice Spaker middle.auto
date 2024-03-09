@@ -2,7 +2,7 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.29,
+      "x": 1.28,
       "y": 5.52
     },
     "rotation": -179.41197514052948
@@ -12,13 +12,63 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Update Limelight"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ResetElevator"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shoot linked to speaker side"
+                }
+              }
+            ]
           }
         },
         {
           "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Note 2 intake Middle"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Set Shooter Speed"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Note 2 score Middle 5"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot linked to speaker"
+          }
+        },
+        {
+          "type": "deadline",
           "data": {
             "commands": [
               {
@@ -37,7 +87,7 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
               {
@@ -50,6 +100,12 @@
                 "type": "sequential",
                 "data": {
                   "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Intake"
+                      }
+                    },
                     {
                       "type": "named",
                       "data": {
@@ -75,21 +131,123 @@
           }
         },
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "Update Limelight"
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.75
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shoot linked to speaker"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "5 piece 1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "5 piece 3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.75
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shoot linked to speaker"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "5 piece 4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "5 piece 2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Shoot linked to speaker"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "stop shooter"
           }
         }
       ]

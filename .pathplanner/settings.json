@@ -13,8 +13,8 @@
     "Theree pice",
     "Two pice"
   ],
-  "defaultMaxVel": 3.0,
-  "defaultMaxAccel": 3.0,
+  "defaultMaxVel": 5.0,
+  "defaultMaxAccel": 5.0,
   "defaultMaxAngVel": 600.0,
   "defaultMaxAngAccel": 700.0,
   "maxModuleSpeed": 5.5

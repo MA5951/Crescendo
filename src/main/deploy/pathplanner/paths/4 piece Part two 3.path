@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.6470138128111684,
-        "y": 6.814156597901747
+        "x": 2.333176094923619,
+        "y": 6.1716317718349725
       },
       "isLocked": false,
       "linkedName": null
@@ -32,8 +32,8 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 5.0,
+    "maxAcceleration": 3.5,
     "maxAngularVelocity": 600.0,
     "maxAngularAcceleration": 700.0
   },
@@ -45,5 +45,5 @@
   "reversed": false,
   "folder": "Speaker- 4 Node",
   "previewStartingState": null,
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }
