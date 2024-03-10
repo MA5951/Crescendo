@@ -370,11 +370,11 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
   }
 
   public void addVisionMeasurement() {
-    if (RobotContainer.APRILTAGS_LIMELIGHT.hasTarget()
-      && RobotContainer.APRILTAGS_LIMELIGHT.getTagId() != -1) {
-      Pose2d estPose = RobotContainer.APRILTAGS_LIMELIGHT.getEstPose();
-      odometry.addVisionMeasurement(estPose, RobotContainer.APRILTAGS_LIMELIGHT.getTimeStamp());
-    }
+    // if (RobotContainer.APRILTAGS_LIMELIGHT.hasTarget()
+    //   && RobotContainer.APRILTAGS_LIMELIGHT.getTagId() != -1) {
+    //   Pose2d estPose = RobotContainer.APRILTAGS_LIMELIGHT.getEstPose();
+    //   odometry.addVisionMeasurement(estPose, RobotContainer.APRILTAGS_LIMELIGHT.getTimeStamp());
+    // }
   }
 
   public static SwerveDrivetrainSubsystem getInstance() {

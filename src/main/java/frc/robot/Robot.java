@@ -73,7 +73,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    SwerveDrivetrainSubsystem.getInstance().resetEncoders();
+    // SwerveDrivetrainSubsystem.getInstance().resetEncoders();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     wasAuto = true;
     
@@ -105,7 +105,7 @@ public class Robot extends TimedRobot {
     }
 
 
-    SwerveDrivetrainSubsystem.getInstance().resetEncoders();
+    // SwerveDrivetrainSubsystem.getInstance().resetEncoders();
     
     CommandScheduler.getInstance().setDefaultCommand(
       Elevator.getInstance(), new DefaultRunInternallyControlledSubsystem(

@@ -10,6 +10,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.motorcontrol.StatusFrameEnhanced;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 
@@ -63,6 +64,9 @@ public class SwerveModuleTalonFX extends SwerveModule {
         configTurningMotor();
         configDriveMotor();
         resetEncoders();
+
+        absoluteEcoder.setStatusFramePeriod(StatusFrameEnhanced.Status_12_Feedback1, 20, 100);
+
     }
 
     private void configTurningMotor() {

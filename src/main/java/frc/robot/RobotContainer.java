@@ -318,6 +318,7 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     // return AutoBuilder.buildAuto("There pice far stage");
-    return board.getSelectedCommand();
+    // return board.getSelectedCommand();
+    return new FourGamePieces();
   }
 }
