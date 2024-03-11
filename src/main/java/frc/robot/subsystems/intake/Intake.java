@@ -3,7 +3,6 @@ package frc.robot.subsystems.intake;
 
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-
 import com.ma5951.utils.MAShuffleboard;
 import com.ma5951.utils.subsystem.MotorSubsystem;
 
@@ -46,8 +45,8 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
     master.setIdleMode(IdleMode.kBrake);
     master.setInverted(false);
     slave.setIdleMode(IdleMode.kBrake);
-    slave.follow(master, false);
-  }
+    slave.follow(master);
+}
 
   public boolean isGamePieceInIntake(){
     return !upSensor.get() || !downSensor.get();

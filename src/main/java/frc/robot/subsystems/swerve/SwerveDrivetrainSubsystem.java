@@ -391,7 +391,6 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
 
     lastVelocity = frontLeftModule.getDriveVelocity();
 
-    
     field.setRobotPose(getPose());
 
     double ySpeaker = SwerveConstants.SPEAKER_TARGET_Y;

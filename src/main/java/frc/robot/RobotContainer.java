@@ -127,7 +127,7 @@ public class RobotContainer {
     );
 
     NamedCommands.registerCommand("close intake", new RunInternallyControlledSubsystem(
-      Elevator.getInstance(), () -> ElevatorConstants.SHOOTING_POSE, false)
+      Elevator.getInstance(), () -> ElevatorConstants.DEFAULT_POSE_DEFANCE, false)
     );
     
     NamedCommands.registerCommand("Update Limelight", new InstantCommand(
@@ -318,7 +318,8 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     // return AutoBuilder.buildAuto("There pice far stage");
-    // return board.getSelectedCommand();
-    return new FourGamePieces();
+    return board.getSelectedCommand();
+    // return new FourGamePieces();
+    // return AutoBuilder.buildAuto("AllaBabala");
   }
 }
