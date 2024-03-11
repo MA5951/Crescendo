@@ -3,7 +3,7 @@ package frc.robot;
 public class PortMap {
 
   public static class CanBus {
-    public static final String CANivoreBus = "rio"; // "Swerve";
+    public static final String CANivoreBus = "Swerve";
     public static final String RioBus = "rio";
   }
 
@@ -50,13 +50,9 @@ public class PortMap {
   public static class Elevator {
     public static final int masterID = 28;
     public static final int slaveID = 30;
-    // public static final int slave2ID = 31;
-    // public static final int slave3ID = 35;
-
-    public static final int absEncoderID = 0;
   }
 
   public static class LED {
-    public static final int ledPort = 8; // TODO
+    public static final int ledPort = 9;
   }
 }

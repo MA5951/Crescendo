@@ -32,7 +32,6 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
 
     private final MAShuffleboard board;
 
-
     private Elevator() {
       master = new TalonFX(PortMap.Elevator.masterID, PortMap.CanBus.CANivoreBus);
       slave = new TalonFX(PortMap.Elevator.slaveID, PortMap.CanBus.CANivoreBus);

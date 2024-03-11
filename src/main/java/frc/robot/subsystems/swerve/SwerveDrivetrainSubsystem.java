@@ -78,7 +78,7 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
       -SwerveConstants.WIDTH / 2,
       -SwerveConstants.LENGTH / 2);
 
-  private final Pigeon2 gyro = new Pigeon2(PortMap.Swerve.Pigeon2ID, PortMap.CanBus.RioBus);
+  private final Pigeon2 gyro = new Pigeon2(PortMap.Swerve.Pigeon2ID, PortMap.CanBus.CANivoreBus);
 
   private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(frontLeftLocation, frontRightLocation,
     rearLeftLocation, rearRightLocation);
@@ -92,7 +92,7 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
       SwerveConstants.FRONT_LEFT_MODULES_IS_TURNING_MOTOR_REVERSED,
       SwerveConstants.FRONT_LEFT_MODULE_IS_ABSOLUTE_ENCODER_REVERSED,
       SwerveConstants.FRONT_LEFT_MODULE_OFFSET_ENCODER,
-      PortMap.CanBus.RioBus);
+      PortMap.CanBus.CANivoreBus);
 
   private final static SwerveModule frontRightModule = new SwerveModuleTalonFX(
       "frontRightModule",
@@ -103,7 +103,7 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
       SwerveConstants.FRONT_RIGHT_MODULES_IS_TURNING_MOTOR_REVERSED,
       SwerveConstants.FRONT_RIGHT_MODULE_IS_ABSOLUTE_ENCODER_REVERSED,
       SwerveConstants.FRONT_RIGHT_MODULE_OFFSET_ENCODER,
-      PortMap.CanBus.RioBus);
+      PortMap.CanBus.CANivoreBus);
 
   private final static SwerveModule rearLeftModule = new SwerveModuleTalonFX(
       "rearLeftModule",
@@ -114,7 +114,7 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
       SwerveConstants.REAR_LEFT_MODULES_IS_TURNING_MOTOR_REVERSED,
       SwerveConstants.REAR_LEFT_MODULE_IS_ABSOLUTE_ENCODER_REVERSED,
       SwerveConstants.REAR_LEFT_MODULE_OFFSET_ENCODER,
-      PortMap.CanBus.RioBus);
+      PortMap.CanBus.CANivoreBus);
 
   private final static SwerveModule rearRightModule = new SwerveModuleTalonFX(
       "rearRightModule",
@@ -125,7 +125,7 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
       SwerveConstants.REAR_RIGHT_MODULES_IS_TURNING_MOTOR_REVERSED,
       SwerveConstants.REAR_RIGHT_MODULE_IS_ABSOLUTE_ENCODER_REVERSED,
       SwerveConstants.REAR_RIGHT_MODULE_OFFSET_ENCODER,
-      PortMap.CanBus.RioBus);
+      PortMap.CanBus.CANivoreBus);
 
   private final SwerveDrivePoseEstimator odometry = new SwerveDrivePoseEstimator(kinematics,
   getRotation2d(), getSwerveModulePositions(),
