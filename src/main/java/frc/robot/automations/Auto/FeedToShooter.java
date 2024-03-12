@@ -29,7 +29,7 @@ public class FeedToShooter extends SequentialCommandGroup {
             new WaitUntilCommand(
               UpperShooter.getInstance()::isGamePiceInShooter),
               new WaitCommand(0.3)
-          ),
+          ).raceWith(new WaitCommand(1.5)),
         new MotorCommand(Intake.getInstance(), IntakeConstants.INTAKE_POWER, 0).repeatedly())
     );
   }

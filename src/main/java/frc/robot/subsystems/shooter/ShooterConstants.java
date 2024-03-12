@@ -9,7 +9,7 @@ public class ShooterConstants {
     public static final double TOLORANCE = 92.2;
     public static final double TIME_AT_SETPOINT = 0.15;
 
-    public static final double KP_UP = 0.00035;
+    public static final double KP_UP = 0.0004;
     public static final double KI_UP = 0;
     public static final double KD_UP = 0.0000003;
 
@@ -28,11 +28,11 @@ public class ShooterConstants {
     public static final double FAR_FEDDING_UPPER_V = 0.6;
     public static final double FAR_FEEDING_LOWER_V = 0.6;
 
-    public static final double SPEAKER_UPPER_V_AUTO = 2000 * 1.169; //2200
-    public static final double SPEAKER_LOWER_V_AUTO = 2080 * 1.169; //3100
+    public static final double SPEAKER_UPPER_V_AUTO = 2000 * 1.169;
+    public static final double SPEAKER_LOWER_V_AUTO = 2080 * 1.169;
 
-    public static final double SPEAKER_UPPER_V = SPEAKER_UPPER_V_AUTO * 1.1 - 7 ; //1550
-    public static final double SPEAKER_LOWER_V = SPEAKER_LOWER_V_AUTO * 1.3 - 14; //1680
+    public static final double SPEAKER_UPPER_V = SPEAKER_UPPER_V_AUTO * 1.1 - 7;
+    public static final double SPEAKER_LOWER_V = SPEAKER_LOWER_V_AUTO * 1.3 - 14;
 
     public static final double SPEAKER_UPPER_V_AUTO_SIDE = SPEAKER_UPPER_V * 1.169;
     public static final double SPEAKER_LOWER_V_AUTO_SIDE = SPEAKER_LOWER_V * 1.169;
@@ -46,7 +46,7 @@ public class ShooterConstants {
 
     public static double getTolorance(double setPoint) {
         if (RobotContainer.driverController.circle().getAsBoolean()) {
-            return 60;
+            return 50;
         }
         return Math.max(0.5952 * setPoint + 5.8986, TOLORANCE);
     }

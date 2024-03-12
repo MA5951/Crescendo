@@ -193,6 +193,8 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
 
     board.addBoolean("atpoint", atPoint());
 
+    board.addNum("set point", setPoint);
+
     board.addNum("current", getCurrent());
   }
 }

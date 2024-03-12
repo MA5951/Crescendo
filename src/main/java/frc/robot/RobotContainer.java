@@ -159,6 +159,7 @@ public class RobotContainer {
     board.addOptionToChooser("one game piece", AutoBuilder.buildAuto("one game piece")); // One Game Piece
     board.addOptionToChooser("three Piece Close Amp", new TwoPieceCloseAmp()); // Two piece close amp
     board.addOptionToChooser("three Piece Close Stage", new TwoPieceCloseStage());// Two piece close amp
+    board.addOptionToChooser("there far stage", AutoBuilder.buildAuto("There pice far stage"));
     board.addOptionToChooser("none", null); // none
 
     board.addDefaultOptionToChooser("none", null);
@@ -220,9 +221,10 @@ public class RobotContainer {
     // );
 
     Button.Create(driverController.circle(),
+    new InstantCommand(() -> UpperShooter.isShooting = true).andThen(
     new GettingReadyToScore(() -> ShooterConstants.PiningShooting,
       () -> ShooterConstants.PiningShooting, () -> ElevatorConstants.MAX_POSE
-      ).andThen(
+      )).andThen(
       new ScoreAutomation(() -> ShooterConstants.PiningShooting,
       () -> ShooterConstants.PiningShooting)));
     
@@ -263,8 +265,9 @@ public class RobotContainer {
     driverController.button(9).onTrue(
       new AngleAdjust(
         () -> DriverStation.getAlliance().get() == Alliance.Red
-        ? -(SwerveConstants.LEFT_SPEAKER_ANGLE - Math.PI) : SwerveConstants.LEFT_SPEAKER_ANGLE ,
-         driverController::getLeftX, driverController::getLeftY).raceWith(
+        ? -(SwerveConstants.RIGHT_SPEAKER_ANGLE - Math.PI) : SwerveConstants.LEFT_SPEAKER_ANGLE ,
+         driverController::getLeftX, driverController::getLeftY, false, true)
+         .raceWith(
         new WaitUntilCommand(() -> Math.abs(driverController.getRightX()) > 0.05)
       )
     );
@@ -272,8 +275,9 @@ public class RobotContainer {
     driverController.options().onTrue(
       new AngleAdjust(
         () -> DriverStation.getAlliance().get() == Alliance.Red
-        ? -(SwerveConstants.RIGHT_SPEAKER_ANGLE - Math.PI) : SwerveConstants.RIGHT_SPEAKER_ANGLE,
-         driverController::getLeftX, driverController::getLeftY).raceWith(
+        ? -(SwerveConstants.LEFT_SPEAKER_ANGLE - Math.PI) : SwerveConstants.RIGHT_SPEAKER_ANGLE,
+         driverController::getLeftX, driverController::getLeftY, false, true)
+         .raceWith(
         new WaitUntilCommand(() -> Math.abs(driverController.getRightX()) > 0.05)
       )
     );
@@ -325,7 +329,7 @@ public class RobotContainer {
       )
     );
 
-    Button.Create(operatorController.options() ,
+    Button.Create(operatorController.options(),
      new Feeding(
       ShooterConstants.FAR_FEDDING_UPPER_V ,
       ShooterConstants.FAR_FEEDING_LOWER_V , true));
