@@ -1,5 +1,6 @@
 package frc.robot.subsystems.elevator;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.ctre.phoenix6.StatusSignal;
@@ -32,6 +33,8 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
 
     private final MAShuffleboard board;
 
+    private boolean disabledElevator = false;
+
     private Elevator() {
       master = new TalonFX(PortMap.Elevator.masterID, PortMap.CanBus.CANivoreBus);
       slave = new TalonFX(PortMap.Elevator.slaveID, PortMap.CanBus.CANivoreBus);
@@ -47,6 +50,9 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
       resetPose(0);
 
       board = new MAShuffleboard("Elevator");
+
+      board.createBoutton("Disable Elevator", new InstantCommand(() -> 
+        disabledElevator = !disabledElevator));
 
     }
 
@@ -113,7 +119,8 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
 
     @Override
     public boolean atPoint() {
-        return Math.abs(getPosition() - getSetPoint()) <= ElevatorConstants.TOLERANCE;
+        return Math.abs(getPosition() - getSetPoint()) <= ElevatorConstants.TOLERANCE
+         || disabledElevator;
     }
 
     @Override
@@ -151,7 +158,7 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
     @Override
     public boolean canMove() {
         return setPoint >= ElevatorConstants.MIN_POSE &&
-         setPoint <= ElevatorConstants.MAX_POSE;
+         setPoint <= ElevatorConstants.MAX_POSE && !disabledElevator;
     }
 
     public void toggleDeafultPose() {
@@ -173,8 +180,11 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
     public void periodic() {
         board.addBoolean("at point", atPoint());
 
+        board.addBoolean("Disable elevator", disabledElevator);
         board.addNum("setPoint", getSetPoint());
         board.addNum("pose", getPosition());
+
+
 
         if (RobotContainer.driverController.L2().getAsBoolean()) {
             setPoint = ElevatorConstants.SHOOTING_POSE;

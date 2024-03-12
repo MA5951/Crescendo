@@ -114,5 +114,8 @@ public class SwerveConstants {
         public final static double AMP_X_RED = 14.65;
         public final static double AMP_Y = 7.8;
         
+
+        public final static double LEFT_SPEAKER_ANGLE = Math.toRadians(-112);
+        public final static double RIGHT_SPEAKER_ANGLE = Math.toRadians(127);
         // public static double shootingSpeed = 0.12;
 }

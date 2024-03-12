@@ -11,13 +11,17 @@ import com.ma5951.utils.commands.RunInternallyControlledSubsystem;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.automations.ScoreAutomation;
 import frc.robot.automations.GettingReadyToScore;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
+import frc.robot.subsystems.swerve.SwerveConstants;
 import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
 import frc.robot.automations.AMPScore;
 import frc.robot.automations.AutoShoot;
@@ -36,6 +40,7 @@ import frc.robot.automations.Auto.TwoPieceCloseStage;
 import frc.robot.commands.Intake.IntakeCommand;
 import frc.robot.commands.elevator.ResetElevator;
 import frc.robot.commands.elevator.SetElevator;
+import frc.robot.commands.swerve.AngleAdjust;
 import frc.robot.commands.swerve.DriveSwerveCommand;
 import frc.robot.subsystems.LED.LED;
 import frc.robot.subsystems.LED.LED.INTAKE;
@@ -222,7 +227,7 @@ public class RobotContainer {
       () -> ShooterConstants.PiningShooting)));
     
     // amp
-    Button.Create(driverController.button(9), new AMPScore().alongWith(
+    Button.Create(driverController.touchpad(), new AMPScore().alongWith(
         new InstantCommand(() -> isAmp = false)
       ));
 
@@ -253,7 +258,25 @@ public class RobotContainer {
           new SetElevator(ElevatorConstants.SHOOTING_POSE).andThen(new MotorCommand(
           Intake.getInstance(), -IntakeConstants.INTAKE_POWER, 0)).alongWith(
           new InstantCommand(() -> isIntakeRunning = false))
-        );
+    );
+
+    driverController.button(9).onTrue(
+      new AngleAdjust(
+        () -> DriverStation.getAlliance().get() == Alliance.Red
+        ? -(SwerveConstants.LEFT_SPEAKER_ANGLE - Math.PI) : SwerveConstants.LEFT_SPEAKER_ANGLE ,
+         driverController::getLeftX, driverController::getLeftY).raceWith(
+        new WaitUntilCommand(() -> Math.abs(driverController.getRightX()) > 0.05)
+      )
+    );
+
+    driverController.options().onTrue(
+      new AngleAdjust(
+        () -> DriverStation.getAlliance().get() == Alliance.Red
+        ? -(SwerveConstants.RIGHT_SPEAKER_ANGLE - Math.PI) : SwerveConstants.RIGHT_SPEAKER_ANGLE,
+         driverController::getLeftX, driverController::getLeftY).raceWith(
+        new WaitUntilCommand(() -> Math.abs(driverController.getRightX()) > 0.05)
+      )
+    );
 
     // climb
     operatorController.triangle().whileTrue(
@@ -302,11 +325,10 @@ public class RobotContainer {
       )
     );
 
-    Button.Create(operatorController.touchpad()
-    ,new Feeding(ShooterConstants.FEDDING_UPPER_V , ShooterConstants.FEEDING_LOWER_V , false));
-
-    Button.Create(operatorController.options()
-    ,new Feeding(ShooterConstants.FAR_FEDDING_UPPER_V , ShooterConstants.FAR_FEEDING_LOWER_V , true));
+    Button.Create(operatorController.options() ,
+     new Feeding(
+      ShooterConstants.FAR_FEDDING_UPPER_V ,
+      ShooterConstants.FAR_FEEDING_LOWER_V , true));
 
     // // //--------------------LEDS-----------------------
 

@@ -6,6 +6,7 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class MAShuffleboard {
@@ -102,6 +103,10 @@ public class MAShuffleboard {
         public double getKD() {
             return shuffleboard.getNum(KD_STRING);
         }
+    }
+
+    public void createBoutton(String title , Command Command) {
+        SmartDashboard.putData(title, Command);
     }
 
     public void initSendableChooser(String title) {

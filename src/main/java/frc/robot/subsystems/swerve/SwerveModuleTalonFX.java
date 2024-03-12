@@ -52,8 +52,8 @@ public class SwerveModuleTalonFX extends SwerveModule {
         this.isDriveMotorReversed = isDriveMotorReversed;
         this.isTurningMotorReversed = isTurningMotorReversed;
 
-        this.driveMotor = new TalonFX(driveID);
-        this.turningMotor = new TalonFX(turningID);
+        this.driveMotor = new TalonFX(driveID, canbus);
+        this.turningMotor = new TalonFX(turningID, canbus);
 
         drivePosition = driveMotor.getPosition();
         driveVelocity = driveMotor.getVelocity();

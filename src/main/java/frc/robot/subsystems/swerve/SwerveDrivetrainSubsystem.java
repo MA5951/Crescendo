@@ -78,7 +78,7 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
       -SwerveConstants.WIDTH / 2,
       -SwerveConstants.LENGTH / 2);
 
-  private final Pigeon2 gyro = new Pigeon2(PortMap.Swerve.Pigeon2ID, PortMap.CanBus.CANivoreBus);
+  private final Pigeon2 gyro = new Pigeon2(PortMap.Swerve.Pigeon2ID, PortMap.CanBus.RioBus);
 
   private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(frontLeftLocation, frontRightLocation,
     rearLeftLocation, rearRightLocation);
