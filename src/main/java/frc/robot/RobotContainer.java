@@ -19,15 +19,15 @@ import frc.robot.automations.ScoreAutomation;
 import frc.robot.automations.GettingReadyToScore;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.swerve.SwerveConstants;
 import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
 import frc.robot.automations.AMPScore;
 import frc.robot.automations.AutoShoot;
 import frc.robot.automations.CenterRing;
-import frc.robot.automations.Feeding;
-import frc.robot.automations.GoToAmp;
 import frc.robot.automations.ResetAll;
 import frc.robot.automations.RunIntake;
 import frc.robot.automations.RunShoot;
@@ -49,7 +49,6 @@ import frc.robot.subsystems.elevator.ElevatorConstants;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeConstants;
 import frc.robot.subsystems.shooter.LowerShooter;
-import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.shooter.UpperShooter;
 
 public class RobotContainer {
@@ -160,6 +159,7 @@ public class RobotContainer {
     board.addOptionToChooser("three Piece Close Amp", new TwoPieceCloseAmp()); // Two piece close amp
     board.addOptionToChooser("three Piece Close Stage", new TwoPieceCloseStage());// Two piece close amp
     board.addOptionToChooser("there far stage", AutoBuilder.buildAuto("There pice far stage"));
+    board.addOptionToChooser("AllaBabala", AutoBuilder.buildAuto("AllaBabala"));
     board.addOptionToChooser("none", null); // none
 
     board.addDefaultOptionToChooser("none", null);
@@ -221,12 +221,13 @@ public class RobotContainer {
     // );
 
     Button.Create(driverController.circle(),
-    new InstantCommand(() -> UpperShooter.isShooting = true).andThen(
-    new GettingReadyToScore(() -> ShooterConstants.PiningShooting,
-      () -> ShooterConstants.PiningShooting, () -> ElevatorConstants.MAX_POSE
-      )).andThen(
-      new ScoreAutomation(() -> ShooterConstants.PiningShooting,
-      () -> ShooterConstants.PiningShooting)));
+    new GettingReadyToScore(
+        UpperShooter.getInstance()::getUpSet, 
+        UpperShooter.getInstance()::getLowSet,
+        () -> ElevatorConstants.MAX_POSE
+      ).andThen(
+      new ScoreAutomation(UpperShooter.getInstance()::getUpSet,
+       UpperShooter.getInstance()::getLowSet)));
     
     // amp
     Button.Create(driverController.touchpad(), new AMPScore().alongWith(
@@ -243,7 +244,8 @@ public class RobotContainer {
     );
 
     // floor or source intake
-    driverController.R1().onTrue( 
+    new Trigger(() -> driverController.getHID().getR1Button() &&
+      !operatorController.getHID().getOptionsButton()).onTrue( 
       new ConditionalCommand(new RunIntake(IntakeConstants.INTAKE_POWER),
         new SourceIntake(),
         RobotContainer::IsFloor
@@ -329,10 +331,14 @@ public class RobotContainer {
       )
     );
 
-    Button.Create(operatorController.options(),
-     new Feeding(
-      ShooterConstants.FAR_FEDDING_UPPER_V ,
-      ShooterConstants.FAR_FEEDING_LOWER_V , true));
+    Button.Create(new Trigger(() -> operatorController.getHID().getOptionsButton() && !isIntakeRunning),
+     new SequentialCommandGroup(
+      new GettingReadyToScore(() -> ShooterConstants.FAR_FEEDING_UPPER_V,
+      () -> ShooterConstants.FAR_FEEDING_LOWER_V, () -> ElevatorConstants.SHOOTING_POSE),
+      new ScoreAutomation(
+        () -> ShooterConstants.FAR_FEEDING_UPPER_V,
+        () -> ShooterConstants.FAR_FEEDING_LOWER_V)
+     ));
 
     // // //--------------------LEDS-----------------------
 

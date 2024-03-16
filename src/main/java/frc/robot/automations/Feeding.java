@@ -15,7 +15,6 @@ import frc.robot.subsystems.elevator.ElevatorConstants;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeConstants;
 import frc.robot.subsystems.shooter.LowerShooter;
-import frc.robot.subsystems.shooter.ShooterConstants;
 import frc.robot.subsystems.shooter.UpperShooter;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -23,14 +22,6 @@ import frc.robot.subsystems.shooter.UpperShooter;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class Feeding extends SequentialCommandGroup {
   /** Creates a new Feeding. */
-  
-  public static double getWaitTime(boolean wait) {
-      if (wait) {
-        return 0.5;
-      } else {
-        return 0;
-      }
-    }
   
   public Feeding(double upperV , double lowerV , boolean shouldWait) {
     // Add your commands in the addCommands() call, e.g.
@@ -42,10 +33,7 @@ public class Feeding extends SequentialCommandGroup {
           new MotorCommand(UpperShooter.getInstance(), upperV, 0),
           new MotorCommand(LowerShooter.getInstance(), lowerV, 0)
         ),
-        new SequentialCommandGroup(
-          new WaitCommand(getWaitTime(shouldWait)),
-          new InstantCommand(() -> Intake.getInstance().setPower(IntakeConstants.INTAKE_POWER))
-        )
+        new InstantCommand(() -> Intake.getInstance().setPower(IntakeConstants.INTAKE_POWER))
       )
     );
   }

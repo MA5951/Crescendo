@@ -186,7 +186,7 @@ public class Elevator extends SubsystemBase implements DefaultInternallyControll
 
 
 
-        if (RobotContainer.driverController.L2().getAsBoolean()) {
+        if (RobotContainer.driverController.getHID().getL2Button()) {
             setPoint = ElevatorConstants.SHOOTING_POSE;
         }
     }

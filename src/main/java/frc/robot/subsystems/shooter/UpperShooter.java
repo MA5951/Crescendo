@@ -73,6 +73,17 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
     feedforward = new SimpleMotorFeedforward(0, ShooterConstants.KV_UP);
 
     board = new MAShuffleboard("Upper shotter");
+
+    board.addNum("up set", 0);
+    board.addNum("low set", 0);
+  }
+
+  public double getUpSet() {
+    return board.getNum("up set");
+  }
+
+  public double getLowSet() {
+    return board.getNum("low set");
   }
 
   public void chengeIDLmode(IdleMode mode) {
@@ -166,7 +177,7 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
     if ((Intake.getInstance().isGamePieceInIntake
     () && !RobotContainer.isAmp
       && (SwerveDrivetrainSubsystem.getInstance().getPose().getX() * factor
-       < poduimLine * factor || RobotContainer.driverController.L2().getAsBoolean()))
+       < poduimLine * factor || RobotContainer.driverController.getHID().getL2Button()))
        && !DriverStation.isAutonomous()) {
         if (RobotContainer.ShootingLinkedToSpeaker) {
           ShooterConstants.defaultVUp = ShooterConstants.SPEAKER_UPPER_V;

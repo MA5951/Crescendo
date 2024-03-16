@@ -67,9 +67,16 @@
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "sequential",
                 "data": {
-                  "pathName": "Note 3 score Stageside"
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Note 3 score Stageside 1"
+                      }
+                    }
+                  ]
                 }
               },
               {

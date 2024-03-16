@@ -4,11 +4,9 @@
 
 package frc.robot;
 
-import com.ctre.phoenix6.CANBus;
 import com.ma5951.utils.commands.DefaultRunInternallyControlledSubsystem;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.CAN;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -98,6 +96,7 @@ public class Robot extends TimedRobot {
     SwerveDrivetrainSubsystem.getInstance().fixOffsetAuto();
     UpperShooter.getInstance().setSetPoint(0);
     LowerShooter.getInstance().setSetPoint(0);
+    Intake.getInstance().setPower(0);
 
     if (wasAuto) {
       Elevator.getInstance().setSetPoint(ElevatorConstants.DEFAULT_POSE);

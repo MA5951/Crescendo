@@ -180,8 +180,7 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
           this::driveAuto,
           new HolonomicPathFollowerConfig(
             new PIDConstants(SwerveConstants.KP_TRANSLATION),
-            new PIDConstants(2.7,
-              SwerveConstants.THATA_KI, SwerveConstants.THATA_KD),
+            new PIDConstants(3),
             SwerveConstants.MAX_VELOCITY,
             SwerveConstants.RADIUS,
             new ReplanningConfig()
@@ -373,7 +372,8 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
     // if (RobotContainer.APRILTAGS_LIMELIGHT.hasTarget()
     //   && RobotContainer.APRILTAGS_LIMELIGHT.getTagId() != -1) {
     //   Pose2d estPose = RobotContainer.APRILTAGS_LIMELIGHT.getEstPose();
-    //   odometry.addVisionMeasurement(estPose, RobotContainer.APRILTAGS_LIMELIGHT.getTimeStamp());
+    //   // odometry.addVisionMeasurement(estPose, RobotContainer.APRILTAGS_LIMELIGHT.getTimeStamp());
+    //   resetOdometry(estPose);
     // }
   }
 
@@ -414,8 +414,12 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
         getPose().getTranslation())
     );
 
+    board.addNum("yaw", offsetAngle - getFusedHeading());
+
     board.addBoolean("can shoot in move", SwerveDrivetrainSubsystem.getInstance().disFormSpeaker < 
     SwerveConstants.MAX_SHOOT_DISTANCE * 0.925 && SwerveDrivetrainSubsystem.getInstance().update);
+
+    board.addNum("x", getPose().getX());
 
     if (RobotContainer.APRILTAGS_LIMELIGHT.hasTarget() && 
       RobotContainer.APRILTAGS_LIMELIGHT.getTagId() != -1
@@ -426,7 +430,6 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
         Pose2d estPose = RobotContainer.APRILTAGS_LIMELIGHT.getEstPose();
           odometry.addVisionMeasurement(estPose, RobotContainer.APRILTAGS_LIMELIGHT.getTimeStamp());
           update = true;
-    }
-    
-    }
+      }
+  }
 }

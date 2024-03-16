@@ -82,7 +82,7 @@ public class Limelight {
   }
 
   public double distance() {
-    if (getTagId() == -1) {
+    if (getTagId() <= 0) {
       return -1;
     }
     double[] aprilTagsHights = {
@@ -191,7 +191,7 @@ public class Limelight {
     Thor = thor.getDouble(0.0);
     Tvert = tvert.getDouble(0.0);
     Tshort = tshort.getDouble(0.0);
-    tagid = (int) tid.getInteger(-1);
+    tagid = (int) tid.getInteger(0);
     yaw = threeDimension.getDoubleArray(new double[] { 0, 0, 0, 0, 0, 0, 0 })[4];
     distanceFromTargetLimelightX = threeDimension.getDoubleArray(new double[] { 0, 0, 0, 0, 0, 0 })[0];
     distanceFromTargetLimelightY = threeDimension.getDoubleArray(new double[] { 0, 0, 0, 0, 0, 0 })[2];

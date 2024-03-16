@@ -25,8 +25,8 @@ public class ShooterConstants {
     public static final double FEDDING_UPPER_V = 0.2;
     public static final double FEEDING_LOWER_V = 0.2;
 
-    public static final double FAR_FEDDING_UPPER_V = 0.6;
-    public static final double FAR_FEEDING_LOWER_V = 0.6;
+    public static final double FAR_FEEDING_UPPER_V = 2500;
+    public static final double FAR_FEEDING_LOWER_V = 2500;
 
     public static final double SPEAKER_UPPER_V_AUTO = 2000 * 1.169;
     public static final double SPEAKER_LOWER_V_AUTO = 2080 * 1.169;
@@ -45,8 +45,8 @@ public class ShooterConstants {
     public static double defaultVDown = 0;
 
     public static double getTolorance(double setPoint) {
-        if (RobotContainer.driverController.circle().getAsBoolean()) {
-            return 50;
+        if (RobotContainer.driverController.getHID().getCircleButton()) {
+            return 60;
         }
         return Math.max(0.5952 * setPoint + 5.8986, TOLORANCE);
     }
@@ -57,12 +57,18 @@ public class ShooterConstants {
         {1.64, 1900, 1980},
         {1.78, 1760, 1790},
         {1.83, 1750, 1780},
-        {1.9, 1740, 1760},
-        {1.95, 1740, 1760} ,
+        {1.9, 1720, 1740},
+        {1.95, 1720, 1740} ,
         // {1.983, 1740, 1760},
         // {1.986, 1720, 1720},
         // {2.04, 1960, 1450},
         // {2.27, 1960, 1450}
+    };
+
+    public static double[][] shootingPosePining = {
+        {1.97, 1650, 1650},
+        {2.05, 1560, 1625},
+        {2.07, 1645, 1600}
     };
 
     public static double PiningShooting = 1750;
