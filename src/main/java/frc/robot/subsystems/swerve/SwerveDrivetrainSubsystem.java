@@ -206,6 +206,12 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
   }
 
   public void fixOffsetAuto() {
+    if (RobotContainer.APRILTAGS_LIMELIGHT.hasTarget()
+      && RobotContainer.APRILTAGS_LIMELIGHT.getTagId() != -1) {
+      Pose2d estPose = RobotContainer.APRILTAGS_LIMELIGHT.getEstPose();
+      // odometry.addVisionMeasurement(estPose, RobotContainer.APRILTAGS_LIMELIGHT.getTimeStamp());
+      resetOdometry(estPose);
+    }
     offsetAngle = -Math.abs(getPose().getRotation().getDegrees()) - Math.abs(getFusedHeading());
     if (!DriverStation.getAlliance().isEmpty()) {
       if (DriverStation.getAlliance().get() == Alliance.Red){

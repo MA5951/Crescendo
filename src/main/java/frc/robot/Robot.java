@@ -103,9 +103,6 @@ public class Robot extends TimedRobot {
     } else {
       Elevator.getInstance().setSetPoint(Elevator.getInstance().getPosition());
     }
-
-
-    SwerveDrivetrainSubsystem.getInstance().resetEncoders();
     
     CommandScheduler.getInstance().setDefaultCommand(
       Elevator.getInstance(), new DefaultRunInternallyControlledSubsystem(
@@ -117,7 +114,6 @@ public class Robot extends TimedRobot {
         RobotContainer.driverController::getLeftX,
         RobotContainer.driverController::getLeftY,
         RobotContainer.driverController::getRightX));
-
   }
 
   @Override
