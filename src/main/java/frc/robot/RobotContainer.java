@@ -180,15 +180,6 @@ public class RobotContainer {
     driverController.triangle().whileTrue(
       new InstantCommand(SwerveDrivetrainSubsystem.getInstance()::updateOffset)
     );
-
-    driverController.touchpad().whileTrue(
-      new DriveSwerveCommand(
-        () -> -RobotContainer.driverController.getLeftX(),
-        () -> -RobotContainer.driverController.getLeftY(),
-        RobotContainer.driverController::getRightX,
-        false)
-    );
-
     // // // ---------------------------------------------------------------
 
     Button.Create(driverController.povLeft(), new ResetElevator());
