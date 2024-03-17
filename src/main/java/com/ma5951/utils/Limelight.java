@@ -90,6 +90,9 @@ public class Limelight {
       1.22, 1.32, 1.32, 1.22, 1.22,
       1.21, 1.21, 1.21, 1.21, 1.21, 1.21
     };
+    if (getTagId() - 1 < 0 || getTagId() - 1 >= aprilTagsHights.length) {
+      return -1;
+    }
     double deltaHight = aprilTagsHights[getTagId() - 1] - cammeraHight;
     double deltaAngle = getY() + cammeraAngle;
     return deltaHight / Math.tan(Math.toRadians(deltaAngle));

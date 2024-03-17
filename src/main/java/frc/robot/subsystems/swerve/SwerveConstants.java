@@ -65,7 +65,7 @@ public class SwerveConstants {
         public final static double DRIVE_KS = 0.015 * 12;
         public final static double DRIVE_KV = 2.4;
         // Current Limit
-        public final static int DRIVE_PEAK_CURRENT_LIMIT_TORQUE_CURRENT = 400;
+        public final static int DRIVE_PEAK_CURRENT_LIMIT_TORQUE_CURRENT = 60;
         public final static int DRIVE_PEAK_CURRENT_LIMIT = 60;
         public final static int DRIVE_CONTINUOS_CURRENT_LIMIT = 35;
         public final static double DRIVE_PEAK_CURRENT_DURATION = 0.1;
@@ -108,7 +108,7 @@ public class SwerveConstants {
         public final static double SPEED_LINE_RED = 10.737;
         public final static double SPEED_LINE_BLUE = 5.88;
 
-        public final static double MAX_LIMELIGHT_DIS = 1.8; // 2.5;// 2.4;
+        public final static double MAX_LIMELIGHT_DIS = 1.7; // 2.5;// 2.4;
 
         public final static double AMP_X_BLUE = 1.95;
         public final static double AMP_X_RED = 14.65;
