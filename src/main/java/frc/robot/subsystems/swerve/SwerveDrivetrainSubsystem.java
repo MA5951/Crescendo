@@ -212,7 +212,8 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
       // odometry.addVisionMeasurement(estPose, RobotContainer.APRILTAGS_LIMELIGHT.getTimeStamp());
       resetOdometry(estPose);
     }
-    offsetAngle = -Math.abs(getPose().getRotation().getDegrees()) - Math.abs(getFusedHeading());
+    offsetAngle = getPose().getRotation().getDegrees();
+    // offsetAngle = -Math.abs(getPose().getRotation().getDegrees()) - Math.abs(getFusedHeading());
     if (!DriverStation.getAlliance().isEmpty()) {
       if (DriverStation.getAlliance().get() == Alliance.Red){
         offsetAngle += 180;

@@ -153,7 +153,7 @@ public class RobotContainer {
     board.addOptionToChooser("Three Piece Middle", AutoBuilder.buildAuto("Theree pice Spaker middle")); // 3 Game Piece Middle
     board.addOptionToChooser("Theree pice Amp", AutoBuilder.buildAuto("Theree pice Amp")); // 3 Game Piece Amp
     board.addOptionToChooser("Theree pice Stage", AutoBuilder.buildAuto("Theree pice Stage")); // 3 Game Piece Stage
-    board.addOptionToChooser("2 n/ote far stage", AutoBuilder.buildAuto("2 note far stage")); // 2 Game Piece Stage Far
+    board.addOptionToChooser("2 note far stage", AutoBuilder.buildAuto("2 note far stage")); // 2 Game Piece Stage Far
     board.addOptionToChooser("one game piece", AutoBuilder.buildAuto("one game piece")); // One Game Piece
     board.addOptionToChooser("three Piece Close Amp", new TwoPieceCloseAmp()); // Two piece close amp
     board.addOptionToChooser("three Piece Close Stage", new TwoPieceCloseStage());// Two piece close amp
