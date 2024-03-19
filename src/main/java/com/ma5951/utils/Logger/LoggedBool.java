@@ -18,7 +18,14 @@ public class LoggedBool {
 
     public LoggedBool(String name) {
         networkTable = NetworkTableInstance.getDefault().getTable("/");
-        loggedBool = networkTable.getBooleanTopic(name).publish();
+        loggedBool = networkTable.getBooleanTopic("/Robot Logger" + name).publish();
+        loggedBool.set(false);
+        lastBool = false;
+    }
+
+    public LoggedBool(String name , String mainDirectory) {
+        networkTable = NetworkTableInstance.getDefault().getTable("/");
+        loggedBool = networkTable.getBooleanTopic(mainDirectory+ name).publish();
         loggedBool.set(false);
         lastBool = false;
     }

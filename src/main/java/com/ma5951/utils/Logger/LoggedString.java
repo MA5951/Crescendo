@@ -18,7 +18,14 @@ public class LoggedString {
 
     public LoggedString(String name) {
         networkTable = NetworkTableInstance.getDefault().getTable("/");
-        loggedNum = networkTable.getStringTopic(name).publish();
+        loggedNum = networkTable.getStringTopic("/Robot Logger" + name).publish();
+        loggedNum.set("-");
+        lastNum = "-";
+    }
+
+    public LoggedString(String name , String mainDirectory) {
+        networkTable = NetworkTableInstance.getDefault().getTable("/");
+        loggedNum = networkTable.getStringTopic(mainDirectory + name).publish();
         loggedNum.set("-");
         lastNum = "-";
     }

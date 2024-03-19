@@ -92,8 +92,8 @@ public class Logger extends SubsystemBase {
     pdh = new PowerDistribution(PortMap.Robot.PDH, ModuleType.kRev);
     log = new MALog();
 
-    
 
+    log.logDriverStation();
     //Swerve Logged Variables
     swerveGyroYaw = new LoggedDouble("/Swerve/Gyro/Yaw");
     swerveGyroRoll = new LoggedDouble("/Swerve/Gyro/Roll");
@@ -196,5 +196,5 @@ public class Logger extends SubsystemBase {
     lowershooterIdleMode.update(lowerShooter.getIDLmode());
 
 
-  }
+  } 
 }

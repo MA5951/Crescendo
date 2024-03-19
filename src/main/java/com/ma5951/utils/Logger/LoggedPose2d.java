@@ -19,7 +19,14 @@ public class LoggedPose2d {
 
     public LoggedPose2d(String name) {
         networkTable = NetworkTableInstance.getDefault().getTable("/");
-        loggedPose = networkTable.getStructTopic(name , Pose2d.struct).publish();
+        loggedPose = networkTable.getStructTopic("/Robot Logger" + name , Pose2d.struct).publish();
+        loggedPose.set(null);
+        lastPose = null;
+    }
+
+    public LoggedPose2d(String name , String mainDirectory) {
+        networkTable = NetworkTableInstance.getDefault().getTable("/");
+        loggedPose = networkTable.getStructTopic(mainDirectory + name , Pose2d.struct).publish();
         loggedPose.set(null);
         lastPose = null;
     }

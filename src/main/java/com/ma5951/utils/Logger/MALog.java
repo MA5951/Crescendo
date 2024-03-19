@@ -22,13 +22,16 @@ public class MALog {
     public MALog() {
         DataLogManager.start();
         WPIlogger = DataLogManager.getLog();
-        DriverStation.startDataLog(DataLogManager.getLog());
         networkTable = NetworkTableInstance.getDefault();
     }
 
     public NetworkTable getMainNT() {
         table = networkTable.getTable("/");
         return table;
+    }
+
+    public void logDriverStation() {
+        DriverStation.startDataLog(DataLogManager.getLog());
     }
 
     public void stopLog() {

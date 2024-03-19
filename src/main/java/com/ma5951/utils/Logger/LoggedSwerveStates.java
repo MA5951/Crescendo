@@ -19,7 +19,14 @@ public class LoggedSwerveStates {
 
     public LoggedSwerveStates(String name) {
         networkTable = NetworkTableInstance.getDefault().getTable("/");
-        loggedStates = networkTable.getStructArrayTopic(name , SwerveModuleState.struct).publish();
+        loggedStates = networkTable.getStructArrayTopic("/Robot Logger" + name , SwerveModuleState.struct).publish();
+        loggedStates.set(null);
+        lastStates = null;
+    }
+
+    public LoggedSwerveStates(String name , String mainDirectory) {
+        networkTable = NetworkTableInstance.getDefault().getTable("/");
+        loggedStates = networkTable.getStructArrayTopic(mainDirectory + name , SwerveModuleState.struct).publish();
         loggedStates.set(null);
         lastStates = null;
     }

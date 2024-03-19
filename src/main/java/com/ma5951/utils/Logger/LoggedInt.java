@@ -18,7 +18,14 @@ public class LoggedInt {
 
     public LoggedInt(String name) {
         networkTable = NetworkTableInstance.getDefault().getTable("/");
-        loggedNum = networkTable.getIntegerTopic(name).publish();
+        loggedNum = networkTable.getIntegerTopic("/Robot Logger" + name).publish();
+        loggedNum.set(0);
+        lastNum = 0;
+    }
+
+    public LoggedInt(String name , String mainDirectory) {
+        networkTable = NetworkTableInstance.getDefault().getTable("/");
+        loggedNum = networkTable.getIntegerTopic(mainDirectory + name).publish();
         loggedNum.set(0);
         lastNum = 0;
     }

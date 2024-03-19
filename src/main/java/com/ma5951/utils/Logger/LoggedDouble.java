@@ -17,7 +17,14 @@ public class LoggedDouble {
 
     public LoggedDouble(String name) {
         networkTable = NetworkTableInstance.getDefault().getTable("/");
-        loggedNum = networkTable.getDoubleTopic(name).publish();
+        loggedNum = networkTable.getDoubleTopic("/Robot Logger" + name).publish();
+        loggedNum.set(0);
+        lastNum = 0;
+    }
+
+    public LoggedDouble(String name , String mainDirectory) {
+        networkTable = NetworkTableInstance.getDefault().getTable("/");
+        loggedNum = networkTable.getDoubleTopic(mainDirectory + name).publish();
         loggedNum.set(0);
         lastNum = 0;
     }
