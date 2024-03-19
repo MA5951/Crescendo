@@ -206,19 +206,13 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
   }
 
   public void fixOffsetAuto() {
-    if (RobotContainer.APRILTAGS_LIMELIGHT.hasTarget()
-      && RobotContainer.APRILTAGS_LIMELIGHT.getTagId() != -1) {
-      Pose2d estPose = RobotContainer.APRILTAGS_LIMELIGHT.getEstPose();
-      // odometry.addVisionMeasurement(estPose, RobotContainer.APRILTAGS_LIMELIGHT.getTimeStamp());
-      resetOdometry(estPose);
-    }
-    offsetAngle = getPose().getRotation().getDegrees();
-    // offsetAngle = -Math.abs(getPose().getRotation().getDegrees()) - Math.abs(getFusedHeading());
+    offsetAngle = -(getPose().getRotation().getDegrees() + getFusedHeading());
     if (!DriverStation.getAlliance().isEmpty()) {
       if (DriverStation.getAlliance().get() == Alliance.Red){
         offsetAngle += 180;
       }
     }
+    System.out.println(offsetAngle);
   }
 
   public void updateOffset() {
@@ -421,7 +415,7 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
         getPose().getTranslation())
     );
 
-    board.addNum("yaw", offsetAngle - getFusedHeading());
+    board.addNum("yaw",  getFusedHeading());
 
     board.addBoolean("can shoot in move", SwerveDrivetrainSubsystem.getInstance().disFormSpeaker < 
     SwerveConstants.MAX_SHOOT_DISTANCE * 0.925 && SwerveDrivetrainSubsystem.getInstance().update);

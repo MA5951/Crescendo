@@ -73,7 +73,6 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     SwerveDrivetrainSubsystem.getInstance().resetEncoders();
-    SwerveDrivetrainSubsystem.getInstance().resetGyro();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     wasAuto = true;
     
