@@ -212,7 +212,7 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
         offsetAngle += 180;
       }
     }
-    System.out.println(offsetAngle);
+    System.out.println("hiiiiiiiiiiiiiiiiiiiiiiii" + offsetAngle + "hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
   }
 
   public void updateOffset() {

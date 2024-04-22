@@ -151,12 +151,12 @@ public class RobotContainer {
     board.addOptionToChooser("Two Piece Amp", AutoBuilder.buildAuto("Two pice Amp")); // 2 Game Piece Amp
     board.addOptionToChooser("Two Piece Middle", AutoBuilder.buildAuto("Two pice Middle")); // 2 Game Piece Middle
     board.addOptionToChooser("4Pieces 1 Middle", AutoBuilder.buildAuto("Theree pice Spaker middle")); // 3 Game Piece Middle
-    board.addOptionToChooser("Theree pice Amp", AutoBuilder.buildAuto("Theree pice Amp")); // 3 Game Piece Amp
-    board.addOptionToChooser("Theree pice Stage", AutoBuilder.buildAuto("Theree pice Stage")); // 3 Game Piece Stage
-    board.addOptionToChooser("2 note far stage", AutoBuilder.buildAuto("2 note far stage")); // 2 Game Piece Stage Far
-    board.addOptionToChooser("one game piece", AutoBuilder.buildAuto("one game piece")); // One Game Piece
-    board.addOptionToChooser("three Piece Close Amp", new TwoPieceCloseAmp()); // Two piece close amp
-    board.addOptionToChooser("three Piece Close Stage", new TwoPieceCloseStage());// Two piece close amp
+    // board.addOptionToChooser("Theree pice Amp", AutoBuilder.buildAuto("Theree pice Amp")); // 3 Game Piece Amp
+    // board.addOptionToChooser("Theree pice Stage", AutoBuilder.buildAuto("Theree pice Stage")); // 3 Game Piece Stage
+    //board.addOptionToChooser("2 note far stage", AutoBuilder.buildAuto("2 note far stage")); // 2 Game Piece Stage Far
+    // board.addOptionToChooser("one game piece", AutoBuilder.buildAuto("one game piece")); // One Game Piece
+    // board.addOptionToChooser("three Piece Close Amp", new TwoPieceCloseAmp()); // Two piece close amp
+    // board.addOptionToChooser("three Piece Close Stage", new TwoPieceCloseStage());// Two piece close amp
     board.addOptionToChooser("there far stage", AutoBuilder.buildAuto("There pice far stage"));
     board.addOptionToChooser("AllaBabala", AutoBuilder.buildAuto("AllaBabala"));
     board.addOptionToChooser("none", null); // none
@@ -274,6 +274,7 @@ public class RobotContainer {
       )
     );
 
+    // 
     // climb
     operatorController.triangle().whileTrue(
       new SetElevator(ElevatorConstants.CLIMB_POSE)
@@ -330,11 +331,18 @@ public class RobotContainer {
         () -> ShooterConstants.FAR_FEEDING_LOWER_V)
      ));
 
+     operatorController.touchpad().whileTrue(
+      new InstantCommand(() -> UpperShooter.getInstance().setSetPoint(ShooterConstants.FAR_FEEDING_UPPER_V)).alongWith(
+        new InstantCommand(() -> LowerShooter.getInstance().setSetPoint(ShooterConstants.FAR_FEEDING_LOWER_V))
+      )
+     );
+
     // // //--------------------LEDS-----------------------
 
     operatorController.square().whileTrue(
       new InstantCommand(() -> LED.getInstance().activateAmp())
     ).whileFalse(new InstantCommand(() -> LED.getInstance().activateCOLAB()));
+
 
   }
 

@@ -29,7 +29,7 @@ public class ShooterConstants {
     public static final double FAR_FEEDING_LOWER_V = 2500;
 
     public static final double SPEAKER_UPPER_V_AUTO = 2000 * 1.169;
-    public static final double SPEAKER_LOWER_V_AUTO = 2080 * 1.169;
+    public static final double SPEAKER_LOWER_V_AUTO = 2090 * 1.169;
 
     public static final double SPEAKER_UPPER_V = SPEAKER_UPPER_V_AUTO * 1.1 - 7;
     public static final double SPEAKER_LOWER_V = SPEAKER_LOWER_V_AUTO * 1.3 - 14;

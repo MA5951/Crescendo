@@ -28,6 +28,18 @@
                     {
                       "type": "named",
                       "data": {
+                        "name": "Set Shooter Speed side"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.2
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
                         "name": "Shoot linked to speaker side"
                       }
                     }
