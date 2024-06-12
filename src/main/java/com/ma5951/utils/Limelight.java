@@ -10,14 +10,14 @@ package com.ma5951.utils;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.Timer;
 
 public class Limelight {
-  private double KDELTA_Y = 0;
-  private double KLIMELIGHT_ANGLE = 0;
+  private double cammeraHight = 0;
+  private double cammeraAngle = 0;
   private double x;
   private double y;
   private boolean v;
@@ -32,7 +32,7 @@ public class Limelight {
   private double distanceFromTargetLimelightX;
   private double distanceFromTargetLimelightY;
   private double pipe;
-  private double tagid;
+  private int tagid;
 
   private final NetworkTable table;
   private final NetworkTableEntry threeDimension;
@@ -51,22 +51,18 @@ public class Limelight {
 
   private final NetworkTableEntry botPose;
 
-  private final Transform3d cameraOffset;
-
   private Pose2d estPose;
-  private double updateTime;
+  private double latency;
 
 
   // private String PIAddress;
 
   public Limelight(
-    String cammeraName,Transform3d cameraOffset){
+    String cammeraName, double cammeraHight, double cammeraAngle){
 
     table = NetworkTableInstance.getDefault().getTable(cammeraName);
-    this.KDELTA_Y = cameraOffset.getY();
-    this.KLIMELIGHT_ANGLE = cameraOffset.getRotation().getY();
-    this.cameraOffset = cameraOffset;
-
+    this.cammeraHight = cammeraHight;
+    this.cammeraAngle = cammeraAngle;
     threeDimension = table.getEntry("camtran");
     tx = table.getEntry("tx");//Horizontal Offset From Crosshair To Target (LL1: -27 degrees to 27 degrees | LL2: -29.8 to 29.8 degrees)
     ty = table.getEntry("ty");//Vertical Offset From Crosshair To Target (LL1: -20.5 degrees to 20.5 degrees | LL2: -24.85 to 24.85 degrees)
@@ -86,8 +82,20 @@ public class Limelight {
   }
 
   public double distance() {
-    double limelightAngle = y + KLIMELIGHT_ANGLE;
-    return Math.tan(limelightAngle) / KDELTA_Y;
+    if (getTagId() <= 0) {
+      return -1;
+    }
+    double[] aprilTagsHights = {
+     1.22, 1.22, 1.32, 1.32, 1.22,
+      1.22, 1.32, 1.32, 1.22, 1.22,
+      1.21, 1.21, 1.21, 1.21, 1.21, 1.21
+    };
+    if (getTagId() - 1 < 0 || getTagId() - 1 >= aprilTagsHights.length) {
+      return -1;
+    }
+    double deltaHight = aprilTagsHights[getTagId() - 1] - cammeraHight;
+    double deltaAngle = getY() + cammeraAngle;
+    return deltaHight / Math.tan(Math.toRadians(deltaAngle));
   }
 
   public void setLedMode(int ledMode) {
@@ -166,11 +174,11 @@ public class Limelight {
     return estPose;
   }
 
-  public double getPoseUpdate() {
-    return updateTime / 1000;
+  public double getTimeStamp() {
+    return Timer.getFPGATimestamp() - (latency / 1000);
   }
 
-  public double getTagId() {
+  public int getTagId() {
     return tagid;
   }
 
@@ -186,7 +194,7 @@ public class Limelight {
     Thor = thor.getDouble(0.0);
     Tvert = tvert.getDouble(0.0);
     Tshort = tshort.getDouble(0.0);
-    tagid = tid.getDouble(-1);
+    tagid = (int) tid.getInteger(0);
     yaw = threeDimension.getDoubleArray(new double[] { 0, 0, 0, 0, 0, 0, 0 })[4];
     distanceFromTargetLimelightX = threeDimension.getDoubleArray(new double[] { 0, 0, 0, 0, 0, 0 })[0];
     distanceFromTargetLimelightY = threeDimension.getDoubleArray(new double[] { 0, 0, 0, 0, 0, 0 })[2];
@@ -195,7 +203,7 @@ public class Limelight {
     botposeEntry = botPose;
 
     double[] data = botposeEntry.getDoubleArray(new double[7]);
-    updateTime = data[6];
+    latency = data[6];
     Pose3d pose = new Pose3d(
       data[0],
       data[1],
@@ -203,7 +211,7 @@ public class Limelight {
       new Rotation3d(
               Math.toRadians(data[3]),
               Math.toRadians(data[4]),
-              Math.toRadians(data[5]))).transformBy(cameraOffset);
+              Math.toRadians(data[5])));
 
     estPose = pose.toPose2d();
   }

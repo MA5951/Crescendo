@@ -12,16 +12,29 @@ import frc.robot.subsystems.swerve.SwerveConstants;
 import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
 
 public class AngleAdjust extends Command {
+  private static PIDController pid;
+
   private SwerveDrivetrainSubsystem swerve;
-  private PIDController pid;
   private Supplier<Double> angle;
   private Supplier<Double> xSupplier;
   private Supplier<Double> ySupplier;
+  private boolean dontStopAtPoint = false;
+  private boolean useGyro;
+  private boolean aligningToSpeaker = false;
+
+  public static boolean atPoint() {
+    return pid.atSetpoint();
+  }
 
   public AngleAdjust(Supplier<Double> angle,
-    Supplier<Double> xSupplier, Supplier<Double> ySupplier) {
+    Supplier<Double> xSupplier, Supplier<Double> ySupplier, boolean useGyro, boolean dontStopAtPoint
+    , boolean aligningToSpeaker) {
     swerve = SwerveDrivetrainSubsystem.getInstance();
     addRequirements(swerve);
+
+    this.useGyro = useGyro;
+    this.dontStopAtPoint = dontStopAtPoint;
+    this.aligningToSpeaker = aligningToSpeaker;
 
     this.xSupplier = xSupplier;
     this.ySupplier = ySupplier;
@@ -31,10 +44,24 @@ public class AngleAdjust extends Command {
       SwerveConstants.THATA_KI,
       SwerveConstants.THATA_KD
     );
-    this.angle = angle;
     pid.setTolerance(SwerveConstants.ANGLE_PID_TOLORANCE);
+    this.angle = angle;
     pid.enableContinuousInput(-Math.PI, Math.PI);
   }
+
+  public void setUseGyro(boolean use) {
+    useGyro = use;
+  }
+
+  public AngleAdjust(Supplier<Double> angle,
+    Supplier<Double> xSupplier, Supplier<Double> ySupplier, boolean useGyro, boolean dontStopAtPoint) {
+      this(angle, xSupplier, ySupplier, useGyro, dontStopAtPoint, false);
+    }
+
+  public AngleAdjust(Supplier<Double> angle,
+    Supplier<Double> xSupplier, Supplier<Double> ySupplier) {
+      this(angle, xSupplier, ySupplier, false, false, false);
+    }
 
   // Called when the command is initially scheduled.
   @Override
@@ -45,6 +72,9 @@ public class AngleAdjust extends Command {
   @Override
   public void execute() {
     pid.setSetpoint(angle.get());
+    if (aligningToSpeaker) {
+      pid.setTolerance(swerve.getAngleTolorance(angle.get()));
+    }
     double xSpeed = SwerveDrivetrainSubsystem.getInstance().isXYReversed ? 
       ySupplier.get() : xSupplier.get();
     double ySpeed = SwerveDrivetrainSubsystem.getInstance().isXYReversed ?
@@ -58,10 +88,12 @@ public class AngleAdjust extends Command {
       swerve.maxVelocity *
       (SwerveDrivetrainSubsystem.getInstance().isYReversed ? -1 : 1);
 
+    Supplier<Double> getMeserment = useGyro ? () -> Math.toRadians(swerve.getFusedHeading()) : swerve.getPose().getRotation()::getRadians;
     swerve.drive(
       xSpeed, ySpeed,
-      pid.calculate(swerve.getPose().getRotation().getRadians())
+      pid.calculate(getMeserment.get())
       , true);
+
   }
 
   // Called once the command ends or is interrupted.
@@ -73,6 +105,6 @@ public class AngleAdjust extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return pid.atSetpoint();
+    return pid.atSetpoint() && !dontStopAtPoint;
   }
 }

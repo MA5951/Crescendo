@@ -11,12 +11,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class DefaultRunInternallyControlledSubsystem extends Command {
   /** Creates a new DefultControlCommandInSubsystemControl. */
   private DefaultInternallyControlledSubsystem subsystem;
-  private double setPointWhenCantMove;
+  private double powerWhenCantMove;
 
   public DefaultRunInternallyControlledSubsystem(
-      DefaultInternallyControlledSubsystem subsystem, double setPointWhenCantMove) {
+      DefaultInternallyControlledSubsystem subsystem, double powerWhenCantMove) {
     this.subsystem = subsystem;
-    this.setPointWhenCantMove = setPointWhenCantMove;
+    this.powerWhenCantMove = powerWhenCantMove;
     addRequirements(subsystem);
   }
 
@@ -29,9 +29,10 @@ public class DefaultRunInternallyControlledSubsystem extends Command {
   @Override
   public void execute() {
     if (!subsystem.canMove()) {
-      subsystem.setSetPoint(setPointWhenCantMove);
-    } 
-    subsystem.calculate(subsystem.getSetPoint());
+      subsystem.setPower(powerWhenCantMove);
+    } else {
+      subsystem.calculate(subsystem.getSetPoint());
+    }
   }
 
   // Called once the command ends or is interrupted.

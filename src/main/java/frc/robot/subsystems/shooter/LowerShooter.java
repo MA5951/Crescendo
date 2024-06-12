@@ -30,7 +30,7 @@ public class LowerShooter extends SubsystemBase implements DefaultInternallyCont
   private final SparkPIDController pidController;
   private final SimpleMotorFeedforward feedforward;
 
-  private double setPoint = ShooterConstants.defaultV;
+  private double setPoint = ShooterConstants.defaultVDown;
 
   private final MAShuffleboard board;
 
@@ -42,6 +42,10 @@ public class LowerShooter extends SubsystemBase implements DefaultInternallyCont
     motor.setIdleMode(IdleMode.kBrake);
 
     motor.setInverted(true);
+
+    motor.setSmartCurrentLimit(40);
+
+    motor.enableVoltageCompensation(12);
 
     encoder = motor.getEncoder();
     encoder.setVelocityConversionFactor(ShooterConstants.CONVERTION_FACTOR_LOWER);
@@ -58,8 +62,6 @@ public class LowerShooter extends SubsystemBase implements DefaultInternallyCont
 
 
     board = new MAShuffleboard("Lower shotter");
-
-    board.addNum("setPonit poduim", ShooterConstants.PODUIM_LOWER_V);
   }
 
   public void chengeIDLmode(IdleMode mode) {
@@ -84,7 +86,7 @@ public class LowerShooter extends SubsystemBase implements DefaultInternallyCont
 
   @Override
   public boolean atPoint() {
-    return Math.abs(getSetPoint() - getVelocity()) < ShooterConstants.TOLORANCE; 
+    return Math.abs(getSetPoint() - getVelocity()) < ShooterConstants.getTolorance(getSetPoint()); 
   }
 
   public double getVelocity(){
@@ -115,12 +117,8 @@ public class LowerShooter extends SubsystemBase implements DefaultInternallyCont
 
   public double getVelocityForShooting() {
     return ShooterConstants.sample(
-      SwerveDrivetrainSubsystem.getInstance().disFormSpeaker)[1] * 
-        ShooterConstants.V_FACTOR;
-  }
-
-  public double getPoduim() {
-    return board.getNum("setPonit poduim");
+      SwerveDrivetrainSubsystem.getInstance().disFormSpeaker,
+      ShooterConstants.shootingPoses)[1] * ShooterConstants.V_FACTOR;
   }
 
   public static LowerShooter getInstance() {
@@ -137,5 +135,7 @@ public class LowerShooter extends SubsystemBase implements DefaultInternallyCont
     board.addBoolean("atpoint", atPoint());
 
     board.addNum("set", setPoint);
+
+    board.addNum("current", motor.getOutputCurrent());
   }
 }

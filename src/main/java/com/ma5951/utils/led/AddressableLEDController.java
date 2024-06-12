@@ -2,7 +2,6 @@ package com.ma5951.utils.led;
 
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
-
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -18,7 +17,7 @@ public class AddressableLEDController {
     public AddressableLEDController(int pwmPort, int length) {
         addressableLED = new AddressableLED(pwmPort);
         addressableLEDBuffer = new AddressableLEDBuffer(length);
-        addressableLED.setLength(length);
+        addressableLED.setLength(addressableLEDBuffer.getLength());
         addressableLED.setData(addressableLEDBuffer);
         addressableLED.start();
         timer = new Timer();

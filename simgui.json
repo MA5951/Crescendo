@@ -1,5 +1,10 @@
 {
   "HALProvider": {
+    "Addressable LEDs": {
+      "window": {
+        "visible": true
+      }
+    },
     "DIO": {
       "window": {
         "visible": true
@@ -31,6 +36,8 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/Shuffleboard/Autonamous/Autonomous Paths": "String Chooser",
+      "/Shuffleboard/Intake/Autonomous Paths": "String Chooser",
       "/SmartDashboard/Field": "Field2d"
     },
     "windows": {

@@ -1,0 +1,125 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.68,
+      "y": 4.441815740774339
+    },
+    "rotation": 120.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shoot linked to speaker side"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ResetElevator"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Update Limelight"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Node 2 intake Stageside"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "stop shooter"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Center Ring"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Set Shooter Speed side"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": " Node 2 score Stageside"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Update Limelight"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot linked to speaker side"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stop shooter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "stage leave starting zone"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Two pice",
+  "choreoAuto": false
+}

@@ -7,9 +7,7 @@ package frc.robot.commands.shooter;
 import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.subsystems.shooter.LowerShooter;
 import frc.robot.subsystems.shooter.UpperShooter;
 
@@ -20,14 +18,12 @@ public class SetShooter extends SequentialCommandGroup {
 
   public SetShooter(Supplier<Double> upperSetPoint, Supplier<Double> lowerSetpoint) {
         addCommands(
+            new InstantCommand(() -> UpperShooter.isShooting = true),
             new InstantCommand(() -> UpperShooter.getInstance()
                 .setSetPoint(upperSetPoint)), 
             new InstantCommand(() -> LowerShooter.getInstance()
                 .setSetPoint(lowerSetpoint)),
-            new ParallelCommandGroup(
-                new WaitUntilCommand(UpperShooter.getInstance()::atPoint),
-                new WaitUntilCommand(LowerShooter.getInstance()::atPoint)
-            )
+            new WaitForSetPoint()
         );
     }
 }

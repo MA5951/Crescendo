@@ -13,8 +13,6 @@ public abstract class SwerveModule {
 
     public abstract double getDriveVelocity();
 
-    public abstract double getTurningVelocity();
-
     public abstract void resetEncoders();
 
     public abstract void turningMotorSetPower(double power);

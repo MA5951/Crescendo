@@ -3,7 +3,6 @@ package frc.robot.subsystems.intake;
 
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-
 import com.ma5951.utils.MAShuffleboard;
 import com.ma5951.utils.subsystem.MotorSubsystem;
 
@@ -16,7 +15,7 @@ import frc.robot.subsystems.shooter.UpperShooter;
 import com.revrobotics.CANSparkMax;
 
 public class Intake extends SubsystemBase implements MotorSubsystem{
-  private static Intake intake;
+  private static Intake instance;
   
   private final DigitalInput upSensor;
   private final DigitalInput downSensor;
@@ -33,6 +32,12 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
     master.restoreFactoryDefaults();
     slave.restoreFactoryDefaults();
 
+    master.setSmartCurrentLimit(45);
+    slave.setSmartCurrentLimit(45);
+
+    master.enableVoltageCompensation(12);
+    slave.enableVoltageCompensation(12);
+    
     upSensor = new DigitalInput(PortMap.Intake.sensor1ID);
     downSensor = new DigitalInput(PortMap.Intake.sensor2ID);
     board = new MAShuffleboard("Intake");
@@ -40,8 +45,8 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
     master.setIdleMode(IdleMode.kBrake);
     master.setInverted(false);
     slave.setIdleMode(IdleMode.kBrake);
-    slave.follow(master, false);
-  }
+    slave.follow(master);
+}
 
   public boolean isGamePieceInIntake(){
     return !upSensor.get() || !downSensor.get();
@@ -65,10 +70,10 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
   }
 
   public static Intake getInstance() {
-  if (intake == null) {
-      intake = new Intake();  
+    if (instance == null) {
+        instance = new Intake();  
     }
-  return intake;
+    return instance;
   }
 
   @Override
@@ -79,5 +84,8 @@ public class Intake extends SubsystemBase implements MotorSubsystem{
     board.addBoolean("is ring", isGamePieceInIntake());
 
     board.addNum("current", master.getOutputCurrent());
+    board.addNum("current slave", slave.getOutputCurrent());
+
+    board.addBoolean("can move", canMove());
   }
 }

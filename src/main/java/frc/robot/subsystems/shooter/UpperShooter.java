@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.PortMap;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.swerve.SwerveConstants;
 import frc.robot.subsystems.swerve.SwerveDrivetrainSubsystem;
@@ -36,8 +37,9 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
   private final SimpleMotorFeedforward feedforward;
 
   private final DigitalInput sensor;
+  public static boolean isShooting = false;
 
-  private double setPoint = ShooterConstants.defaultV;
+  private double setPoint = ShooterConstants.defaultVUp;
 
   public boolean changeToDefaultV = false;
 
@@ -52,9 +54,12 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
 
     motor.setInverted(false);
 
+    motor.setSmartCurrentLimit(40);
+
+    motor.enableVoltageCompensation(12);
+
     encoder = motor.getEncoder();
     encoder.setVelocityConversionFactor(ShooterConstants.CONVERTION_FACTOR_UPPER);
-    encoder.setPositionConversionFactor(ShooterConstants.CONVERTION_FACTOR_UPPER);
 
     pidController = motor.getPIDController();
     pidController.setFeedbackDevice(encoder);
@@ -67,10 +72,18 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
 
     feedforward = new SimpleMotorFeedforward(0, ShooterConstants.KV_UP);
 
-
     board = new MAShuffleboard("Upper shotter");
 
-    board.addNum("setPonit poduim", ShooterConstants.PODIUM_UPPER_V);
+    board.addNum("up set", 0);
+    board.addNum("low set", 0);
+  }
+
+  public double getUpSet() {
+    return board.getNum("up set");
+  }
+
+  public double getLowSet() {
+    return board.getNum("low set");
   }
 
   public void chengeIDLmode(IdleMode mode) {
@@ -99,7 +112,7 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
 
   @Override
   public boolean atPoint() {
-    return Math.abs(getSetPoint() - getVelocity()) < ShooterConstants.TOLORANCE; 
+    return Math.abs(getSetPoint() - getVelocity()) < ShooterConstants.getTolorance(getSetPoint());
   }
 
   public double getVelocity(){
@@ -130,13 +143,11 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
 
   public double getVelocityForShooting() {
     return ShooterConstants.sample(
-      SwerveDrivetrainSubsystem.getInstance().disFormSpeaker)[0] * 
-        ShooterConstants.V_FACTOR;
+      SwerveDrivetrainSubsystem.getInstance().disFormSpeaker,
+      ShooterConstants.shootingPoses)[0] * ShooterConstants.V_FACTOR;
   }
 
-  public double getPoduim() {
-    return board.getNum("setPonit poduim");
-  }
+
 
   public static UpperShooter getInstance() {
     if (instance == null) {
@@ -145,32 +156,56 @@ public class UpperShooter extends SubsystemBase implements DefaultInternallyCont
     return instance;
   }
 
+  public double getCurrent() {
+    return motor.getOutputCurrent();
+  }
+
   @Override
   public void periodic() {
     board.addNum("v", getVelocity());
 
     board.addBoolean("sensor", isGamePiceInShooter());
 
-    double poduimLine = DriverStation.getAlliance().get() == Alliance.Red ?
-      SwerveConstants.PODUIM_LINE_RED : SwerveConstants.PODUIM_LINE_BLUE;
-    double factor = DriverStation.getAlliance().get() == Alliance.Red ?
-      -1 : 1;
-
-    if (Intake.getInstance().isGamePieceInIntake() && 
-      SwerveDrivetrainSubsystem.getInstance().getPose().getX() * factor
-       < poduimLine * factor) {
-        ShooterConstants.defaultV = 2500;
-    } else {
-      ShooterConstants.defaultV = 0;
+    double poduimLine = 0;
+    double factor = 0;
+    if (!DriverStation.getAlliance().isEmpty()) {
+      poduimLine = DriverStation.getAlliance().get() == Alliance.Red ?
+        SwerveConstants.SPEED_LINE_RED : SwerveConstants.SPEED_LINE_BLUE;
+      factor = DriverStation.getAlliance().get() == Alliance.Red ?
+        -1 : 1;
+    }
+    if ((Intake.getInstance().isGamePieceInIntake
+    () && !RobotContainer.isAmp
+      && (SwerveDrivetrainSubsystem.getInstance().getPose().getX() * factor
+       < poduimLine * factor || RobotContainer.driverController.getHID().getL2Button()))
+       && !DriverStation.isAutonomous()) {
+        if (RobotContainer.ShootingLinkedToSpeaker) {
+          ShooterConstants.defaultVUp = ShooterConstants.SPEAKER_UPPER_V;
+          ShooterConstants.defaultVDown = ShooterConstants.SPEAKER_LOWER_V;
+        } else {
+          ShooterConstants.defaultVUp = 
+            ShooterConstants.sample(SwerveDrivetrainSubsystem.getInstance().disFormSpeaker,
+            ShooterConstants.shootingPoses)[0] * 
+            ShooterConstants.V_FACTOR;
+          ShooterConstants.defaultVDown = ShooterConstants.sample(
+            SwerveDrivetrainSubsystem.getInstance().disFormSpeaker,
+            ShooterConstants.shootingPoses)[1] * 
+            ShooterConstants.V_FACTOR;
+        }
+  } else {
+      ShooterConstants.defaultVUp = 0;
+      ShooterConstants.defaultVDown = 0;
     }
 
-    if (changeToDefaultV) {
-      LowerShooter.getInstance().setSetPoint(ShooterConstants.defaultV);
-      setSetPoint(ShooterConstants.defaultV);
+    if (changeToDefaultV && DriverStation.isTeleop() && !isShooting && !RobotContainer.isIntakeRunning) {
+      LowerShooter.getInstance().setSetPoint(ShooterConstants.defaultVUp);
+      setSetPoint(ShooterConstants.defaultVDown);
     }
 
     board.addBoolean("atpoint", atPoint());
 
-    board.addNum("set", setPoint);
+    board.addNum("set point", setPoint);
+
+    board.addNum("current", getCurrent());
   }
 }

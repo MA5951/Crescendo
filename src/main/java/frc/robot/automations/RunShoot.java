@@ -27,6 +27,7 @@ public class RunShoot extends Command {
   @Override
   public void end(boolean interrupted) {
     commandShoot.end(interrupted);
+    SwerveDrivetrainSubsystem.getInstance().FactorVelocityTo(1);
   }
 
   @Override

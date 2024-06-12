@@ -26,8 +26,8 @@ public class PortMap {
     public static final int rightFrontTurningID = 6;
 
     public static final int rightBackAbsoluteEncoder = 24;
-    public static final int rightBackDriveID = 2;
-    public static final int rightBackTurningID = 3;
+    public static final int rightBackDriveID = 3;
+    public static final int rightBackTurningID = 2;
 
     public static final int Pigeon2ID = 12;
   }
@@ -36,27 +36,23 @@ public class PortMap {
     public static final int upperID = 14;
     public static final int lowerID = 18;
 
-    public static final int sensorID = 9;
+    public static final int sensorID = 7;
   }
 
   public static class Intake {
     public static final int masterID = 17;
     public static final int slaveID = 13;
 
-    public static final int sensor1ID = 7; // up
-    public static final int sensor2ID = 8; // down
+    public static final int sensor1ID = 8; 
+    public static final int sensor2ID = 9; 
   }
 
   public static class Elevator {
     public static final int masterID = 28;
-    public static final int slave1ID = 30;
-    public static final int slave2ID = 31;
-    public static final int slave3ID = 35;
-
-    public static final int absEncoderID = 0;
+    public static final int slaveID = 30;
   }
 
   public static class LED {
-    public static final int ledPort = 9; // TODO
+    public static final int ledPort = 9;
   }
 }

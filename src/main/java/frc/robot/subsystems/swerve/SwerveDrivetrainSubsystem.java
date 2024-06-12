@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems.swerve;
 
+import java.util.ArrayList;
 import java.util.function.BooleanSupplier;
 
 import com.ctre.phoenix6.StatusSignal;
@@ -15,6 +16,9 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -23,22 +27,27 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.PortMap;
 import frc.robot.RobotContainer;
-import frc.robot.automations.AutoAutomations.ShootInMotion;
 
 public class SwerveDrivetrainSubsystem extends SubsystemBase {
 
   private static SwerveDrivetrainSubsystem swerve;
 
   public final boolean isXReversed = true;
-  public final boolean isYReversed = false;
+  public final boolean isYReversed = true;
   public final boolean isXYReversed = true;
 
   private double offsetAngle = 0;
@@ -52,21 +61,21 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
   public double disFormSpeaker = 0;
   public double disFromSpeakerX = 0;
 
-  public final MAShuffleboard board;
+  public boolean update = false;
 
-  private boolean canShoot;
+  private final MAShuffleboard board;
 
   private final Translation2d frontLeftLocation = new Translation2d(
-      -SwerveConstants.WIDTH / 2,
+      SwerveConstants.WIDTH / 2,
       SwerveConstants.LENGTH / 2);
   private final Translation2d frontRightLocation = new Translation2d(
-      SwerveConstants.WIDTH / 2,
+      -SwerveConstants.WIDTH / 2,
       SwerveConstants.LENGTH / 2);
   private final Translation2d rearLeftLocation = new Translation2d(
-      -SwerveConstants.WIDTH / 2,
+      SwerveConstants.WIDTH / 2,
       -SwerveConstants.LENGTH / 2);
   private final Translation2d rearRightLocation = new Translation2d(
-      SwerveConstants.WIDTH / 2,
+      -SwerveConstants.WIDTH / 2,
       -SwerveConstants.LENGTH / 2);
 
   private final Pigeon2 gyro = new Pigeon2(PortMap.Swerve.Pigeon2ID, PortMap.CanBus.RioBus);
@@ -119,17 +128,26 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
       PortMap.CanBus.CANivoreBus);
 
   private final SwerveDrivePoseEstimator odometry = new SwerveDrivePoseEstimator(kinematics,
-      new Rotation2d(0), getSwerveModulePositions(),
-      new Pose2d(0, 0, new Rotation2d(0)));
-
+  getRotation2d(), getSwerveModulePositions(),
+      new Pose2d(0, 0, new Rotation2d(0)),
+      /**
+       * Standard deviations of model states. Increase these numbers to trust your model's state estimates less. This
+       * matrix is in the form [x, y, theta]ᵀ, with units in meters and radians, then meters.
+      */
+      VecBuilder.fill(0.9,0.9, 0.9),
+      /**
+       * Standard deviations of the vision measurements. Increase these numbers to trust global measurements from vision
+       * less. This matrix is in the form [x, y, theta]ᵀ, with units in meters and radians.
+      */
+      VecBuilder.fill(0.1, 0.1, 0.1));
   private final Field2d field = new Field2d();
 
   private static SwerveModulePosition[] getSwerveModulePositions() {
     return new SwerveModulePosition[] {
-        rearLeftModule.getPosition(),
         frontLeftModule.getPosition(),
-        rearRightModule.getPosition(),
-        frontRightModule.getPosition()
+        frontRightModule.getPosition(),
+        rearLeftModule.getPosition(),
+        rearRightModule.getPosition()
     };
   }
 
@@ -162,8 +180,7 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
           this::driveAuto,
           new HolonomicPathFollowerConfig(
             new PIDConstants(SwerveConstants.KP_TRANSLATION),
-            new PIDConstants(SwerveConstants.THATA_KP,
-              SwerveConstants.THATA_KI, SwerveConstants.THATA_KD),
+            new PIDConstants(3),
             SwerveConstants.MAX_VELOCITY,
             SwerveConstants.RADIUS,
             new ReplanningConfig()
@@ -180,8 +197,22 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
     rearRightModule.resetEncoders();
   }
 
+  public double getOffsetAngle() {
+    return offsetAngle;
+  }
+
   public void resetOdometry(Pose2d pose) {
     odometry.resetPosition(getRotation2d(), getSwerveModulePositions(), pose);
+  }
+
+  public void fixOffsetAuto() {
+    offsetAngle = -(getPose().getRotation().getDegrees() + getFusedHeading());
+    if (!DriverStation.getAlliance().isEmpty()) {
+      if (DriverStation.getAlliance().get() == Alliance.Red){
+        offsetAngle += 180;
+      }
+    }
+    System.out.println("hiiiiiiiiiiiiiiiiiiiiiiii" + offsetAngle + "hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
   }
 
   public void updateOffset() {
@@ -269,9 +300,10 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
         .toSwerveModuleStates(
             fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(x, y, omega,
                 new Rotation2d(
-                  Math.toRadians((offsetAngle - getFusedHeading()))))
+                  Math.toRadians((getFusedHeading() - offsetAngle))))
                 : new ChassisSpeeds(x, y, omega));
-    setModules(states);
+    
+                setModules(states);
   }
 
   public void driveAuto(ChassisSpeeds speeds) {
@@ -290,12 +322,60 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
     rearRightModule.setAccelerationLimit(limit);
   }
 
-  public void setOffsetangle(double offset) {
-    offsetAngle = offset;
+  public boolean canShoot() {
+    return disFormSpeaker < SwerveConstants.MAX_SHOOT_DISTANCE;
   }
 
-  public boolean canShoot() {
-    return canShoot;
+  public Command goToAmp() {
+    TrajectoryConfig config = 
+      new TrajectoryConfig(3.5, 1.5);
+    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(getPose(), 
+      new ArrayList<Translation2d>(), new Pose2d(
+        new Translation2d(
+          DriverStation.getAlliance().get() == Alliance.Red ? SwerveConstants.AMP_X_RED 
+          : SwerveConstants.AMP_X_BLUE, SwerveConstants.AMP_Y),
+        Rotation2d.fromDegrees(90)), config);
+    return new SwerveControllerCommand(
+        trajectory, 
+        this::getPose,
+        getKinematics(),
+        new PIDController(
+          SwerveConstants.KP_TRANSLATION,
+          0, 0),
+        new PIDController(
+          SwerveConstants.KP_TRANSLATION,
+          0, 0),
+        new ProfiledPIDController(
+          SwerveConstants.THATA_KP, 0, 0, 
+          new Constraints(3 * SwerveConstants.RADIUS, 3 * SwerveConstants.RADIUS)),
+          this::setModules,
+          this
+    ).andThen(new InstantCommand(this::stop));
+  }
+
+
+  public void printAbsPositions() {
+    board.addNum("fl" , frontLeftModule.getAbsoluteEncoderPosition());
+    board.addNum("fr" , frontRightModule.getAbsoluteEncoderPosition());
+    board.addNum("rr" , rearRightModule.getAbsoluteEncoderPosition());
+    board.addNum("rl" , rearLeftModule.getAbsoluteEncoderPosition());
+  }
+
+  public double getAngleTolorance(double setPoint) {
+    if (DriverStation.getAlliance().get() == Alliance.Red) {
+      setPoint = -(setPoint - Math.PI);
+    }
+    return (Math.max(-0.0003 * Math.pow(setPoint, 2) + 7e-17 * setPoint + 10,
+      SwerveConstants.ANGLE_PID_TOLORANCE)) * 1.3;
+  }
+
+  public void addVisionMeasurement() {
+    // if (RobotContainer.APRILTAGS_LIMELIGHT.hasTarget()
+    //   && RobotContainer.APRILTAGS_LIMELIGHT.getTagId() != -1) {
+    //   Pose2d estPose = RobotContainer.APRILTAGS_LIMELIGHT.getEstPose();
+    //   // odometry.addVisionMeasurement(estPose, RobotContainer.APRILTAGS_LIMELIGHT.getTimeStamp());
+    //   resetOdometry(estPose);
+    // }
   }
 
   public static SwerveDrivetrainSubsystem getInstance() {
@@ -314,50 +394,43 @@ public class SwerveDrivetrainSubsystem extends SubsystemBase {
 
     field.setRobotPose(getPose());
 
-    board.addNum("yaw", getFusedHeading());
-    board.addNum("roll", getRoll());
-    board.addNum("pitch", getPitch());
-
-    board.addNum("yaw pose", getPose().getRotation().getDegrees());
-
-    board.addNum("flV", frontLeftModule.getDriveVelocity());
-
-    board.addNum("dis from speaker", disFormSpeaker);
-
-    board.addNum("yv", getRobotRelativeSpeeds().vyMetersPerSecond);
-
     double ySpeaker = SwerveConstants.SPEAKER_TARGET_Y;
-    double xSpeaker =  DriverStation.getAlliance().get() == Alliance.Blue ? 
+    double xSpeaker = 0;
+    if (!DriverStation.getAlliance().isEmpty()) {
+      xSpeaker = DriverStation.getAlliance().get() == Alliance.Blue ? 
       SwerveConstants.SPEAKER_TARGET_X_BLUE : SwerveConstants.SPEAKER_TAGET_X_RED;
+    }
 
-    canShoot = getPose().getTranslation()
-      .getDistance(new Translation2d(xSpeaker, ySpeaker)) < 
-        SwerveConstants.MAX_SHOOT_DISTANCE;
+    board.addNum("distance", disFormSpeaker);
+    board.addBoolean("canshoot", canShoot());
 
-    board.addBoolean("can shoot", canShoot);
+    printAbsPositions();
+
 
     disFromSpeakerX = new Translation2d(
       SwerveDrivetrainSubsystem.getInstance().getPose().getX(),
-        0).getDistance(new Translation2d(
-        DriverStation.getAlliance().get() == Alliance.Blue ?
-        SwerveConstants.SPEAKER_TARGET_X_BLUE : 
-        SwerveConstants.SPEAKER_TAGET_X_RED, 0));
+        0).getDistance(new Translation2d(xSpeaker, 0));
 
-    disFormSpeaker = new Translation2d(xSpeaker, ySpeaker).getDistance(
-      getPose().getTranslation()
+    disFormSpeaker = Math.abs(new Translation2d(xSpeaker, ySpeaker).getDistance(
+        getPose().getTranslation())
     );
-    if (DriverStation.isEnabled() && 
-      RobotContainer.APRILTAGS_LIMELIGHT.hasTarget()
-      && RobotContainer.APRILTAGS_LIMELIGHT.getTagId() != -1) {
-      Pose2d estPose = RobotContainer.APRILTAGS_LIMELIGHT.getEstPose();
-      resetOdometry(estPose);
-    }
 
-    if (ShootInMotion.isRunning) {
-      SwerveConstants.lowerSpeedFactor = SwerveConstants.LOWER_SPEED * 
-        SwerveConstants.SHOOTING_SPEED;
-    } else {
-      SwerveConstants.lowerSpeedFactor = SwerveConstants.LOWER_SPEED;
-    }
+    board.addNum("yaw",  getFusedHeading());
+
+    board.addBoolean("can shoot in move", SwerveDrivetrainSubsystem.getInstance().disFormSpeaker < 
+    SwerveConstants.MAX_SHOOT_DISTANCE * 0.925 && SwerveDrivetrainSubsystem.getInstance().update);
+
+    board.addNum("x", getPose().getX());
+
+    if (RobotContainer.APRILTAGS_LIMELIGHT.hasTarget() && 
+      RobotContainer.APRILTAGS_LIMELIGHT.getTagId() != -1
+      && RobotContainer.APRILTAGS_LIMELIGHT.distance() > 0 
+      && RobotContainer.APRILTAGS_LIMELIGHT.distance() < SwerveConstants.MAX_LIMELIGHT_DIS
+      && !DriverStation.isAutonomous()
+      && Math.abs(RobotContainer.APRILTAGS_LIMELIGHT.getX()) < 30) { 
+        Pose2d estPose = RobotContainer.APRILTAGS_LIMELIGHT.getEstPose();
+          odometry.addVisionMeasurement(estPose, RobotContainer.APRILTAGS_LIMELIGHT.getTimeStamp());
+          update = true;
+      }
   }
 }

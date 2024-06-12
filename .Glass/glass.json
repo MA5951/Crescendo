@@ -2,12 +2,13 @@
   "NetworkTables": {
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/Shuffleboard/Autonamous/Autonomous Paths": "String Chooser",
+      "/SmartDashboard/Disable Elevator": "Command",
       "/SmartDashboard/Field": "Field2d"
     },
     "windows": {
       "/SmartDashboard/Field": {
         "Robot": {
-          "length": 0.8199999928474426,
           "width": 0.8199999928474426
         },
         "bottom": 1476,

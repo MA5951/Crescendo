@@ -39,7 +39,7 @@ public class ResetElevator extends Command {
       elevator.resetPose(0);
     }
     elevator.setPower(0);
-    elevator.setSetPoint(ElevatorConstants.MIN_POSE);
+    elevator.setSetPoint(ElevatorConstants.DEFAULT_POSE);
   }
 
   // Returns true when the command should end.

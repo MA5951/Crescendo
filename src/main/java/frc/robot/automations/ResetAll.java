@@ -4,6 +4,8 @@
 
 package frc.robot.automations;
 
+import java.util.function.Supplier;
+
 import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -19,16 +21,16 @@ import frc.robot.subsystems.shooter.UpperShooter;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ResetAll extends SequentialCommandGroup {
 
-  public ResetAll(double elevatorPose) {
+  public ResetAll(Supplier<Double> elevatorPose) {
     addCommands(
       new InstantCommand(
-        () -> Elevator.getInstance().setSetPoint(elevatorPose))
+        () -> Elevator.getInstance().setSetPoint(elevatorPose.get()))
       .alongWith(
       new InstantCommand(() -> Intake.getInstance().setPower(0)).alongWith(
       new InstantCommand(
-        () -> UpperShooter.getInstance().setSetPoint(ShooterConstants.defaultV))
+        () -> UpperShooter.getInstance().setSetPoint(ShooterConstants.defaultVUp))
         .alongWith(new InstantCommand(
-        () -> LowerShooter.getInstance().setSetPoint(ShooterConstants.defaultV))))
+        () -> LowerShooter.getInstance().setSetPoint(ShooterConstants.defaultVDown))))
       ).alongWith(new InstantCommand(
         () -> LowerShooter.getInstance().chengeIDLmode(IdleMode.kBrake)))
         .alongWith(
@@ -36,6 +38,8 @@ public class ResetAll extends SequentialCommandGroup {
         () -> UpperShooter.getInstance().chengeIDLmode(IdleMode.kBrake))
       ).alongWith(
         new InstantCommand(() -> UpperShooter.getInstance().changeToDefaultV = true)
+      ).alongWith(
+        new InstantCommand(() -> UpperShooter.isShooting = false)
       )
     );
   }

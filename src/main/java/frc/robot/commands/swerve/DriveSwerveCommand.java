@@ -16,6 +16,7 @@ public class DriveSwerveCommand extends Command {
   private Supplier<Double> xSpeedSupplier;
   private Supplier<Double> ySpeedSupplier;
   private Supplier<Double> turningSpeedSupplier;
+  private boolean filedReletive;
 
   /**
    * @param xSpeedSupplier       Percentage (-1 - 1)
@@ -25,13 +26,22 @@ public class DriveSwerveCommand extends Command {
   public DriveSwerveCommand(
       Supplier<Double> xSpeedSupplier,
       Supplier<Double> ySpeedSupplier,
-      Supplier<Double> turningSpeedSupplier) {
+      Supplier<Double> turningSpeedSupplier,
+      boolean filedReletive) {
     swerve = SwerveDrivetrainSubsystem.getInstance();
     this.xSpeedSupplier = xSpeedSupplier;
     this.ySpeedSupplier = ySpeedSupplier;
     this.turningSpeedSupplier = turningSpeedSupplier;
+    this.filedReletive = filedReletive;
     addRequirements(swerve);
   }
+
+  public DriveSwerveCommand(
+      Supplier<Double> xSpeedSupplier,
+      Supplier<Double> ySpeedSupplier,
+      Supplier<Double> turningSpeedSupplier) {
+        this(xSpeedSupplier, ySpeedSupplier, turningSpeedSupplier, true);
+      }
 
   // Called when the command is initially scheduled.
   @Override
@@ -59,7 +69,7 @@ public class DriveSwerveCommand extends Command {
     turningSpeed = turningSpeed *
         swerve.maxAngularVelocity;
 
-    swerve.drive(xSpeed, ySpeed, turningSpeed, true);
+    swerve.drive(xSpeed, ySpeed, turningSpeed, filedReletive);
 
   }
 

@@ -5,14 +5,19 @@ import java.util.HashMap;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 
 public class MAShuffleboard {
     private ShuffleboardTab board;
     private HashMap<String, GenericEntry> values;
+    private SendableChooser<edu.wpi.first.wpilibj2.command.Command> commandChooser;
 
     public MAShuffleboard(String tab) {
         board = Shuffleboard.getTab(tab);
-        values = new HashMap<String, GenericEntry>();
+        values = new HashMap<>();
+        commandChooser = new SendableChooser<>();
     }
 
     public void addNum(String title, double num) {
@@ -38,7 +43,7 @@ public class MAShuffleboard {
             values.get(title).setBoolean(bol);
         }
     }
-    
+
     public double getNum(String title) {
         if (values.containsKey(title)) {
             return values.get(title).getDouble(0);
@@ -48,7 +53,6 @@ public class MAShuffleboard {
     }
 
     public String getString(String title) {
-
         if (values.containsKey(title)) {
             return values.get(title).getString("null");
         }
@@ -57,7 +61,6 @@ public class MAShuffleboard {
     }
 
     public Boolean getBoolean(String title) {
-
         if (values.containsKey(title)) {
             return values.get(title).getBoolean(false);
         }
@@ -65,9 +68,8 @@ public class MAShuffleboard {
         return false;
     }
 
-    public pidControllerGainSupplier getPidControllerGainSupplier(
-        String PIDname, double KP, double KI, double KD) {
-            return new pidControllerGainSupplier(this, PIDname, KP, KI, KD);
+    public pidControllerGainSupplier getPidControllerGainSupplier(String PIDname, double KP, double KI, double KD) {
+        return new pidControllerGainSupplier(this, PIDname, KP, KI, KD);
     }
 
     public pidControllerGainSupplier getPidControllerGainSupplier(String PIDname) {
@@ -75,14 +77,12 @@ public class MAShuffleboard {
     }
 
     public class pidControllerGainSupplier {
-        
         private String KP_STRING;
         private String KI_STRING;
         private String KD_STRING;
         private MAShuffleboard shuffleboard;
 
-        private pidControllerGainSupplier(MAShuffleboard shuffleboard, String PIDname,
-         double KP, double KI, double KD) {
+        private pidControllerGainSupplier(MAShuffleboard shuffleboard, String PIDname, double KP, double KI, double KD) {
             this.shuffleboard = shuffleboard;
             KP_STRING = PIDname + " KP";
             KI_STRING = PIDname + " KI";
@@ -103,5 +103,25 @@ public class MAShuffleboard {
         public double getKD() {
             return shuffleboard.getNum(KD_STRING);
         }
+    }
+
+    public void createBoutton(String title , Command Command) {
+        SmartDashboard.putData(title, Command);
+    }
+
+    public void initSendableChooser(String title) {
+        board.add(title, commandChooser);
+    }
+
+    public void addOptionToChooser(String optionName, Command command) {
+        commandChooser.addOption(optionName, command);
+    }
+
+    public void addDefaultOptionToChooser(String optionName, Command command) {
+        commandChooser.setDefaultOption(optionName, command);
+    }
+
+    public Command getSelectedCommand() {
+        return commandChooser.getSelected();
     }
 }

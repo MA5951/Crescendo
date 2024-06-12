@@ -1,0 +1,77 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.63,
+      "y": 4.375440973104168
+    },
+    "rotation": 121.1247458567994
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "ResetElevator"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "close intake"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Shoot linked to speaker side"
+                      }
+                    },
+                    {
+                      "type": "parallel",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "stop shooter"
+                            }
+                          },
+                          {
+                            "type": "path",
+                            "data": {
+                              "pathName": "allababala"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

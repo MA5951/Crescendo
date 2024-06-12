@@ -4,7 +4,7 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.ClosedLoopRampsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
-import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
@@ -30,12 +30,12 @@ public class SwerveModuleTalonFX extends SwerveModule {
     private boolean isTurningMotorReversed;
 
     private PositionVoltage angleSetter = new PositionVoltage(0);
-    private VelocityTorqueCurrentFOC velocitySetter = new VelocityTorqueCurrentFOC(0);
+    private VelocityVoltage velocitySetter = new VelocityVoltage(0);
 
     private StatusSignal<Double> drivePosition;
     private StatusSignal<Double> driveVelocity;
     private StatusSignal<Double> steerPosition;
-    private StatusSignal<Double> steerVelocity;
+    private StatusSignal<Double> absAngle;
 
     private double angleOffset;
     private double dirvePoseOffset;
@@ -58,7 +58,8 @@ public class SwerveModuleTalonFX extends SwerveModule {
         drivePosition = driveMotor.getPosition();
         driveVelocity = driveMotor.getVelocity();
         steerPosition = turningMotor.getPosition();
-        steerVelocity = turningMotor.getVelocity();
+
+        absAngle = absoluteEcoder.getAbsolutePosition();
         
         configTurningMotor();
         configDriveMotor();
@@ -81,8 +82,19 @@ public class SwerveModuleTalonFX extends SwerveModule {
         turningConfiguration.Slot0.kP = SwerveConstants.TURNING_PID_KP;
         turningConfiguration.Slot0.kI = SwerveConstants.TURNING_PID_KI;
         turningConfiguration.Slot0.kD = SwerveConstants.TURNING_PID_KD;
-        turningConfiguration.TorqueCurrent.PeakForwardTorqueCurrent = SwerveConstants.TURNING_PEAK_CURRENT_LIMIT;
-        turningConfiguration.TorqueCurrent.PeakReverseTorqueCurrent = -SwerveConstants.TURNING_PEAK_CURRENT_LIMIT;
+        turningConfiguration.TorqueCurrent.PeakForwardTorqueCurrent = 
+            SwerveConstants.TURNING_PEAK_CURRENT_LIMIT_TORQUE_CURRENT;
+        turningConfiguration.TorqueCurrent.PeakReverseTorqueCurrent = 
+            -SwerveConstants.TURNING_PEAK_CURRENT_LIMIT_TORQUE_CURRENT;
+
+        turningConfiguration.CurrentLimits.SupplyCurrentLimitEnable = 
+            SwerveConstants.TURNING_ENABLE_CURRENT_LIMIT;
+        turningConfiguration.CurrentLimits.SupplyCurrentLimit =
+            SwerveConstants.TURNING_CONTINUOUS_CURRENT_LIMIT;
+        turningConfiguration.CurrentLimits.SupplyCurrentThreshold =
+            SwerveConstants.TURNING_PEAK_CURRENT_LIMIT;
+        turningConfiguration.CurrentLimits.SupplyTimeThreshold = 
+            SwerveConstants.TURNING_PEAK_CURRENT_DURATION;
         
         turningMotor.getConfigurator().apply(turningConfiguration);
     }
@@ -104,8 +116,19 @@ public class SwerveModuleTalonFX extends SwerveModule {
         driveConfiguration.Slot0.kI = SwerveConstants.DRIVE_PID_KI;
         driveConfiguration.Slot0.kD = SwerveConstants.DRIVE_PID_KD;
 
-        driveConfiguration.TorqueCurrent.PeakForwardTorqueCurrent = SwerveConstants.DRIVE_PEAK_CURRENT_LIMIT;
-        driveConfiguration.TorqueCurrent.PeakReverseTorqueCurrent = -SwerveConstants.DRIVE_PEAK_CURRENT_LIMIT;
+        driveConfiguration.TorqueCurrent.PeakForwardTorqueCurrent = 
+            SwerveConstants.DRIVE_PEAK_CURRENT_LIMIT_TORQUE_CURRENT;
+        driveConfiguration.TorqueCurrent.PeakReverseTorqueCurrent = 
+            -SwerveConstants.DRIVE_PEAK_CURRENT_LIMIT_TORQUE_CURRENT;
+
+        driveConfiguration.CurrentLimits.SupplyCurrentLimitEnable = 
+            SwerveConstants.DRIVE_ENBLE_CURRENT_LIMIT;
+        driveConfiguration.CurrentLimits.SupplyCurrentLimit = 
+            SwerveConstants.DRIVE_CONTINUOS_CURRENT_LIMIT;
+        driveConfiguration.CurrentLimits.SupplyCurrentThreshold = 
+            SwerveConstants.DRIVE_PEAK_CURRENT_LIMIT;
+        driveConfiguration.CurrentLimits.SupplyTimeThreshold = 
+            SwerveConstants.DRIVE_PEAK_CURRENT_DURATION;
 
         driveMotor.getConfigurator().apply(driveConfiguration);
     }
@@ -122,11 +145,9 @@ public class SwerveModuleTalonFX extends SwerveModule {
     }
 
     public double getAbsoluteEncoderPosition() {
-        StatusSignal<Double> pose = absoluteEcoder.getAbsolutePosition();
-        pose.refresh();
-        // return pose.getValue();
-        return isAbsoluteEncoderReversed ? 360 - ((pose.getValue() + 0.5)) * 360
-                : ((pose.getValue() + 0.5)) * 360;
+        absAngle.refresh();
+        return isAbsoluteEncoderReversed ? 360 - ((absAngle.getValue() + 0.5)) * 360
+                : ((absAngle.getValue() + 0.5)) * 360;
     }
 
     public double getDrivePosition() {
@@ -147,13 +168,6 @@ public class SwerveModuleTalonFX extends SwerveModule {
         driveVelocity.refresh();
         return (driveVelocity.getValue()
                 * SwerveConstants.DISTANCE_PER_PULSE) /
-                SwerveConstants.VELOCITY_TIME_UNIT_IN_SECONDS;
-    }
-
-    public double getTurningVelocity() {
-        steerVelocity.refresh();
-        return (steerVelocity.getValue()
-                * SwerveConstants.ANGLE_PER_PULSE) /
                 SwerveConstants.VELOCITY_TIME_UNIT_IN_SECONDS;
     }
 
